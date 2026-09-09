@@ -32,19 +32,47 @@ const Home = () => {
             
             {/* ── Custom CSS for Hover Effects ── */}
             <style>{`
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+                * { box-sizing: border-box; }
+
+                /* ── Hero ── */
                 .hero-banner {
-                    background: linear-gradient(135deg, #0f172a 0%, #3b82f6 100%);
+                    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #3b82f6 100%);
                     color: white;
-                    padding: 80px 0;
+                    padding: 80px 0 70px;
                     position: relative;
                     overflow: hidden;
+                    font-family: 'Inter', sans-serif;
+                }
+                .hero-banner::before {
+                    content: '';
+                    position: absolute;
+                    width: 500px; height: 500px;
+                    background: radial-gradient(circle, rgba(99,102,241,0.18) 0%, transparent 70%);
+                    top: -100px; right: -100px;
+                    border-radius: 50%;
                 }
                 .hero-badge {
-                    background: rgba(255,255,255,0.15);
+                    background: rgba(255,255,255,0.12);
                     border: 1px solid rgba(255,255,255,0.2);
                     backdrop-filter: blur(4px);
                     color: white;
+                    font-size: 13px;
                 }
+                .hero-title {
+                    font-size: clamp(1.8rem, 5vw, 3rem);
+                    font-weight: 800;
+                    line-height: 1.2;
+                    letter-spacing: -0.5px;
+                }
+                .hero-emoji {
+                    font-size: clamp(4rem, 12vw, 8rem);
+                    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.25));
+                    line-height: 1;
+                }
+
+                /* ── Product Cards ── */
                 .product-card {
                     background: white;
                     border-radius: 16px;
@@ -52,14 +80,15 @@ const Home = () => {
                     transition: all 0.3s ease;
                     height: 100%;
                     overflow: hidden;
+                    font-family: 'Inter', sans-serif;
                 }
                 .product-card:hover {
-                    transform: translateY(-8px);
-                    box-shadow: 0 12px 24px rgba(0,0,0,0.08);
-                    border-color: #cbd5e1;
+                    transform: translateY(-6px);
+                    box-shadow: 0 16px 32px rgba(0,0,0,0.1);
+                    border-color: #c7d2fe;
                 }
                 .product-img-wrapper {
-                    height: 220px;
+                    height: 200px;
                     background: #f1f5f9;
                     display: flex;
                     align-items: center;
@@ -68,94 +97,100 @@ const Home = () => {
                     position: relative;
                 }
                 .product-img {
-                    width: 100%;
-                    height: 100%;
+                    width: 100%; height: 100%;
                     object-fit: cover;
                     transition: transform 0.5s ease;
                 }
-                .product-card:hover .product-img {
-                    transform: scale(1.08);
-                }
+                .product-card:hover .product-img { transform: scale(1.08); }
+
                 .stock-badge {
-                    position: absolute;
-                    top: 12px;
-                    right: 12px;
-                    z-index: 2;
-                    font-size: 11px;
-                    padding: 4px 10px;
-                    border-radius: 20px;
-                    font-weight: 600;
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                    position: absolute; top: 10px; right: 10px; z-index: 2;
+                    font-size: 10px; padding: 3px 8px; border-radius: 20px;
+                    font-weight: 700; box-shadow: 0 2px 6px rgba(0,0,0,0.12);
                 }
                 .cat-badge {
-                    position: absolute;
-                    top: 12px;
-                    left: 12px;
-                    z-index: 2;
-                    font-size: 11px;
-                    padding: 4px 10px;
-                    border-radius: 20px;
-                    font-weight: 600;
-                    background: rgba(255,255,255,0.9);
-                    color: #475569;
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+                    position: absolute; top: 10px; left: 10px; z-index: 2;
+                    font-size: 10px; padding: 3px 8px; border-radius: 20px;
+                    font-weight: 600; background: rgba(255,255,255,0.92);
+                    color: #475569; box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+                    max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
                 }
                 .shop-btn {
-                    background: #3b82f6;
-                    color: white;
-                    border: none;
-                    transition: background 0.2s;
+                    background: linear-gradient(135deg,#6366f1,#3b82f6);
+                    color: white; border: none;
+                    transition: all 0.2s;
+                    box-shadow: 0 3px 8px rgba(99,102,241,0.3);
                 }
                 .shop-btn:hover {
-                    background: #2563eb;
-                    color: white;
+                    background: linear-gradient(135deg,#4f46e5,#2563eb);
+                    color: white; transform: scale(1.08);
                 }
+
+                /* ── Features ── */
                 .features-section {
                     background: white;
                     border-top: 1px solid #edf2f7;
                     border-bottom: 1px solid #edf2f7;
                 }
-                .feature-box {
-                    text-align: center;
-                    padding: 24px;
-                }
+                .feature-box { text-align: center; padding: 20px 12px; }
                 .feature-icon {
-                    width: 60px;
-                    height: 60px;
-                    background: #eff6ff;
-                    color: #3b82f6;
-                    border-radius: 50%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 24px;
-                    margin: 0 auto 16px;
+                    width: 56px; height: 56px;
+                    background: linear-gradient(135deg,#ede9fe,#dbeafe);
+                    border-radius: 16px;
+                    display: flex; align-items: center; justify-content: center;
+                    font-size: 22px; margin: 0 auto 12px;
+                }
+                .feature-box h6 { font-size: 14px; font-weight: 700; }
+                .feature-box p  { font-size: 12px; }
+
+                /* ── CTA Section ── */
+                .cta-section {
+                    background: linear-gradient(135deg,#f8fafc,#ede9fe);
+                    border-top: 1px solid #e2e8f0;
+                }
+
+                /* ── Responsive ── */
+                @media (max-width: 575px) {
+                    .hero-banner { padding: 48px 0 40px; }
+                    .product-img-wrapper { height: 150px; }
+                    .product-card .p-3 { padding: 10px !important; }
+                    .product-card h6 { font-size: 13px; }
+                    .product-card .fs-5 { font-size: 14px !important; }
+                    .feature-icon { width: 44px; height: 44px; font-size: 18px; }
+                    .feature-box { padding: 14px 8px; }
+                }
+                @media (max-width: 767px) {
+                    .hero-banner { padding: 56px 0 48px; text-align: center; }
+                    .hero-banner .lead { font-size: 14px; }
+                    .hero-banner .btn { font-size: 14px; padding: 10px 24px; }
+                    .product-img-wrapper { height: 170px; }
+                }
+                @media (min-width: 576px) and (max-width: 991px) {
+                    .product-img-wrapper { height: 190px; }
                 }
             `}</style>
 
-            {/* ── Hero Banner ── */}
+
             <section className="hero-banner">
                 <div className="container position-relative z-1">
                     <div className="row align-items-center">
                         <div className="col-lg-7 text-center text-lg-start">
-                            <span className="badge hero-badge rounded-pill px-3 py-2 mb-3">
+                            <span className="badge hero-badge rounded-pill px-3 py-2 mb-3 d-inline-block">
                                 🌟 Welcome to My Store
                             </span>
-                            <h1 className="display-4 fw-bold mb-3 lh-sm">
-                                Shop the Latest <br />
+                            <h1 className="hero-title fw-bold mb-3">
+                                Shop the Latest{' '}
                                 <span style={{ color: '#93c5fd' }}>Trending Products</span>
                             </h1>
                             <p className="lead mb-4 opacity-75 pe-lg-5">
                                 Browse through our exclusive collection of high-quality products. We offer the best prices and fast delivery directly to your doorstep.
                             </p>
-                            <Link to="/products" className="btn btn-light btn-lg rounded-pill px-4 fw-bold text-primary shadow">
+                            <Link to="/products" className="btn btn-light btn-lg rounded-pill px-5 fw-bold text-primary shadow">
                                 Shop All Products →
                             </Link>
                         </div>
-                        <div className="col-lg-5 d-none d-lg-block text-center">
-                            <div className="display-1" style={{ fontSize: '8rem', filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.2))' }}>
-                                🛍️
-                            </div>
+                        <div className="col-lg-5 d-none d-lg-flex justify-content-center align-items-center">
+                            <span className="hero-emoji">🛍️</span>
                         </div>
                     </div>
                 </div>
@@ -300,10 +335,10 @@ const Home = () => {
             </section>
             
             {/* ── Call to Action ── */}
-            <section className="py-5 bg-white border-top">
-                <div className="container py-4 text-center">
-                    <h3 className="fw-bold mb-3">Didn't find what you're looking for?</h3>
-                    <p className="text-muted mb-4">We have hundreds of products across multiple categories waiting for you.</p>
+            <section className="cta-section py-5">
+                <div className="container py-3 text-center">
+                    <h3 className="fw-bold mb-3" style={{ fontSize:'clamp(1.2rem,4vw,1.6rem)' }}>Didn't find what you're looking for?</h3>
+                    <p className="text-muted mb-4" style={{ fontSize:'clamp(13px,2.5vw,16px)' }}>We have hundreds of products across multiple categories waiting for you.</p>
                     <Link to="/products" className="btn btn-primary btn-lg rounded-pill px-5 shadow-sm">
                         Explore Full Store 🛍️
                     </Link>

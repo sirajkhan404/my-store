@@ -141,79 +141,91 @@ const Products = () => {
 
       {/* ── Custom CSS ── */}
       <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        /* ── Header ── */
         .shop-header {
-          background: linear-gradient(135deg, #1e293b 0%, #3b82f6 100%);
+          background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #3b82f6 100%);
           color: white;
-          padding: 80px 0 60px;
+          padding: clamp(48px, 9vw, 90px) 0 clamp(40px, 7vw, 70px);
           position: relative;
           overflow: hidden;
+          font-family: 'Inter', sans-serif;
         }
-        .shop-header::after {
+        .shop-header::before {
           content: '';
           position: absolute;
-          width: 300px;
-          height: 300px;
-          background: rgba(255,255,255,0.1);
+          width: 360px; height: 360px;
+          background: radial-gradient(circle, rgba(99,102,241,0.2) 0%, transparent 70%);
           border-radius: 50%;
-          top: -100px;
-          right: -100px;
-          filter: blur(50px);
+          top: -100px; right: -80px;
         }
+        .shop-header h1 { font-size: clamp(1.8rem, 5vw, 3rem); font-weight: 800; }
+        .shop-header p   { font-size: clamp(13px, 2vw, 17px); }
+
+        /* ── Filter Card ── */
         .filter-card {
           background: white;
-          border-radius: 16px;
-          box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-          margin-top: -30px;
+          border-radius: 20px;
+          box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+          margin-top: -28px;
           position: relative;
           z-index: 10;
           border: 1px solid #e2e8f0;
+          padding: clamp(16px, 3vw, 24px);
         }
         .search-input {
           border-radius: 12px;
           background: #f1f5f9;
           border: 1px solid transparent;
           transition: all 0.2s;
+          font-size: clamp(13px, 1.8vw, 15px);
         }
         .search-input:focus {
           background: white;
-          border-color: #3b82f6;
-          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+          border-color: #6366f1;
+          box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+          outline: none;
         }
+
+        /* ── Category Buttons ── */
         .cat-btn {
-          border-radius: 12px;
-          padding: 8px 16px;
-          font-weight: 500;
+          border-radius: 10px;
+          padding: 7px 14px;
+          font-size: clamp(12px, 1.5vw, 14px);
+          font-weight: 600;
           transition: all 0.2s;
-          border: 1px solid #e2e8f0;
+          border: 1.5px solid #e2e8f0;
           color: #475569;
           background: white;
+          white-space: nowrap;
         }
-        .cat-btn:hover {
-          background: #f1f5f9;
-        }
+        .cat-btn:hover  { background: #f1f5f9; border-color: #c7d2fe; color: #6366f1; }
         .cat-btn.active {
-          background: #3b82f6;
-          color: white;
-          border-color: #3b82f6;
-          box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+          background: linear-gradient(135deg,#6366f1,#3b82f6);
+          color: white; border-color: transparent;
+          box-shadow: 0 4px 12px rgba(99,102,241,0.35);
         }
+
+        /* ── Product Cards ── */
         .product-card {
           background: white;
           border-radius: 20px;
           border: 1px solid #edf2f7;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
           height: 100%;
           display: flex;
           flex-direction: column;
           position: relative;
+          font-family: 'Inter', sans-serif;
         }
         .product-card:hover {
-          transform: translateY(-8px);
-          box-shadow: 0 15px 30px rgba(0,0,0,0.08);
-          border-color: #cbd5e1;
+          transform: translateY(-7px);
+          box-shadow: 0 20px 40px rgba(0,0,0,0.09);
+          border-color: #c7d2fe;
         }
         .product-img-wrap {
-          height: 240px;
+          height: clamp(160px, 22vw, 240px);
           background: #f8fafc;
           border-radius: 20px 20px 0 0;
           overflow: hidden;
@@ -223,81 +235,117 @@ const Products = () => {
           justify-content: center;
         }
         .product-img {
-          width: 100%;
-          height: 100%;
+          width: 100%; height: 100%;
           object-fit: cover;
           transition: transform 0.5s ease;
         }
-        .product-card:hover .product-img {
-          transform: scale(1.08);
-        }
+        .product-card:hover .product-img { transform: scale(1.07); }
+
         .badge-category {
-          position: absolute;
-          top: 16px;
-          left: 16px;
-          background: rgba(255,255,255,0.9);
+          position: absolute; top: 12px; left: 12px;
+          background: rgba(255,255,255,0.92);
           backdrop-filter: blur(4px);
           color: #334155;
-          padding: 6px 12px;
+          padding: 4px 10px;
           border-radius: 20px;
-          font-size: 12px;
-          font-weight: 600;
-          box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+          font-size: clamp(10px,1.4vw,12px);
+          font-weight: 700;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.06);
           z-index: 2;
+          max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
         }
         .badge-stock {
-          position: absolute;
-          top: 16px;
-          right: 16px;
-          padding: 6px 12px;
+          position: absolute; top: 12px; right: 12px;
+          padding: 4px 10px;
           border-radius: 20px;
-          font-size: 12px;
-          font-weight: 600;
-          z-index: 2;
-          box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+          font-size: clamp(10px,1.4vw,12px);
+          font-weight: 700; z-index: 2;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         }
+        .product-card .card-body-inner {
+          padding: clamp(12px, 2.5vw, 20px);
+        }
+        .product-card h5 { font-size: clamp(13px, 1.8vw, 16px); }
+        .product-card .price { font-size: clamp(15px, 2vw, 20px); font-weight: 800; color: #6366f1; }
+
         .btn-order {
-          background: #3b82f6;
-          color: white;
-          border: none;
+          background: linear-gradient(135deg,#6366f1,#3b82f6);
+          color: white; border: none;
           border-radius: 12px;
-          padding: 10px;
-          font-weight: 600;
+          padding: clamp(9px,1.5vw,12px);
+          font-weight: 700;
+          font-size: clamp(13px,1.6vw,15px);
           transition: all 0.2s;
+          width: 100%;
         }
         .btn-order:hover:not(:disabled) {
-          background: #2563eb;
           transform: translateY(-2px);
-          box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+          box-shadow: 0 8px 20px rgba(99,102,241,0.4);
         }
-        .btn-order:disabled {
-          background: #94a3b8;
-          cursor: not-allowed;
+        .btn-order:disabled { background: #cbd5e1; cursor: not-allowed; }
+
+        /* ── Order Modal ── */
+        .prem-modal-overlay {
+          position: fixed; inset: 0;
+          background: rgba(15,23,42,0.65);
+          backdrop-filter: blur(5px);
+          z-index: 1040;
+          display: flex; align-items: center; justify-content: center;
+          padding: 16px;
         }
-        /* Modal Customization */
-        .premium-modal .modal-content {
+        .prem-modal-box {
+          background: white;
           border-radius: 24px;
-          border: none;
+          width: 100%; max-width: 520px;
+          max-height: 92vh;
+          overflow-y: auto;
+          box-shadow: 0 32px 80px rgba(0,0,0,0.2);
+          animation: modal-in 0.3s ease;
         }
-        .premium-modal .modal-header {
-          background: #f8fafc;
-          border-radius: 24px 24px 0 0;
-          border-bottom: 1px solid #e2e8f0;
-          padding: 20px 24px;
+        @keyframes modal-in { from{opacity:0;transform:scale(0.95) translateY(20px)} to{opacity:1;transform:scale(1) translateY(0)} }
+        .prem-modal-hdr {
+          padding: 20px 24px 16px;
+          border-bottom: 1px solid #f1f5f9;
+          display: flex; align-items: flex-start; justify-content: space-between;
+          position: sticky; top: 0; background: #fff; border-radius: 24px 24px 0 0; z-index: 1;
         }
+        .prem-close {
+          width: 32px; height: 32px; border-radius: 50%;
+          border: 1.5px solid #e2e8f0; background: #f8fafc;
+          cursor: pointer; font-size: 15px;
+          display: flex; align-items: center; justify-content: center;
+          transition: background 0.2s; flex-shrink: 0;
+        }
+        .prem-close:hover { background: #f1f5f9; }
+        .prem-modal-body { padding: clamp(16px,3vw,24px); }
+
         .form-control-custom {
           background: #f8fafc;
-          border: 1px solid #e2e8f0;
+          border: 1.5px solid #e2e8f0;
           border-radius: 12px;
-          padding: 12px 16px;
+          padding: clamp(10px,1.5vw,13px) 14px;
+          font-size: clamp(13px,1.6vw,15px);
           transition: all 0.2s;
+          width: 100%;
         }
         .form-control-custom:focus {
-          background: white;
-          border-color: #3b82f6;
-          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+          background: white; outline: none;
+          border-color: #6366f1;
+          box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+        }
+        .form-control-custom.is-invalid { border-color: #fca5a5; background: #fff5f5; }
+
+        /* ── Responsive ── */
+        @media (max-width: 575px) {
+          .filter-card { margin-top: 0; border-radius: 16px; }
+          .cat-scroll  { overflow-x: auto; flex-wrap: nowrap !important; padding-bottom: 4px; }
+          .cat-scroll::-webkit-scrollbar { height: 0; }
+          .product-card { border-radius: 16px; }
+          .product-img-wrap { border-radius: 16px 16px 0 0; }
+          .prem-modal-box { border-radius: 20px; }
         }
       `}</style>
+
 
       {/* ── Header Banner ─────────────────────────────────── */}
       <section className="shop-header text-center">
@@ -329,7 +377,7 @@ const Products = () => {
               </div>
             </div>
             <div className="col-lg-8">
-              <div className="d-flex flex-wrap gap-2 justify-content-lg-end">
+              <div className="d-flex flex-wrap gap-2 justify-content-lg-end cat-scroll">
                 {categoriesList.map((cat, idx) => (
                   <button
                     key={idx}
@@ -398,18 +446,15 @@ const Products = () => {
                     </div>
 
                     {/* Details Section */}
-                    <div className="p-4 d-flex flex-column flex-grow-1">
+                    <div className="card-body-inner d-flex flex-column flex-grow-1">
                       <h5 className="fw-bold text-dark mb-2 text-truncate" title={product.name}>{product.name}</h5>
-                      <p className="text-muted small mb-3 flex-grow-1" style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                      <p className="text-muted small mb-3 flex-grow-1" style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', fontSize: 'clamp(12px,1.5vw,14px)' }}>
                         {product.description}
                       </p>
-
                       <div className="mt-auto">
-                        <div className="fw-bold fs-4 text-primary mb-3">
-                          Rs. {Number(product.price).toLocaleString()}
-                        </div>
+                        <div className="price mb-2">Rs. {Number(product.price).toLocaleString()}</div>
                         <button
-                          className="btn-order w-100"
+                          className="btn-order"
                           onClick={() => openOrderModal(product)}
                           disabled={product.stock <= 0}
                         >
@@ -425,135 +470,104 @@ const Products = () => {
         </div>
       </section>
 
-      {/* ── Premium Order Modal ──────────────────────── */}
+      {/* ── Order Modal ── */}
       {orderModal && selectedProduct && (
-        <>
-          <div className="modal-backdrop fade show" onClick={closeOrderModal} style={{ zIndex: 1040, background: 'rgba(15,23,42,0.6)', backdropFilter: 'blur(4px)' }} />
+        <div className="prem-modal-overlay" onClick={e => { if (e.target.classList.contains('prem-modal-overlay')) closeOrderModal() }}>
+          <div className="prem-modal-box">
 
-          <div className="modal fade show d-block premium-modal" tabIndex="-1" style={{ zIndex: 1045 }} role="dialog" aria-modal="true">
-            <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-              <div className="modal-content shadow-lg">
+            {/* Header */}
+            <div className="prem-modal-hdr">
+              <div>
+                <div style={{ fontSize: 16, fontWeight: 800, color: '#0f172a' }}>Complete Your Order</div>
+                <div style={{ fontSize: 12, color: '#94a3b8', marginTop: 3 }}>Almost there! Just fill in your details.</div>
+              </div>
+              <button className="prem-close" onClick={closeOrderModal}>✕</button>
+            </div>
 
-                {/* Header */}
-                <div className="modal-header">
-                  <div>
-                    <h5 className="modal-title fw-bold mb-0">Complete Your Order</h5>
-                    <small className="text-muted">Almost there! Just fill in your details.</small>
-                  </div>
-                  <button type="button" className="btn-close bg-white rounded-circle shadow-sm p-2" onClick={closeOrderModal} style={{ opacity: 1 }} />
-                </div>
+            {/* Body */}
+            <div className="prem-modal-body">
 
-                {/* Body */}
-                <div className="modal-body p-4">
-
-                  {/* Product Info Card */}
-                  <div className="d-flex gap-3 align-items-center mb-4 p-3 bg-white border rounded-4 shadow-sm">
-                    <img
-                      src={selectedProduct.imageURL || 'https://via.placeholder.com/80'}
-                      alt={selectedProduct.name}
-                      className="rounded-3"
-                      style={{ width: 80, height: 80, objectFit: 'cover' }}
-                    />
-                    <div className="flex-grow-1">
-                      <h6 className="fw-bold mb-1 text-truncate" style={{ maxWidth: '200px' }}>{selectedProduct.name}</h6>
-                      <p className="text-primary fw-bold mb-0">Rs. {Number(selectedProduct.price).toLocaleString()}</p>
-                      <span className="badge bg-light text-dark border mt-1">{selectedProduct.category}</span>
-                    </div>
-                  </div>
-
-                  {/* Quantity Selector */}
-                  <div className="mb-4">
-                    <label className="form-label fw-semibold text-dark">Select Quantity</label>
-                    <div className="d-flex align-items-center justify-content-between p-3 bg-light rounded-4 border">
-                      <div className="d-flex align-items-center gap-2">
-                        <button className="btn btn-white border shadow-sm rounded-circle d-flex align-items-center justify-content-center" style={{ width: 36, height: 36, fontWeight: 'bold' }} onClick={() => setQuantity(q => Math.max(1, q - 1))} type="button">−</button>
-                        <span className="fw-bold mx-2 fs-5">{quantity}</span>
-                        <button className="btn btn-white border shadow-sm rounded-circle d-flex align-items-center justify-content-center" style={{ width: 36, height: 36, fontWeight: 'bold' }} onClick={() => setQuantity(q => Math.min(selectedProduct.stock, q + 1))} type="button">+</button>
-                      </div>
-                      <div className="text-end">
-                        <small className="text-muted d-block">Total Amount</small>
-                        <strong className="fs-5 text-primary">Rs. {(selectedProduct.price * quantity).toLocaleString()}</strong>
-                      </div>
-                    </div>
-                  </div>
-
-                  <hr className="my-4 border-light" />
-
-                  <h6 className="fw-bold mb-3 d-flex align-items-center gap-2">
-                    <span>📍</span> Shipping Details
-                  </h6>
-
-                  {/* Shipping Form */}
-                  <form onSubmit={handleOrderSubmit}>
-                    <div className="row g-3">
-                      <div className="col-12">
-                        <label className="form-label small fw-semibold text-muted mb-1">Full Name</label>
-                        <input
-                          type="text"
-                          className={`form-control form-control-custom ${formErrors.fullName ? 'is-invalid border-danger' : ''}`}
-                          placeholder="John Doe"
-                          value={shippingForm.fullName}
-                          onChange={e => setShippingForm(f => ({ ...f, fullName: e.target.value }))}
-                        />
-                        {formErrors.fullName && <div className="invalid-feedback">{formErrors.fullName}</div>}
-                      </div>
-
-                      <div className="col-md-6">
-                        <label className="form-label small fw-semibold text-muted mb-1">Phone Number</label>
-                        <input
-                          type="text"
-                          className={`form-control form-control-custom ${formErrors.phone ? 'is-invalid border-danger' : ''}`}
-                          placeholder="03XX-XXXXXXX"
-                          value={shippingForm.phone}
-                          onChange={e => setShippingForm(f => ({ ...f, phone: e.target.value }))}
-                        />
-                        {formErrors.phone && <div className="invalid-feedback">{formErrors.phone}</div>}
-                      </div>
-
-                      <div className="col-md-6">
-                        <label className="form-label small fw-semibold text-muted mb-1">City</label>
-                        <input
-                          type="text"
-                          className={`form-control form-control-custom ${formErrors.city ? 'is-invalid border-danger' : ''}`}
-                          placeholder="Karachi / Lahore"
-                          value={shippingForm.city}
-                          onChange={e => setShippingForm(f => ({ ...f, city: e.target.value }))}
-                        />
-                        {formErrors.city && <div className="invalid-feedback">{formErrors.city}</div>}
-                      </div>
-
-                      <div className="col-12">
-                        <label className="form-label small fw-semibold text-muted mb-1">Delivery Address</label>
-                        <textarea
-                          className={`form-control form-control-custom ${formErrors.address ? 'is-invalid border-danger' : ''}`}
-                          placeholder="House No, Street, Area..."
-                          rows={2}
-                          value={shippingForm.address}
-                          onChange={e => setShippingForm(f => ({ ...f, address: e.target.value }))}
-                        />
-                        {formErrors.address && <div className="invalid-feedback">{formErrors.address}</div>}
-                      </div>
-                    </div>
-
-                    {/* Modal Footer / Actions */}
-                    <div className="d-flex gap-3 mt-5">
-                      <button type="button" className="btn btn-light px-4 fw-semibold rounded-pill" onClick={closeOrderModal}>
-                        Cancel
-                      </button>
-                      <button type="submit" className="btn btn-primary flex-fill fw-bold rounded-pill shadow-sm" disabled={orderLoading}>
-                        {orderLoading
-                          ? <><span className="spinner-border spinner-border-sm me-2" role="status" />Processing...</>
-                          : `Confirm Order — Rs. ${(selectedProduct.price * quantity).toLocaleString()}`
-                        }
-                      </button>
-                    </div>
-                  </form>
-
+              {/* Product Info */}
+              <div style={{ display:'flex', gap:12, alignItems:'center', marginBottom:20, padding:'12px 14px', background:'#f8fafc', borderRadius:14, border:'1px solid #e2e8f0' }}>
+                <img src={selectedProduct.imageURL || 'https://via.placeholder.com/72'} alt={selectedProduct.name}
+                  style={{ width:64, height:64, objectFit:'cover', borderRadius:10, border:'1px solid #e2e8f0', flexShrink:0 }} />
+                <div style={{ flex:1, minWidth:0 }}>
+                  <div style={{ fontSize:14, fontWeight:700, color:'#0f172a', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{selectedProduct.name}</div>
+                  <div style={{ fontSize:15, fontWeight:800, color:'#6366f1', marginTop:2 }}>Rs. {Number(selectedProduct.price).toLocaleString()}</div>
+                  <span style={{ fontSize:11, fontWeight:600, padding:'2px 8px', borderRadius:20, background:'#ede9fe', color:'#6366f1', display:'inline-block', marginTop:4 }}>{selectedProduct.category}</span>
                 </div>
               </div>
+
+              {/* Quantity */}
+              <div style={{ marginBottom:20 }}>
+                <label style={{ display:'block', fontSize:12, fontWeight:700, color:'#64748b', textTransform:'uppercase', letterSpacing:0.8, marginBottom:8 }}>Select Quantity</label>
+                <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'12px 16px', background:'#f8fafc', borderRadius:14, border:'1px solid #e2e8f0' }}>
+                  <div style={{ display:'flex', alignItems:'center', gap:12 }}>
+                    <button type="button" onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                      style={{ width:36, height:36, borderRadius:'50%', border:'1.5px solid #e2e8f0', background:'white', fontSize:18, fontWeight:700, cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center' }}>−</button>
+                    <span style={{ fontSize:18, fontWeight:800, color:'#0f172a', minWidth:24, textAlign:'center' }}>{quantity}</span>
+                    <button type="button" onClick={() => setQuantity(q => Math.min(selectedProduct.stock, q + 1))}
+                      style={{ width:36, height:36, borderRadius:'50%', border:'1.5px solid #e2e8f0', background:'white', fontSize:18, fontWeight:700, cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center' }}>+</button>
+                  </div>
+                  <div style={{ textAlign:'right' }}>
+                    <div style={{ fontSize:11, color:'#94a3b8', fontWeight:600 }}>Total</div>
+                    <div style={{ fontSize:17, fontWeight:800, color:'#6366f1' }}>Rs. {(selectedProduct.price * quantity).toLocaleString()}</div>
+                  </div>
+                </div>
+              </div>
+
+              <hr style={{ borderColor:'#f1f5f9', margin:'0 0 20px' }} />
+
+              <div style={{ fontSize:14, fontWeight:700, color:'#0f172a', marginBottom:14, display:'flex', alignItems:'center', gap:6 }}>📍 Shipping Details</div>
+
+              {/* Form */}
+              <form onSubmit={handleOrderSubmit}>
+                <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12, marginBottom:12 }}>
+                  <div style={{ gridColumn:'1/-1' }}>
+                    <label style={{ display:'block', fontSize:11, fontWeight:700, color:'#64748b', textTransform:'uppercase', letterSpacing:0.7, marginBottom:6 }}>Full Name</label>
+                    <input type="text" className={`form-control-custom ${formErrors.fullName ? 'is-invalid' : ''}`}
+                      placeholder="John Doe" value={shippingForm.fullName}
+                      onChange={e => setShippingForm(f => ({ ...f, fullName: e.target.value }))} />
+                    {formErrors.fullName && <div style={{ fontSize:11, color:'#dc2626', marginTop:4 }}>⚠ {formErrors.fullName}</div>}
+                  </div>
+                  <div>
+                    <label style={{ display:'block', fontSize:11, fontWeight:700, color:'#64748b', textTransform:'uppercase', letterSpacing:0.7, marginBottom:6 }}>Phone</label>
+                    <input type="text" className={`form-control-custom ${formErrors.phone ? 'is-invalid' : ''}`}
+                      placeholder="03XX-XXXXXXX" value={shippingForm.phone}
+                      onChange={e => setShippingForm(f => ({ ...f, phone: e.target.value }))} />
+                    {formErrors.phone && <div style={{ fontSize:11, color:'#dc2626', marginTop:4 }}>⚠ {formErrors.phone}</div>}
+                  </div>
+                  <div>
+                    <label style={{ display:'block', fontSize:11, fontWeight:700, color:'#64748b', textTransform:'uppercase', letterSpacing:0.7, marginBottom:6 }}>City</label>
+                    <input type="text" className={`form-control-custom ${formErrors.city ? 'is-invalid' : ''}`}
+                      placeholder="Karachi / Lahore" value={shippingForm.city}
+                      onChange={e => setShippingForm(f => ({ ...f, city: e.target.value }))} />
+                    {formErrors.city && <div style={{ fontSize:11, color:'#dc2626', marginTop:4 }}>⚠ {formErrors.city}</div>}
+                  </div>
+                  <div style={{ gridColumn:'1/-1' }}>
+                    <label style={{ display:'block', fontSize:11, fontWeight:700, color:'#64748b', textTransform:'uppercase', letterSpacing:0.7, marginBottom:6 }}>Delivery Address</label>
+                    <textarea className={`form-control-custom ${formErrors.address ? 'is-invalid' : ''}`}
+                      placeholder="House No, Street, Area..." rows={2} value={shippingForm.address}
+                      onChange={e => setShippingForm(f => ({ ...f, address: e.target.value }))} />
+                    {formErrors.address && <div style={{ fontSize:11, color:'#dc2626', marginTop:4 }}>⚠ {formErrors.address}</div>}
+                  </div>
+                </div>
+
+                <div style={{ display:'flex', gap:10, marginTop:20 }}>
+                  <button type="button" onClick={closeOrderModal}
+                    style={{ flex:1, padding:'12px', borderRadius:12, border:'1.5px solid #e2e8f0', background:'#f8fafc', color:'#64748b', fontSize:14, fontWeight:600, cursor:'pointer' }}>Cancel</button>
+                  <button type="submit" disabled={orderLoading}
+                    style={{ flex:2, padding:'12px', borderRadius:12, border:'none', background: orderLoading ? '#c7d2fe' : 'linear-gradient(135deg,#6366f1,#3b82f6)', color:'white', fontSize:14, fontWeight:700, cursor: orderLoading ? 'not-allowed' : 'pointer', display:'flex', alignItems:'center', justifyContent:'center', gap:8, boxShadow:'0 4px 14px rgba(99,102,241,0.3)' }}>
+                    {orderLoading
+                      ? <><span style={{ width:16, height:16, border:'2px solid rgba(255,255,255,0.4)', borderTop:'2px solid white', borderRadius:'50%', animation:'spin 0.8s linear infinite', display:'inline-block' }} />Processing...</>
+                      : `Confirm Order — Rs. ${(selectedProduct.price * quantity).toLocaleString()}`
+                    }
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
-        </>
+        </div>
       )}
     </main>
   )
