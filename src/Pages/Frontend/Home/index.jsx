@@ -261,9 +261,9 @@ const Home = () => {
                             <p className="text-muted">Please check back later!</p>
                         </div>
                     ) : (
-                        <div className="row g-4">
+                        <div className="row g-3 g-md-4">
                             {recentProducts.map(product => (
-                                <div key={product.id} className="col-6 col-md-4 col-xl-3">
+                                <div key={product.id} className="col-12 col-sm-6 col-md-4 col-xl-3">
                                     <div className="product-card d-flex flex-column">
                                         
                                         {/* Image Section */}

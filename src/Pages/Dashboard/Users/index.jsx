@@ -84,7 +84,7 @@ const Users = () => {
     const active = documents.filter(u => u.status === 'active').length
 
     return (
-        <div style={{ padding: '28px 24px', fontFamily: "'Inter', sans-serif", minHeight: '100%', background: '#f8fafc' }}>
+        <div style={{ padding: 'clamp(14px, 3vw, 28px)', fontFamily: "'Inter', sans-serif", minHeight: '100%', background: '#f8fafc' }}>
             <style>{`
                 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
                 @keyframes usr-in { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
@@ -100,12 +100,23 @@ const Users = () => {
                 .usr-modal-select:focus { outline:none; border-color:#6366f1 !important; box-shadow:0 0 0 3px rgba(99,102,241,0.15) !important; }
                 .usr-save-btn:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 8px 24px rgba(99,102,241,0.35) !important; }
                 .usr-save-btn { transition:all 0.2s; }
+
+                /* Smooth Horizontal Scrollbar for Users Table */
+                .usr-table-scroll::-webkit-scrollbar { height: 6px; }
+                .usr-table-scroll::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+                .usr-table-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+                .usr-table-scroll::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+                @media (max-width: 576px) {
+                    .usr-filter-box { flex-direction: column !important; align-items: stretch !important; }
+                    .usr-filter-info { margin-left: 0 !important; text-align: left !important; }
+                }
             `}</style>
 
             {/* ── Header ── */}
-            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:28, flexWrap:'wrap', gap:12, animation:'usr-in 0.4s ease' }}>
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:24, flexWrap:'wrap', gap:12, animation:'usr-in 0.4s ease' }}>
                 <div>
-                    <h1 style={{ margin:0, fontSize:24, fontWeight:800, color:'#0f172a', letterSpacing:-0.5 }}>👥 Users Management</h1>
+                    <h1 style={{ margin:0, fontSize:'clamp(20px, 4vw, 26px)', fontWeight:800, color:'#0f172a', letterSpacing:-0.5 }}>👥 Users Management</h1>
                     <p style={{ margin:'4px 0 0', fontSize:13, color:'#94a3b8' }}>Manage all registered users and their roles</p>
                 </div>
                 <div style={{ fontSize:13, color:'#64748b', background:'#fff', border:'1px solid #e2e8f0', borderRadius:10, padding:'7px 14px', fontWeight:500 }}>
@@ -114,19 +125,19 @@ const Users = () => {
             </div>
 
             {/* ── Stat Cards ── */}
-            <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(160px,1fr))', gap:16, marginBottom:24, animation:'usr-in 0.4s ease 0.05s both' }}>
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(140px,1fr))', gap:14, marginBottom:24, animation:'usr-in 0.4s ease 0.05s both' }}>
                 {[
                     { label:'Total Users',  value:documents.length, icon:'👥', color:'#6366f1', bg:'#ede9fe' },
                     { label:'Super Admins', value:admins,            icon:'👑', color:'#d97706', bg:'#fef3c7' },
                     { label:'Customers',    value:customers,         icon:'🛍', color:'#1d4ed8', bg:'#dbeafe' },
                     { label:'Active',       value:active,            icon:'🟢', color:'#16a34a', bg:'#dcfce7' },
                 ].map((s,i) => (
-                    <div key={i} style={{ background:'#fff', borderRadius:16, padding:'18px 20px', boxShadow:'0 2px 12px rgba(0,0,0,0.06)', display:'flex', alignItems:'center', gap:14 }}>
-                        <div style={{ width:44, height:44, borderRadius:12, background:s.bg, display:'flex', alignItems:'center', justifyContent:'center', fontSize:20, flexShrink:0 }}>
+                    <div key={i} style={{ background:'#fff', borderRadius:16, padding:'14px 16px', boxShadow:'0 2px 10px rgba(0,0,0,0.05)', display:'flex', alignItems:'center', gap:12 }}>
+                        <div style={{ width:40, height:40, borderRadius:12, background:s.bg, display:'flex', alignItems:'center', justifyContent:'center', fontSize:18, flexShrink:0 }}>
                             {s.icon}
                         </div>
                         <div>
-                            <div style={{ fontSize:22, fontWeight:800, color:'#0f172a', lineHeight:1 }}>{s.value}</div>
+                            <div style={{ fontSize:20, fontWeight:800, color:'#0f172a', lineHeight:1 }}>{s.value}</div>
                             <div style={{ fontSize:11, color:'#94a3b8', fontWeight:600, marginTop:3 }}>{s.label}</div>
                         </div>
                     </div>
@@ -134,14 +145,14 @@ const Users = () => {
             </div>
 
             {/* ── Filters ── */}
-            <div style={{ background:'#fff', borderRadius:16, padding:'16px 20px', marginBottom:20, boxShadow:'0 2px 12px rgba(0,0,0,0.05)', display:'flex', gap:12, flexWrap:'wrap', alignItems:'center', animation:'usr-in 0.4s ease 0.1s both' }}>
+            <div className="usr-filter-box" style={{ background:'#fff', borderRadius:16, padding:'14px 18px', marginBottom:18, boxShadow:'0 2px 10px rgba(0,0,0,0.05)', display:'flex', gap:10, flexWrap:'wrap', alignItems:'center', animation:'usr-in 0.4s ease 0.1s both' }}>
                 <input
                     className="usr-search"
                     type="text"
-                    placeholder="🔍  Search by name or email…"
+                    placeholder="🔍 Search by name or email…"
                     value={search}
                     onChange={e => setSearch(e.target.value)}
-                    style={{ flex:1, minWidth:200, padding:'10px 14px', borderRadius:10, border:'1.5px solid #e2e8f0', fontSize:13, background:'#f8fafc', color:'#0f172a', transition:'all 0.2s' }}
+                    style={{ flex:1, minWidth:180, padding:'10px 14px', borderRadius:10, border:'1.5px solid #e2e8f0', fontSize:13, background:'#f8fafc', color:'#0f172a', transition:'all 0.2s' }}
                 />
                 <select
                     className="usr-select"
@@ -155,138 +166,143 @@ const Users = () => {
                 </select>
                 {(search || filterRole !== 'all') && (
                     <button onClick={() => { setSearch(''); setFilterRole('all') }}
-                        style={{ padding:'10px 16px', borderRadius:10, border:'1.5px solid #e2e8f0', fontSize:12, background:'#f1f5f9', color:'#64748b', cursor:'pointer', fontWeight:600 }}>
+                        style={{ padding:'10px 14px', borderRadius:10, border:'1.5px solid #e2e8f0', fontSize:12, background:'#f1f5f9', color:'#64748b', cursor:'pointer', fontWeight:600 }}>
                         ✕ Clear
                     </button>
                 )}
-                <div style={{ marginLeft:'auto', fontSize:12, color:'#94a3b8', fontWeight:500 }}>
+                <div className="usr-filter-info" style={{ marginLeft:'auto', fontSize:12, color:'#94a3b8', fontWeight:500 }}>
                     Showing {filtered.length} of {documents.length}
                 </div>
             </div>
 
-            {/* ── Table ── */}
+            {/* ── Table Container ── */}
             <div style={{ background:'#fff', borderRadius:20, boxShadow:'0 4px 20px rgba(0,0,0,0.07)', overflow:'hidden', animation:'usr-in 0.4s ease 0.15s both' }}>
+                <div className="usr-table-scroll" style={{ width: '100%', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+                    <div style={{ minWidth: '850px' }}>
 
-                {/* Table Header */}
-                <div style={{ display:'grid', gridTemplateColumns:'2fr 2fr 3fr 1.5fr 1.5fr 1fr', gap:0, background:'#1e293b', padding:'14px 24px' }}>
-                    {['Name','UID','Email','Role','Status','Actions'].map((h,i) => (
-                        <div key={i} style={{ fontSize:11, fontWeight:700, color:'#94a3b8', textTransform:'uppercase', letterSpacing:1 }}>{h}</div>
-                    ))}
-                </div>
+                        {/* Table Header */}
+                        <div style={{ display:'grid', gridTemplateColumns:'2fr 2fr 3fr 1.5fr 1.5fr 90px', gap:10, background:'#1e293b', padding:'14px 20px' }}>
+                            {['Name','UID','Email','Role','Status','Actions'].map((h,i) => (
+                                <div key={i} style={{ fontSize:11, fontWeight:700, color:'#94a3b8', textTransform:'uppercase', letterSpacing:1 }}>{h}</div>
+                            ))}
+                        </div>
 
-                {/* Loading */}
-                {isLoading && (
-                    <div style={{ padding:48, textAlign:'center' }}>
-                        <div style={{ width:36, height:36, border:'3px solid #e2e8f0', borderTop:'3px solid #6366f1', borderRadius:'50%', animation:'usr-spin 0.8s linear infinite', margin:'0 auto 12px' }} />
-                        <p style={{ color:'#94a3b8', fontSize:13 }}>Loading users…</p>
-                    </div>
-                )}
+                        {/* Loading */}
+                        {isLoading && (
+                            <div style={{ padding:48, textAlign:'center' }}>
+                                <div style={{ width:36, height:36, border:'3px solid #e2e8f0', borderTop:'3px solid #6366f1', borderRadius:'50%', animation:'usr-spin 0.8s linear infinite', margin:'0 auto 12px' }} />
+                                <p style={{ color:'#94a3b8', fontSize:13 }}>Loading users…</p>
+                            </div>
+                        )}
 
-                {/* Empty */}
-                {!isLoading && filtered.length === 0 && (
-                    <div style={{ padding:56, textAlign:'center' }}>
-                        <div style={{ fontSize:48, marginBottom:12 }}>🔍</div>
-                        <div style={{ fontSize:15, fontWeight:600, color:'#475569' }}>No users found</div>
-                        <div style={{ fontSize:13, color:'#94a3b8', marginTop:4 }}>Try adjusting your search or filter</div>
-                    </div>
-                )}
+                        {/* Empty */}
+                        {!isLoading && filtered.length === 0 && (
+                            <div style={{ padding:56, textAlign:'center' }}>
+                                <div style={{ fontSize:48, marginBottom:12 }}>🔍</div>
+                                <div style={{ fontSize:15, fontWeight:600, color:'#475569' }}>No users found</div>
+                                <div style={{ fontSize:13, color:'#94a3b8', marginTop:4 }}>Try adjusting your search or filter</div>
+                            </div>
+                        )}
 
-                {/* Rows */}
-                {!isLoading && filtered.map((user, i) => {
-                    const role = ROLE_CONFIG[user.role] || ROLE_CONFIG.customer
-                    const status = STATUS_CONFIG[user.status] || STATUS_CONFIG.inactive
-                    return (
-                        <div key={user.uid} className="usr-row" style={{
-                            display:'grid', gridTemplateColumns:'2fr 2fr 3fr 1.5fr 1.5fr 1fr',
-                            gap:0, padding:'16px 24px', alignItems:'center',
-                            borderBottom: i < filtered.length - 1 ? '1px solid #f1f5f9' : 'none',
-                            background:'#fff'
-                        }}>
-                            {/* Name + Avatar */}
-                            <div style={{ display:'flex', alignItems:'center', gap:10, minWidth:0 }}>
-                                <div style={{
-                                    width:38, height:38, borderRadius:12, flexShrink:0, overflow:'hidden',
-                                    background: user.profilePicture ? '#fff' : `linear-gradient(135deg, ${role.color}33, ${role.color}66)`,
-                                    display:'flex', alignItems:'center', justifyContent:'center',
-                                    border:`1.5px solid ${role.border}`, fontSize:15, fontWeight:700, color:role.color
+                        {/* Rows */}
+                        {!isLoading && filtered.map((user, i) => {
+                            const role = ROLE_CONFIG[user.role] || ROLE_CONFIG.customer
+                            const status = STATUS_CONFIG[user.status] || STATUS_CONFIG.inactive
+                            return (
+                                <div key={user.uid} className="usr-row" style={{
+                                    display:'grid', gridTemplateColumns:'2fr 2fr 3fr 1.5fr 1.5fr 90px',
+                                    gap:10, padding:'14px 20px', alignItems:'center',
+                                    borderBottom: i < filtered.length - 1 ? '1px solid #f1f5f9' : 'none',
+                                    background:'#fff'
                                 }}>
-                                    {user.profilePicture
-                                        ? <img src={user.profilePicture} alt="" style={{ width:'100%', height:'100%', objectFit:'cover' }} />
-                                        : (user.fullName || 'U').charAt(0).toUpperCase()
-                                    }
-                                </div>
-                                <div style={{ minWidth:0 }}>
-                                    <div style={{ fontSize:13, fontWeight:700, color:'#0f172a', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>
-                                        {user.fullName || '—'}
+                                    {/* Name + Avatar */}
+                                    <div style={{ display:'flex', alignItems:'center', gap:10, minWidth:0 }}>
+                                        <div style={{
+                                            width:38, height:38, borderRadius:12, flexShrink:0, overflow:'hidden',
+                                            background: user.profilePicture ? '#fff' : `linear-gradient(135deg, ${role.color}33, ${role.color}66)`,
+                                            display:'flex', alignItems:'center', justifyContent:'center',
+                                            border:`1.5px solid ${role.border}`, fontSize:15, fontWeight:700, color:role.color
+                                        }}>
+                                            {user.profilePicture
+                                                ? <img src={user.profilePicture} alt="" style={{ width:'100%', height:'100%', objectFit:'cover' }} />
+                                                : (user.fullName || 'U').charAt(0).toUpperCase()
+                                            }
+                                        </div>
+                                        <div style={{ minWidth:0 }}>
+                                            <div style={{ fontSize:13, fontWeight:700, color:'#0f172a', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>
+                                                {user.fullName || '—'}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* UID */}
+                                    <div style={{ fontSize:11, color:'#94a3b8', fontFamily:'monospace', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>
+                                        {user.uid}
+                                    </div>
+
+                                    {/* Email */}
+                                    <div style={{ fontSize:13, color:'#475569', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>
+                                        {user.email}
+                                    </div>
+
+                                    {/* Role badge */}
+                                    <div>
+                                        <span style={{
+                                            display:'inline-flex', alignItems:'center', gap:5, fontSize:11,
+                                            fontWeight:700, padding:'4px 12px', borderRadius:999,
+                                            background:role.bg, color:role.color,
+                                            border:`1px solid ${role.border}`, textTransform:'capitalize',
+                                            whiteSpace:'nowrap'
+                                        }}>
+                                            {role.icon} {role.label}
+                                        </span>
+                                    </div>
+
+                                    {/* Status badge */}
+                                    <div>
+                                        <span style={{
+                                            display:'inline-flex', alignItems:'center', gap:6, fontSize:11,
+                                            fontWeight:700, padding:'4px 12px', borderRadius:999,
+                                            background:status.bg, color:status.color,
+                                            border:`1px solid ${status.border}`,
+                                        }}>
+                                            <span style={{ width:6, height:6, borderRadius:'50%', background:status.dot, animation: user.status==='active' ? 'pulse-dot 2s infinite' : 'none', display:'inline-block' }} />
+                                            {status.label}
+                                        </span>
+                                    </div>
+
+                                    {/* Actions */}
+                                    <div style={{ display:'flex', gap:6 }}>
+                                        <button className="usr-icon-btn" onClick={() => handleEdit(user)}
+                                            style={{ width:32, height:32, background:'#ede9fe', color:'#7c3aed', fontSize:13 }}
+                                            title="Edit user">
+                                            ✏️
+                                        </button>
+                                        <button className="usr-icon-btn" onClick={() => setConfirmDelete(user)}
+                                            style={{ width:32, height:32, background:'#fef2f2', color:'#dc2626', fontSize:13 }}
+                                            title="Delete user">
+                                            🗑️
+                                        </button>
                                     </div>
                                 </div>
-                            </div>
-
-                            {/* UID */}
-                            <div style={{ fontSize:11, color:'#94a3b8', fontFamily:'monospace', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>
-                                {user.uid}
-                            </div>
-
-                            {/* Email */}
-                            <div style={{ fontSize:13, color:'#475569', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>
-                                {user.email}
-                            </div>
-
-                            {/* Role badge */}
-                            <div>
-                                <span style={{
-                                    display:'inline-flex', alignItems:'center', gap:5, fontSize:11,
-                                    fontWeight:700, padding:'4px 12px', borderRadius:999,
-                                    background:role.bg, color:role.color,
-                                    border:`1px solid ${role.border}`, textTransform:'capitalize',
-                                    whiteSpace:'nowrap'
-                                }}>
-                                    {role.icon} {role.label}
-                                </span>
-                            </div>
-
-                            {/* Status badge */}
-                            <div>
-                                <span style={{
-                                    display:'inline-flex', alignItems:'center', gap:6, fontSize:11,
-                                    fontWeight:700, padding:'4px 12px', borderRadius:999,
-                                    background:status.bg, color:status.color,
-                                    border:`1px solid ${status.border}`,
-                                }}>
-                                    <span style={{ width:6, height:6, borderRadius:'50%', background:status.dot, animation: user.status==='active' ? 'pulse-dot 2s infinite' : 'none', display:'inline-block' }} />
-                                    {status.label}
-                                </span>
-                            </div>
-
-                            {/* Actions */}
-                            <div style={{ display:'flex', gap:8 }}>
-                                <button className="usr-icon-btn" onClick={() => handleEdit(user)}
-                                    style={{ width:34, height:34, background:'#ede9fe', color:'#7c3aed', fontSize:14 }}
-                                    title="Edit user">
-                                    ✏️
-                                </button>
-                                <button className="usr-icon-btn" onClick={() => setConfirmDelete(user)}
-                                    style={{ width:34, height:34, background:'#fef2f2', color:'#dc2626', fontSize:14 }}
-                                    title="Delete user">
-                                    🗑️
-                                </button>
-                            </div>
-                        </div>
-                    )
-                })}
+                            )
+                        })}
+                    </div>
+                </div>
             </div>
 
             {/* ── Edit Modal ── */}
             {modalOpen && userToEdit && (
-                <div style={{ position:'fixed', inset:0, background:'rgba(15,12,41,0.6)', zIndex:1000, display:'flex', alignItems:'center', justifyContent:'center', padding:20, backdropFilter:'blur(4px)' }}
+                <div style={{ position:'fixed', inset:0, background:'rgba(15,12,41,0.6)', zIndex:1000, display:'flex', alignItems:'center', justifyContent:'center', padding:16, backdropFilter:'blur(4px)' }}
                     onClick={e => { if (e.target === e.currentTarget) setModalOpen(false) }}>
-                    <div style={{ background:'#fff', borderRadius:24, padding:32, width:'100%', maxWidth:440, boxShadow:'0 24px 64px rgba(0,0,0,0.18)', animation:'usr-in 0.3s ease' }}>
-                        <div style={{ display:'flex', alignItems:'center', gap:14, marginBottom:24 }}>
-                            <div style={{ width:48, height:48, borderRadius:14, background:'#ede9fe', display:'flex', alignItems:'center', justifyContent:'center', fontSize:22 }}>✏️</div>
-                            <div>
+                    <div style={{ background:'#fff', borderRadius:24, padding:24, width:'100%', maxWidth:440, boxShadow:'0 24px 64px rgba(0,0,0,0.18)', animation:'usr-in 0.3s ease' }}>
+                        <div style={{ display:'flex', alignItems:'center', gap:14, marginBottom:20 }}>
+                            <div style={{ width:44, height:44, borderRadius:14, background:'#ede9fe', display:'flex', alignItems:'center', justifyContent:'center', fontSize:20, flexShrink:0 }}>✏️</div>
+                            <div style={{ flex:1, minWidth:0 }}>
                                 <div style={{ fontSize:16, fontWeight:800, color:'#0f172a' }}>Edit User</div>
-                                <div style={{ fontSize:12, color:'#94a3b8', marginTop:2 }}>{userToEdit.email}</div>
+                                <div style={{ fontSize:12, color:'#94a3b8', marginTop:2, whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{userToEdit.email}</div>
                             </div>
+                            <button onClick={() => setModalOpen(false)} style={{ width:32, height:32, borderRadius:'50%', border:'none', background:'#f1f5f9', cursor:'pointer', fontSize:16, display:'flex', alignItems:'center', justifyContent:'center', color:'#64748b' }}>✕</button>
                         </div>
 
                         {/* Name */}
@@ -313,7 +329,7 @@ const Users = () => {
                         </div>
 
                         {/* Status */}
-                        <div style={{ marginBottom:28 }}>
+                        <div style={{ marginBottom:24 }}>
                             <label style={{ display:'block', fontSize:11, fontWeight:700, color:'#64748b', textTransform:'uppercase', letterSpacing:0.8, marginBottom:7 }}>Status</label>
                             <select className="usr-modal-select"
                                 value={editForm.status}
@@ -333,7 +349,7 @@ const Users = () => {
                                 style={{ flex:2, padding:'12px', borderRadius:12, border:'none', background: isProcessing ? '#c7d2fe' : 'linear-gradient(135deg,#6366f1,#8b5cf6)', color:'#fff', fontSize:14, fontWeight:700, cursor: isProcessing ? 'not-allowed' : 'pointer', display:'flex', alignItems:'center', justifyContent:'center', gap:8, boxShadow:'0 4px 14px rgba(99,102,241,0.3)' }}>
                                 {isProcessing
                                     ? <><span style={{ width:16, height:16, border:'2px solid rgba(255,255,255,0.4)', borderTop:'2px solid #fff', borderRadius:'50%', animation:'usr-spin 0.8s linear infinite', display:'inline-block' }} />Saving...</>
-                                    : '💾  Save Changes'
+                                    : '💾 Save Changes'
                                 }
                             </button>
                         </div>
@@ -343,12 +359,12 @@ const Users = () => {
 
             {/* ── Delete Confirm Modal ── */}
             {confirmDelete && (
-                <div style={{ position:'fixed', inset:0, background:'rgba(15,12,41,0.6)', zIndex:1000, display:'flex', alignItems:'center', justifyContent:'center', padding:20, backdropFilter:'blur(4px)' }}
+                <div style={{ position:'fixed', inset:0, background:'rgba(15,12,41,0.6)', zIndex:1000, display:'flex', alignItems:'center', justifyContent:'center', padding:16, backdropFilter:'blur(4px)' }}
                     onClick={e => { if (e.target === e.currentTarget) setConfirmDelete(null) }}>
-                    <div style={{ background:'#fff', borderRadius:24, padding:32, width:'100%', maxWidth:400, boxShadow:'0 24px 64px rgba(0,0,0,0.18)', textAlign:'center', animation:'usr-in 0.3s ease' }}>
-                        <div style={{ width:64, height:64, borderRadius:'50%', background:'#fef2f2', display:'flex', alignItems:'center', justifyContent:'center', fontSize:28, margin:'0 auto 16px' }}>🗑️</div>
+                    <div style={{ background:'#fff', borderRadius:24, padding:28, width:'100%', maxWidth:380, boxShadow:'0 24px 64px rgba(0,0,0,0.18)', textAlign:'center', animation:'usr-in 0.3s ease' }}>
+                        <div style={{ width:60, height:60, borderRadius:'50%', background:'#fef2f2', display:'flex', alignItems:'center', justifyContent:'center', fontSize:26, margin:'0 auto 14px' }}>🗑️</div>
                         <div style={{ fontSize:18, fontWeight:800, color:'#0f172a', marginBottom:8 }}>Delete User?</div>
-                        <div style={{ fontSize:13, color:'#64748b', marginBottom:24, lineHeight:1.6 }}>
+                        <div style={{ fontSize:13, color:'#64748b', marginBottom:20, lineHeight:1.6 }}>
                             Are you sure you want to delete <strong>"{confirmDelete.fullName}"</strong>?<br />This action cannot be undone.
                         </div>
                         <div style={{ display:'flex', gap:10 }}>
@@ -360,7 +376,7 @@ const Users = () => {
                                 style={{ flex:1, padding:'12px', borderRadius:12, border:'none', background: isProcessing ? '#fca5a5' : 'linear-gradient(135deg,#ef4444,#dc2626)', color:'#fff', fontSize:14, fontWeight:700, cursor: isProcessing ? 'not-allowed' : 'pointer', display:'flex', alignItems:'center', justifyContent:'center', gap:8, boxShadow:'0 4px 14px rgba(239,68,68,0.3)', transition:'all 0.2s' }}>
                                 {isProcessing
                                     ? <><span style={{ width:16, height:16, border:'2px solid rgba(255,255,255,0.4)', borderTop:'2px solid #fff', borderRadius:'50%', animation:'usr-spin 0.8s linear infinite', display:'inline-block' }} />Deleting...</>
-                                    : '🗑️  Delete'
+                                    : '🗑️ Delete'
                                 }
                             </button>
                         </div>

@@ -197,16 +197,16 @@ const Navbar = () => {
                 /* ── Sidebar Drawer ── */
                 .mob-sidebar {
                     position: fixed;
-                    top: 0; right: -100%;
+                    top: 0; left: -100%;
                     width: 300px; height: 100%;
                     background: #ffffff;
                     z-index: 1300;
-                    transition: right 0.35s cubic-bezier(0.4,0,0.2,1);
+                    transition: left 0.35s cubic-bezier(0.4,0,0.2,1);
                     display: flex; flex-direction: column;
-                    box-shadow: -8px 0 40px rgba(0,0,0,0.15);
+                    box-shadow: 8px 0 40px rgba(0,0,0,0.15);
                     overflow-y: auto;
                 }
-                .mob-sidebar.open { right: 0; }
+                .mob-sidebar.open { left: 0; }
 
                 .sb-header {
                     display: flex; align-items: center; justify-content: space-between;
