@@ -1,218 +1,188 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 const Footer = () => {
     const year = new Date().getFullYear()
+    const [newsletterEmail, setNewsletterEmail] = useState('')
+    const [subscribed, setSubscribed] = useState(false)
+
+    const handleSubscribe = (e) => {
+        e.preventDefault()
+        if (newsletterEmail) {
+            setSubscribed(true)
+            if (window.toastify) {
+                window.toastify('Subscribed successfully! Thank you.', 'success')
+            }
+            setNewsletterEmail('')
+            setTimeout(() => setSubscribed(false), 5000)
+        }
+    }
 
     return (
-        <footer className="footer-area">
-            {/* Custom Styles for Footer */}
-            <style>{`
-                .footer-area {
-                    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-                    color: #94a3b8;
-                    padding-top: 80px;
-                    font-size: 15px;
-                    border-top: 1px solid rgba(255, 255, 255, 0.05);
-                }
-                .footer-brand {
-                    font-size: 28px;
-                    font-weight: 800;
-                    color: #ffffff;
-                    text-decoration: none;
-                    margin-bottom: 20px;
-                    display: inline-block;
-                    letter-spacing: -0.5px;
-                }
-                .footer-heading {
-                    color: #ffffff;
-                    font-size: 18px;
-                    font-weight: 700;
-                    margin-bottom: 24px;
-                    position: relative;
-                    padding-bottom: 12px;
-                }
-                .footer-heading::after {
-                    content: '';
-                    position: absolute;
-                    left: 0;
-                    bottom: 0;
-                    width: 40px;
-                    height: 3px;
-                    background: #3b82f6;
-                    border-radius: 2px;
-                }
-                .footer-links {
-                    list-style: none;
-                    padding: 0;
-                    margin: 0;
-                }
-                .footer-links li {
-                    margin-bottom: 12px;
-                }
-                .footer-links a {
-                    color: #94a3b8;
-                    text-decoration: none;
-                    transition: all 0.3s ease;
-                    display: inline-flex;
-                    align-items: center;
-                }
-                .footer-links a::before {
-                    content: '→';
-                    margin-right: 8px;
-                    font-size: 12px;
-                    color: #3b82f6;
-                    opacity: 0;
-                    transform: translateX(-10px);
-                    transition: all 0.3s ease;
-                }
-                .footer-links a:hover {
-                    color: #ffffff;
-                    transform: translateX(5px);
-                }
-                .footer-links a:hover::before {
-                    opacity: 1;
-                    transform: translateX(0);
-                }
-                .contact-item {
-                    display: flex;
-                    align-items: flex-start;
-                    margin-bottom: 16px;
-                }
-                .contact-icon {
-                    color: #3b82f6;
-                    margin-right: 12px;
-                    font-size: 20px;
-                    line-height: 1;
-                    margin-top: 2px;
-                }
-                .social-icons {
-                    display: flex;
-                    gap: 12px;
-                    margin-top: 24px;
-                }
-                .social-btn {
-                    width: 40px;
-                    height: 40px;
-                    border-radius: 50%;
-                    background: rgba(255, 255, 255, 0.05);
-                    color: #ffffff;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    text-decoration: none;
-                    transition: all 0.3s ease;
-                    border: 1px solid rgba(255, 255, 255, 0.1);
-                }
-                .social-btn:hover {
-                    background: #3b82f6;
-                    border-color: #3b82f6;
-                    transform: translateY(-3px);
-                }
-                .footer-bottom {
-                    background: rgba(0, 0, 0, 0.2);
-                    padding: 24px 0;
-                    margin-top: 60px;
-                    border-top: 1px solid rgba(255, 255, 255, 0.05);
-                }
-                .newsletter-input {
-                    background: rgba(255,255,255,0.05);
-                    border: 1px solid rgba(255,255,255,0.1);
-                    color: white;
-                    padding: 12px 20px;
-                    border-radius: 12px;
-                }
-                .newsletter-input:focus {
-                    background: rgba(255,255,255,0.1);
-                    border-color: #3b82f6;
-                    color: white;
-                    box-shadow: none;
-                }
-            `}</style>
+        <footer className="text-light position-relative overflow-hidden"
+            style={{ background: 'linear-gradient(180deg, #0f172a 0%, #090d16 100%)', fontFamily: "'Inter', sans-serif" }}>
 
-            <div className="container">
-                <div className="row g-5">
+            {/* ── Top Highlights Banner ── */}
+            <div className="border-bottom border-secondary border-opacity-15 py-4"
+                style={{ background: 'rgba(255, 255, 255, 0.02)' }}>
+                <div className="container py-2">
+                    <div className="row g-4 text-center text-md-start">
+                        {[
+                            { icon: '🚀', title: 'Free & Fast Shipping', desc: 'On all orders nationwide' },
+                            { icon: '🔒', title: '100% Secure Checkout', desc: 'Protected by SSL encryption' },
+                            { icon: '🔄', title: 'Easy 30-Day Returns', desc: 'Hassle-free money back' },
+                            { icon: '🎧', title: '24/7 Dedicated Support', desc: 'Always ready to help' },
+                        ].map((item, idx) => (
+                            <div key={idx} className="col-12 col-sm-6 col-lg-3">
+                                <div className="d-flex align-items-center justify-content-center justify-content-md-start gap-3 p-2">
+                                    <div className="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0 border border-light border-opacity-10 shadow-sm"
+                                        style={{ width: '48px', height: '48px', fontSize: '22px', background: 'rgba(255, 255, 255, 0.05)' }}>
+                                        {item.icon}
+                                    </div>
+                                    <div>
+                                        <h6 className="fw-bold mb-0 text-white fs-6">{item.title}</h6>
+                                        <p className="text-secondary small mb-0" style={{ fontSize: '12px' }}>{item.desc}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
 
-                    {/* Brand & About */}
-                    <div className="col-lg-4 col-md-6">
-                        <Link to="/" className="footer-brand">
-                            <span className="text-primary">My</span>Store
+            {/* ── Main Footer Grid ── */}
+            <div className="container py-5">
+                <div className="row g-4 g-lg-5 pt-2">
+
+                    {/* Column 1: Brand & About */}
+                    <div className="col-12 col-md-6 col-lg-4">
+                        <Link to="/" className="d-flex align-items-center gap-2 text-decoration-none mb-3">
+                            <span className="fs-3 lh-1">🛍️</span>
+                            <span className="fw-extrabold fs-3 text-white tracking-tight">MyStore</span>
                         </Link>
-                        <p className="mb-4 pe-lg-4">
-                            We are dedicated to providing the best online shopping experience. Premium quality products, fast delivery, and exceptional customer support right at your fingertips.
+                        <p className="text-secondary small mb-4 pe-lg-3 lh-base" style={{ fontSize: '14px' }}>
+                            Your one-stop destination for high-quality products at unbeatable prices. Fast shipping, guaranteed security, and exceptional service every time.
                         </p>
-                        <div className="social-icons">
-                            <a href="#" className="social-btn">📱</a>
-                            <a href="#" className="social-btn">📘</a>
-                            <a href="#" className="social-btn">📸</a>
-                            <a href="#" className="social-btn">🐦</a>
+
+                        {/* Social Buttons */}
+                        <div className="d-flex gap-2">
+                            {[
+                                { icon: '💬', name: 'WhatsApp', href: '#whatsapp' },
+                                { icon: '📘', name: 'Facebook', href: '#facebook' },
+                                { icon: '📸', name: 'Instagram', href: '#instagram' },
+                                { icon: '🌐', name: 'Website', href: '#website' },
+                            ].map((s, idx) => (
+                                <a key={idx} href={s.href} onClick={(e) => e.preventDefault()}
+                                    title={s.name}
+                                    className="d-inline-flex align-items-center justify-content-center text-white text-decoration-none rounded-3 border border-light border-opacity-10 transition-all"
+                                    style={{ width: '42px', height: '42px', background: 'rgba(255, 255, 255, 0.05)', fontSize: '18px' }}>
+                                    {s.icon}
+                                </a>
+                            ))}
                         </div>
                     </div>
 
-                    {/* Quick Links */}
-                    <div className="col-lg-2 col-md-6">
-                        <h4 className="footer-heading">Quick Links</h4>
-                        <ul className="footer-links">
-                            <li><Link to="/">Home</Link></li>
-                            <li><Link to="/about">About Us</Link></li>
-                            <li><Link to="/products">Shop Products</Link></li>
-                            <li><Link to="/auth/login">Login</Link></li>
-                            <li><Link to="/auth/register">Sign Up</Link></li>
+                    {/* Column 2: Quick Links */}
+                    <div className="col-6 col-md-3 col-lg-2">
+                        <h6 className="text-white fw-bold uppercase-spacing mb-3 pb-2 border-bottom border-primary border-2 d-inline-block" style={{ fontSize: '14px', letterSpacing: '0.8px' }}>
+                            Quick Links
+                        </h6>
+                        <ul className="list-unstyled m-0 d-flex flex-column gap-2.5">
+                            {[
+                                { to: '/', label: 'Home Page' },
+                                { to: '/about', label: 'About Us' },
+                                { to: '/products', label: 'All Products' },
+                                { to: '/contact', label: 'Contact Us' },
+                                { to: '/auth/login', label: 'Account Login' },
+                            ].map((link, idx) => (
+                                <li key={idx}>
+                                    <Link to={link.to} className="text-secondary text-decoration-none small transition-all d-inline-block hover-white" style={{ fontSize: '14px' }}>
+                                        {link.label}
+                                    </Link>
+                                </li>
+                            ))}
                         </ul>
                     </div>
 
-                    {/* Contact Info */}
-                    <div className="col-lg-3 col-md-6">
-                        <h4 className="footer-heading">Contact Us</h4>
-                        <div className="contact-item">
-                            <span className="contact-icon">📍</span>
-                            <span>123 Store Street, Main Boulevard,<br />City Name, Country</span>
-                        </div>
-                        <div className="contact-item">
-                            <span className="contact-icon">📞</span>
-                            <span>+92 3466407536<br />+92 3466407536</span>
-                        </div>
-                        <div className="contact-item">
-                            <span className="contact-icon">✉️</span>
-                            <span>sirajkhank819@gmail.com<br />siraj07536@gmail.com</span>
-                        </div>
+                    {/* Column 3: Customer Care */}
+                    <div className="col-6 col-md-3 col-lg-2">
+                        <h6 className="text-white fw-bold uppercase-spacing mb-3 pb-2 border-bottom border-primary border-2 d-inline-block" style={{ fontSize: '14px', letterSpacing: '0.8px' }}>
+                            Support & Contact
+                        </h6>
+                        <ul className="list-unstyled m-0 d-flex flex-column gap-2.5">
+                            <li className="d-flex align-items-center gap-2 text-secondary small" style={{ fontSize: '13px' }}>
+                                <span>📍</span> Tech City, Pakistan
+                            </li>
+                            <li className="d-flex align-items-center gap-2 text-secondary small" style={{ fontSize: '13px' }}>
+                                <span>📞</span> +92 300 1234567
+                            </li>
+                            <li className="d-flex align-items-center gap-2 text-secondary small" style={{ fontSize: '13px' }}>
+                                <span>✉️</span> support@mystore.com
+                            </li>
+                            <li className="d-flex align-items-center gap-2 text-secondary small" style={{ fontSize: '13px' }}>
+                                <span>🕐</span> Mon-Sat: 9am - 6pm
+                            </li>
+                        </ul>
                     </div>
 
-                    {/* Newsletter */}
-                    <div className="col-lg-3 col-md-6">
-                        <h4 className="footer-heading">Newsletter</h4>
-                        <p className="mb-4">Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.</p>
-                        <form className="d-flex flex-column gap-3" onSubmit={(e) => e.preventDefault()}>
-                            <input
-                                type="email"
-                                className="form-control newsletter-input"
-                                placeholder="Enter your email"
-                                required
-                            />
-                            <button className="btn btn-primary rounded-3 py-2 fw-semibold w-100">
-                                Subscribe Now
-                            </button>
-                        </form>
+                    {/* Column 4: Newsletter Subscription Card */}
+                    <div className="col-12 col-md-6 col-lg-4">
+                        <div className="p-4 rounded-4 border border-light border-opacity-10 shadow-lg"
+                            style={{ background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(10px)' }}>
+                            <div className="d-flex align-items-center gap-2 mb-2">
+                                <span className="fs-5">💌</span>
+                                <h6 className="text-white fw-bold mb-0" style={{ fontSize: '15px' }}>Subscribe Newsletter</h6>
+                            </div>
+                            <p className="text-secondary small mb-3 lh-sm" style={{ fontSize: '12px' }}>
+                                Get early access to new product releases, weekly sales, and exclusive discounts.
+                            </p>
+
+                            {subscribed ? (
+                                <div className="alert alert-success bg-success bg-opacity-25 border-success text-white small p-2 text-center rounded-3 mb-0">
+                                    ✓ Subscribed! Thank you.
+                                </div>
+                            ) : (
+                                <form onSubmit={handleSubscribe} className="d-flex flex-column gap-2">
+                                    <input
+                                        type="email"
+                                        className="form-control bg-dark bg-opacity-50 border border-light border-opacity-15 text-white rounded-3 px-3 py-2 shadow-none small"
+                                        placeholder="Enter your email address..."
+                                        value={newsletterEmail}
+                                        onChange={e => setNewsletterEmail(e.target.value)}
+                                        required
+                                        style={{ fontSize: '13px' }}
+                                    />
+                                    <button type="submit"
+                                        className="btn btn-primary rounded-3 py-2 fw-bold small text-white shadow-sm"
+                                        style={{ background: 'linear-gradient(135deg, #6366f1, #3b82f6)', border: 'none' }}>
+                                        Subscribe Now →
+                                    </button>
+                                </form>
+                            )}
+                        </div>
                     </div>
 
                 </div>
             </div>
 
-            {/* Copyright Bottom */}
-            <div className="footer-bottom mt-5">
+            {/* ── Bottom Bar ── */}
+            <div className="py-3 border-top border-secondary border-opacity-15"
+                style={{ background: 'rgba(0, 0, 0, 0.4)' }}>
                 <div className="container">
-                    <div className="row align-items-center">
-                        <div className="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                            &copy; {year} <span className="text-white fw-semibold">MyStore</span>. All Rights Reserved.
+                    <div className="row align-items-center g-3 text-center text-md-start">
+                        <div className="col-12 col-md-6 text-secondary small" style={{ fontSize: '13px' }}>
+                            © {year} <span className="text-white fw-bold">MyStore</span>. All rights reserved.
                         </div>
-                        <div className="col-md-6 text-center text-md-end">
-                            <span className="small">
-                                Made with ❤️ by <a href="#" className="text-primary text-decoration-none fw-semibold">CoDev</a>
-                            </span>
+                        <div className="col-12 col-md-6 text-md-end">
+                            <div className="d-inline-flex align-items-center gap-2">
+                                <span className="badge bg-secondary bg-opacity-25 text-white border border-light border-opacity-10 px-2 py-1" style={{ fontSize: '11px' }}>💳 Cash on Delivery</span>
+                                <span className="badge bg-secondary bg-opacity-25 text-white border border-light border-opacity-10 px-2 py-1" style={{ fontSize: '11px' }}>🔒 Secure SSL</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </footer>
     )
 }

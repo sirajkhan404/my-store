@@ -3,200 +3,96 @@ import { Link } from 'react-router-dom';
 
 const About = () => {
     return (
-        <main className="flex-grow-1" style={{ fontFamily: "'Inter', sans-serif" }}>
-            <style>{`
-                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-
-                /* ── Hero ── */
-                .ab-hero {
-                    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 55%, #3b82f6 100%);
-                    color: white;
-                    padding: clamp(56px, 10vw, 100px) 0 clamp(48px, 8vw, 80px);
-                    position: relative;
-                    overflow: hidden;
-                    text-align: center;
-                }
-                .ab-hero::before {
-                    content: '';
-                    position: absolute;
-                    width: 420px; height: 420px;
-                    background: radial-gradient(circle, rgba(99,102,241,0.22) 0%, transparent 70%);
-                    border-radius: 50%;
-                    top: -120px; left: -80px;
-                }
-                .ab-hero::after {
-                    content: '';
-                    position: absolute;
-                    width: 300px; height: 300px;
-                    background: radial-gradient(circle, rgba(59,130,246,0.18) 0%, transparent 70%);
-                    border-radius: 50%;
-                    bottom: -80px; right: -60px;
-                }
-                .ab-hero h1 {
-                    font-size: clamp(1.8rem, 5vw, 3rem);
-                    font-weight: 800;
-                    line-height: 1.2;
-                    letter-spacing: -0.5px;
-                }
-                .ab-hero p.lead {
-                    font-size: clamp(14px, 2vw, 17px);
-                }
-
-                /* ── Stats ── */
-                .ab-stats {
-                    background: linear-gradient(135deg, #6366f1, #3b82f6);
-                    border-radius: 24px;
-                    padding: clamp(24px, 5vw, 40px) clamp(16px, 4vw, 40px);
-                    box-shadow: 0 20px 48px rgba(99,102,241,0.3);
-                    transform: translateY(-40px);
-                    margin-bottom: -16px;
-                }
-                .ab-stat-val {
-                    font-size: clamp(1.6rem, 4vw, 2.5rem);
-                    font-weight: 800;
-                    line-height: 1.1;
-                }
-                .ab-stat-label { font-size: clamp(12px, 1.8vw, 15px); opacity: 0.8; }
-                .ab-stat-div {
-                    width: 1.5px; height: 50px;
-                    background: rgba(255,255,255,0.2);
-                }
-
-                /* ── Mission Cards ── */
-                .ab-mission-card {
-                    background: white;
-                    border: 1px solid #e2e8f0;
-                    border-radius: 20px;
-                    padding: clamp(24px, 4vw, 40px) clamp(18px, 3vw, 30px);
-                    transition: all 0.3s ease;
-                    height: 100%;
-                }
-                .ab-mission-card:hover {
-                    transform: translateY(-8px);
-                    box-shadow: 0 20px 40px rgba(99,102,241,0.1);
-                    border-color: #c7d2fe;
-                }
-                .ab-mission-icon {
-                    width: 64px; height: 64px;
-                    border-radius: 18px;
-                    display: flex; align-items: center; justify-content: center;
-                    font-size: 28px;
-                    margin: 0 auto 20px;
-                }
-
-                /* ── Team Cards ── */
-                .ab-team-card {
-                    background: white;
-                    border-radius: 20px;
-                    overflow: hidden;
-                    border: 1px solid #e2e8f0;
-                    transition: all 0.3s ease;
-                    height: 100%;
-                }
-                .ab-team-card:hover {
-                    transform: translateY(-8px);
-                    box-shadow: 0 20px 40px rgba(0,0,0,0.09);
-                    border-color: #c7d2fe;
-                }
-                .ab-team-img {
-                    height: clamp(140px, 20vw, 220px);
-                    display: flex; align-items: center; justify-content: center;
-                    font-size: clamp(48px, 8vw, 72px);
-                }
-
-                /* ── CTA ── */
-                .ab-cta {
-                    background: linear-gradient(135deg, #ede9fe, #dbeafe);
-                    border-radius: 24px;
-                    padding: clamp(32px, 6vw, 56px) clamp(20px, 5vw, 48px);
-                    text-align: center;
-                    border: 1px solid #c7d2fe;
-                }
-                .ab-cta h3 { font-size: clamp(1.2rem, 3.5vw, 1.8rem); font-weight: 800; }
-                .ab-cta p  { font-size: clamp(13px, 2vw, 16px); }
-
-                /* ── Responsive ── */
-                @media (max-width: 767px) {
-                    .ab-stats { transform: translateY(0); margin-top: 24px; margin-bottom: 0; }
-                    .ab-stat-div { width: 80%; height: 1.5px; margin: 12px auto; }
-                    .ab-mission-card { padding: 22px 18px; }
-                }
-                @media (max-width: 575px) {
-                    .ab-mission-icon { width: 52px; height: 52px; font-size: 22px; }
-                }
-            `}</style>
-
+        <main className="d-flex flex-column flex-grow-1" style={{ fontFamily: "'Inter', sans-serif" }}>
             {/* ── Hero ── */}
-            <section className="ab-hero">
+            <section className="text-white text-center position-relative overflow-hidden py-5 py-md-6 py-lg-7"
+                style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e3a8a 55%, #3b82f6 100%)' }}>
+
+                {/* Decorative background gradients */}
+                <div className="position-absolute rounded-circle pointer-event-none"
+                    style={{ width: '420px', height: '420px', background: 'radial-gradient(circle, rgba(99,102,241,0.22) 0%, transparent 70%)', top: '-120px', left: '-80px', zIndex: 0 }}></div>
+                <div className="position-absolute rounded-circle pointer-event-none"
+                    style={{ width: '300px', height: '300px', background: 'radial-gradient(circle, rgba(59,130,246,0.18) 0%, transparent 70%)', bottom: '-80px', right: '-60px', zIndex: 0 }}></div>
+
                 <div className="container position-relative" style={{ zIndex: 1 }}>
-                    <span className="badge rounded-pill px-3 py-2 mb-3 d-inline-block fw-semibold"
-                        style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', fontSize: 12, backdropFilter: 'blur(4px)' }}>
+                    <span className="badge rounded-pill px-3 py-2 mb-3 fw-semibold"
+                        style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', fontSize: '12px', backdropFilter: 'blur(4px)' }}>
                         ✨ Our Story
                     </span>
-                    <h1 className="fw-bold mb-4">
+                    <h1 className="fw-extrabold display-5 display-md-4 mb-4" style={{ letterSpacing: '-0.5px' }}>
                         Redefining the{' '}
                         <span style={{ color: '#93c5fd' }}>Shopping Experience</span>
                     </h1>
-                    <p className="lead mb-0 mx-auto opacity-75" style={{ maxWidth: 640 }}>
+                    <p className="lead fs-6 fs-md-5 mb-0 mx-auto opacity-75" style={{ maxWidth: '640px' }}>
                         MyStore started with a simple idea — bringing high-quality products directly to your doorstep with zero hassle and maximum trust.
                     </p>
                 </div>
             </section>
 
             {/* ── Stats ── */}
-            <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-                <div className="ab-stats">
-                    <div className="row align-items-center text-center text-white g-0">
-                        <div className="col-12 col-md">
-                            <div className="ab-stat-val">10k+</div>
-                            <div className="ab-stat-label mt-1">Happy Customers</div>
+            <div className="container position-relative" style={{ zIndex: 2, marginTop: '-35px' }}>
+                <div className="p-4 p-md-5 text-white shadow-lg"
+                    style={{ background: 'linear-gradient(135deg, #6366f1, #3b82f6)', borderRadius: '24px', boxShadow: '0 20px 48px rgba(99,102,241,0.3)' }}>
+                    <div className="row align-items-center text-center g-4 g-md-0">
+                        <div className="col-6 col-md">
+                            <div className="fs-2 fs-md-1 fw-bold lh-1">10k+</div>
+                            <div className="small opacity-75 mt-1">Happy Customers</div>
                         </div>
-                        <div className="col-12 col-md-auto d-flex justify-content-center">
-                            <div className="ab-stat-div" />
+                        <div className="d-none d-md-flex col-md-auto justify-content-center">
+                            <div className="bg-white opacity-25" style={{ width: '1.5px', height: '50px' }}></div>
                         </div>
-                        <div className="col-12 col-md">
-                            <div className="ab-stat-val">500+</div>
-                            <div className="ab-stat-label mt-1">Premium Products</div>
+                        <div className="col-6 col-md">
+                            <div className="fs-2 fs-md-1 fw-bold lh-1">500+</div>
+                            <div className="small opacity-75 mt-1">Premium Products</div>
                         </div>
-                        <div className="col-12 col-md-auto d-flex justify-content-center">
-                            <div className="ab-stat-div" />
+                        <div className="d-none d-md-flex col-md-auto justify-content-center">
+                            <div className="bg-white opacity-25" style={{ width: '1.5px', height: '50px' }}></div>
                         </div>
-                        <div className="col-12 col-md">
-                            <div className="ab-stat-val">99%</div>
-                            <div className="ab-stat-label mt-1">Positive Reviews</div>
+                        <div className="col-6 col-md">
+                            <div className="fs-2 fs-md-1 fw-bold lh-1">99%</div>
+                            <div className="small opacity-75 mt-1">Positive Reviews</div>
                         </div>
-                        <div className="col-12 col-md-auto d-flex justify-content-center">
-                            <div className="ab-stat-div" />
+                        <div className="d-none d-md-flex col-md-auto justify-content-center">
+                            <div className="bg-white opacity-25" style={{ width: '1.5px', height: '50px' }}></div>
                         </div>
-                        <div className="col-12 col-md">
-                            <div className="ab-stat-val">5★</div>
-                            <div className="ab-stat-label mt-1">Avg. Rating</div>
+                        <div className="col-6 col-md">
+                            <div className="fs-2 fs-md-1 fw-bold lh-1">5★</div>
+                            <div className="small opacity-75 mt-1">Avg. Rating</div>
                         </div>
                     </div>
                 </div>
             </div>
 
             {/* ── Core Values ── */}
-            <section style={{ background: '#f8fafc', paddingTop: 'clamp(48px,8vw,100px)', paddingBottom: 'clamp(40px,6vw,72px)' }}>
-                <div className="container">
+            <section className="bg-light py-5 py-lg-6">
+                <div className="container py-4">
                     <div className="text-center mb-5">
-                        <span style={{ fontSize: 12, fontWeight: 700, color: '#6366f1', textTransform: 'uppercase', letterSpacing: 1.5 }}>Our Values</span>
-                        <h2 className="fw-bold mt-2" style={{ fontSize: 'clamp(1.4rem,4vw,2rem)', color: '#0f172a' }}>Why choose MyStore?</h2>
+                        <span className="small fw-bold text-uppercase text-indigo" style={{ color: '#6366f1', letterSpacing: '1.5px' }}>Our Values</span>
+                        <h2 className="fw-bold fs-2 fs-md-1 text-dark mt-2">Why choose MyStore?</h2>
                     </div>
                     <div className="row g-4">
                         {[
-                            { icon: '🎯', bg: 'linear-gradient(135deg,#ede9fe,#ddd6fe)', title: 'Our Mission',
-                              text: 'To provide a seamless, secure, and highly reliable e-commerce platform that connects customers with their favorite products effortlessly.' },
-                            { icon: '💎', bg: 'linear-gradient(135deg,#dbeafe,#bfdbfe)', title: 'Premium Quality',
-                              text: 'We do not compromise on quality. Every product available on our store is strictly vetted for durability and standard.' },
-                            { icon: '🤝', bg: 'linear-gradient(135deg,#d1fae5,#a7f3d0)', title: 'Customer First',
-                              text: 'Our 24/7 dedicated support team ensures that you get exactly what you ordered and are 100% satisfied with your purchase.' },
+                            {
+                                icon: '🎯', bg: 'linear-gradient(135deg,#ede9fe,#ddd6fe)', title: 'Our Mission',
+                                text: 'To provide a seamless, secure, and highly reliable e-commerce platform that connects customers with their favorite products effortlessly.'
+                            },
+                            {
+                                icon: '💎', bg: 'linear-gradient(135deg,#dbeafe,#bfdbfe)', title: 'Premium Quality',
+                                text: 'We do not compromise on quality. Every product available on our store is strictly vetted for durability and standard.'
+                            },
+                            {
+                                icon: '🤝', bg: 'linear-gradient(135deg,#d1fae5,#a7f3d0)', title: 'Customer First',
+                                text: 'Our 24/7 dedicated support team ensures that you get exactly what you ordered and are 100% satisfied with your purchase.'
+                            },
                         ].map((v, i) => (
                             <div key={i} className="col-12 col-md-4">
-                                <div className="ab-mission-card text-center">
-                                    <div className="ab-mission-icon" style={{ background: v.bg }}>{v.icon}</div>
-                                    <h4 className="fw-bold mb-3" style={{ fontSize: 'clamp(16px,2.5vw,20px)' }}>{v.title}</h4>
-                                    <p className="text-muted mb-0" style={{ fontSize: 'clamp(13px,1.8vw,15px)', lineHeight: 1.7 }}>{v.text}</p>
+                                <div className="card bg-white border border-light-subtle h-100 p-4 p-xl-5 text-center shadow-sm rounded-4 transition-all">
+                                    <div className="d-flex align-items-center justify-content-center mx-auto mb-4 rounded-4"
+                                        style={{ width: '64px', height: '64px', background: v.bg, fontSize: '28px' }}>
+                                        {v.icon}
+                                    </div>
+                                    <h4 className="fw-bold fs-5 fs-md-4 mb-3 text-dark">{v.title}</h4>
+                                    <p className="text-muted small fs-6 mb-0 lh-base">{v.text}</p>
                                 </div>
                             </div>
                         ))}
@@ -205,26 +101,28 @@ const About = () => {
             </section>
 
             {/* ── Team ── */}
-            <section style={{ background: '#ffffff', padding: 'clamp(40px,6vw,72px) 0' }}>
-                <div className="container">
+            <section className="bg-white py-5 py-lg-6">
+                <div className="container py-4">
                     <div className="text-center mb-5">
-                        <span style={{ fontSize: 12, fontWeight: 700, color: '#6366f1', textTransform: 'uppercase', letterSpacing: 1.5 }}>The People</span>
-                        <h2 className="fw-bold mt-2" style={{ fontSize: 'clamp(1.4rem,4vw,2rem)', color: '#0f172a' }}>Behind the Magic</h2>
-                        <p className="text-muted mt-2" style={{ fontSize: 'clamp(13px,1.8vw,15px)' }}>The dedicated people working hard to bring you the best.</p>
+                        <span className="small fw-bold text-uppercase" style={{ color: '#6366f1', letterSpacing: '1.5px' }}>The People</span>
+                        <h2 className="fw-bold fs-2 fs-md-1 text-dark mt-2">Behind the Magic</h2>
+                        <p className="text-muted small fs-6 mt-2">The dedicated people working hard to bring you the best.</p>
                     </div>
                     <div className="row g-4 justify-content-center">
                         {[
-                            { emoji: '👨‍💻', bg: 'linear-gradient(135deg,#ede9fe,#ddd6fe)', name: 'Siraj Khan',   role: 'Founder & CEO',      desc: 'Leading the vision and building the future of e-commerce in Pakistan.' },
-                            { emoji: '👩‍💼', bg: 'linear-gradient(135deg,#d1fae5,#a7f3d0)', name: 'Ayesha Ali',   role: 'Operations Head',    desc: 'Ensuring every order is processed and delivered on time without fail.' },
-                            { emoji: '🧑‍🔧', bg: 'linear-gradient(135deg,#fef9c3,#fde68a)', name: 'Ahmed Raza',   role: 'Support Lead',       desc: 'Always ready to solve your problems and answer your questions 24/7.' },
+                            { emoji: '👨‍💻', bg: 'linear-gradient(135deg,#ede9fe,#ddd6fe)', name: 'Siraj Khan', role: 'Founder & CEO', desc: 'Leading the vision and building the future of e-commerce in Pakistan.' },
+                            { emoji: '👩‍💼', bg: 'linear-gradient(135deg,#d1fae5,#a7f3d0)', name: 'Ayesha Ali', role: 'Operations Head', desc: 'Ensuring every order is processed and delivered on time without fail.' },
+                            { emoji: '🧑‍🔧', bg: 'linear-gradient(135deg,#fef9c3,#fde68a)', name: 'Ahmed Raza', role: 'Support Lead', desc: 'Always ready to solve your problems and answer your questions 24/7.' },
                         ].map((m, i) => (
                             <div key={i} className="col-12 col-sm-6 col-lg-4">
-                                <div className="ab-team-card">
-                                    <div className="ab-team-img" style={{ background: m.bg }}>{m.emoji}</div>
-                                    <div style={{ padding: 'clamp(16px,3vw,28px)' }}>
-                                        <h5 className="fw-bold mb-1" style={{ fontSize: 'clamp(15px,2vw,18px)' }}>{m.name}</h5>
-                                        <p style={{ color: '#6366f1', fontSize: 13, fontWeight: 600, marginBottom: 10 }}>{m.role}</p>
-                                        <p className="text-muted mb-0" style={{ fontSize: 'clamp(12px,1.6vw,14px)', lineHeight: 1.6 }}>{m.desc}</p>
+                                <div className="card bg-white border border-light-subtle h-100 rounded-4 overflow-hidden shadow-sm">
+                                    <div className="d-flex align-items-center justify-content-center py-5" style={{ background: m.bg, fontSize: '64px' }}>
+                                        {m.emoji}
+                                    </div>
+                                    <div className="card-body p-4">
+                                        <h5 className="fw-bold fs-5 mb-1 text-dark">{m.name}</h5>
+                                        <p className="small fw-semibold mb-2" style={{ color: '#6366f1' }}>{m.role}</p>
+                                        <p className="text-muted small mb-0 lh-base">{m.desc}</p>
                                     </div>
                                 </div>
                             </div>
@@ -234,17 +132,17 @@ const About = () => {
             </section>
 
             {/* ── CTA ── */}
-            <section style={{ background: '#f8fafc', padding: 'clamp(32px,5vw,64px) 0' }}>
+            <section className="bg-light py-5">
                 <div className="container">
-                    <div className="ab-cta">
-                        <div style={{ fontSize: 'clamp(2rem,5vw,3rem)', marginBottom: 16 }}>🚀</div>
-                        <h3 className="mb-3">Ready to experience the difference?</h3>
-                        <p className="text-muted mb-4 mx-auto" style={{ maxWidth: 520 }}>
+                    <div className="p-4 p-md-5 text-center rounded-4 border" style={{ background: 'linear-gradient(135deg, #ede9fe, #dbeafe)', borderColor: '#c7d2fe !important' }}>
+                        <div className="fs-1 mb-3">🚀</div>
+                        <h3 className="fw-bold fs-3 mb-3 text-dark">Ready to experience the difference?</h3>
+                        <p className="text-muted small fs-6 mb-4 mx-auto" style={{ maxWidth: '520px' }}>
                             Join thousands of happy customers who have made MyStore their go-to destination for online shopping.
                         </p>
                         <Link to="/products"
-                            className="btn btn-primary btn-lg rounded-pill fw-semibold"
-                            style={{ padding: 'clamp(10px,2vw,14px) clamp(28px,4vw,48px)', fontSize: 'clamp(14px,1.8vw,16px)', background: 'linear-gradient(135deg,#6366f1,#3b82f6)', border: 'none', boxShadow: '0 8px 24px rgba(99,102,241,0.35)' }}>
+                            className="btn btn-primary btn-lg rounded-pill fw-semibold px-4 px-md-5 py-3 shadow"
+                            style={{ background: 'linear-gradient(135deg,#6366f1,#3b82f6)', border: 'none' }}>
                             Start Shopping Now →
                         </Link>
                     </div>

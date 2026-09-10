@@ -48,285 +48,75 @@ const Navbar = () => {
 
     const navLinks = [
         { to: '/', label: 'Home', icon: '🏠' },
-        { to: '/about', label: 'About ', icon: 'ℹ️' },
+        { to: '/about', label: 'About', icon: 'ℹ️' },
         { to: '/products', label: 'Products', icon: '🛍️' },
-        { to: '/contact', label: 'Contact ', icon: '📞' },
+        { to: '/contact', label: 'Contact', icon: '📞' },
     ];
-
-    const nbg = scrolled
-        ? 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)'
-        : '#ffffff';
 
     return (
         <>
-            <style>{`
-                /* ── Navbar ── */
-                .premium-navbar {
-                    transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
-                    background: ${nbg};
-                    backdrop-filter: ${scrolled ? 'blur(16px)' : 'none'};
-                    box-shadow: ${scrolled ? '0 8px 32px rgba(0,0,0,0.25)' : '0 1px 0 #f1f5f9'};
-                    border-bottom: ${scrolled ? '1px solid rgba(255,255,255,0.08)' : '1px solid #f1f5f9'};
-                    padding: ${scrolled ? '0.6rem 0' : '1.1rem 0'};
-                }
-                .nav-link-custom {
-                    color: ${scrolled ? 'rgba(255,255,255,0.8)' : '#475569'};
-                    font-weight: 500;
-                    position: relative;
-                    padding: 0.5rem 1rem;
-                    transition: color 0.2s;
-                    text-decoration: none;
-                    font-size: 15px;
-                }
-                .nav-link-custom:hover { color: ${scrolled ? '#fff' : '#3b82f6'}; }
-                .nav-link-custom::after {
-                    content: '';
-                    position: absolute;
-                    bottom: 0; left: 50%;
-                    width: 0; height: 2px;
-                    background: ${scrolled ? '#6366f1' : '#3b82f6'};
-                    transition: all 0.3s ease;
-                    transform: translateX(-50%);
-                }
-                .nav-link-custom:hover::after,
-                .nav-link-custom.nav-active::after { width: 80%; }
-                .nav-link-custom.nav-active { color: ${scrolled ? '#fff' : '#3b82f6'}; font-weight: 700; }
-
-                .brand-logo {
-                    font-weight: 800;
-                    font-size: 1.5rem;
-                    background: ${scrolled
-                    ? 'linear-gradient(135deg,#ffffff 0%,#a5b4fc 100%)'
-                    : 'linear-gradient(135deg,#0f172a 0%,#3b82f6 100%)'
-                };
-                    -webkit-background-clip: text;
-                    -webkit-text-fill-color: transparent;
-                    letter-spacing: -0.5px;
-                    transition: all 0.4s;
-                }
-                .btn-login {
-                    border: 2px solid ${scrolled ? 'rgba(255,255,255,0.25)' : '#e2e8f0'};
-                    color: ${scrolled ? 'rgba(255,255,255,0.85)' : '#475569'};
-                    font-weight: 600;
-                    transition: all 0.2s;
-                    background: transparent;
-                }
-                .btn-login:hover {
-                    border-color: ${scrolled ? 'rgba(255,255,255,0.55)' : '#cbd5e1'};
-                    background: ${scrolled ? 'rgba(255,255,255,0.1)' : '#f8fafc'};
-                    color: ${scrolled ? '#fff' : '#0f172a'};
-                }
-                .btn-signup {
-                    background: ${scrolled ? 'linear-gradient(135deg,#6366f1,#8b5cf6)' : '#3b82f6'};
-                    color: #fff; font-weight: 600; border: none;
-                    box-shadow: ${scrolled ? '0 4px 14px rgba(99,102,241,0.4)' : '0 4px 10px rgba(59,130,246,0.3)'};
-                    transition: all 0.2s;
-                }
-                .btn-signup:hover {
-                    background: ${scrolled ? 'linear-gradient(135deg,#4f46e5,#7c3aed)' : '#2563eb'};
-                    color: #fff; transform: translateY(-1px);
-                    box-shadow: ${scrolled ? '0 8px 20px rgba(99,102,241,0.5)' : '0 6px 15px rgba(59,130,246,0.4)'};
-                }
-                .user-avatar {
-                    width: 38px; height: 38px;
-                    background: ${scrolled ? 'linear-gradient(135deg,#6366f1,#8b5cf6)' : '#3b82f6'};
-                    color: #fff; border-radius: 50%;
-                    display: flex; align-items: center; justify-content: center;
-                    font-weight: bold; cursor: pointer; overflow: hidden;
-                    transition: background 0.4s;
-                    border: ${scrolled ? '2px solid rgba(255,255,255,0.2)' : 'none'};
-                }
-
-                /* ── Hamburger ── */
-                .mob-toggle {
-                    display: none;
-                    flex-direction: column;
-                    justify-content: center;
-                    gap: 5px;
-                    background: none;
-                    border: none;
-                    cursor: pointer;
-                    padding: 6px;
-                    border-radius: 8px;
-                    transition: background 0.2s;
-                }
-                .mob-toggle:hover { background: rgba(0,0,0,0.06); }
-                .mob-toggle span {
-                    display: block;
-                    width: 24px; height: 2.5px;
-                    background: ${scrolled ? '#fff' : '#334155'};
-                    border-radius: 4px;
-                    transition: all 0.3s;
-                }
-                .mob-toggle.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
-                .mob-toggle.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-                .mob-toggle.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
-
-                /* desktop-nav: hidden by default on mobile, flex on lg+ */
-                .desktop-nav {
-                    display: none;
-                }
-                @media (min-width: 992px) {
-                    .desktop-nav { display: flex !important; }
-                    .mob-toggle { display: none !important; }
-                }
-                @media (max-width: 991px) {
-                    .mob-toggle { display: flex; }
-                }
-                /* Navbar container always flex row */
-                .premium-navbar .container {
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    flex-wrap: nowrap;
-                    gap: 0;
-                }
-
-                /* ── Sidebar Overlay ── */
-                .sidebar-overlay {
-                    position: fixed; inset: 0;
-                    background: rgba(0,0,0,0.5);
-                    z-index: 1200;
-                    opacity: 0;
-                    visibility: hidden;
-                    transition: all 0.3s;
-                    backdrop-filter: blur(2px);
-                }
-                .sidebar-overlay.open { opacity: 1; visibility: visible; }
-
-                /* ── Sidebar Drawer ── */
-                .mob-sidebar {
-                    position: fixed;
-                    top: 0; left: -100%;
-                    width: 300px; height: 100%;
-                    background: #ffffff;
-                    z-index: 1300;
-                    transition: left 0.35s cubic-bezier(0.4,0,0.2,1);
-                    display: flex; flex-direction: column;
-                    box-shadow: 8px 0 40px rgba(0,0,0,0.15);
-                    overflow-y: auto;
-                }
-                .mob-sidebar.open { left: 0; }
-
-                .sb-header {
-                    display: flex; align-items: center; justify-content: space-between;
-                    padding: 20px 20px 16px;
-                    border-bottom: 1px solid #f1f5f9;
-                    background: linear-gradient(135deg,#0f172a,#1e293b);
-                }
-                .sb-close-btn {
-                    width: 36px; height: 36px; border-radius: 10px;
-                    border: 1.5px solid rgba(255,255,255,0.15);
-                    background: rgba(255,255,255,0.1);
-                    color: #fff; font-size: 18px; cursor: pointer;
-                    display: flex; align-items: center; justify-content: center;
-                    transition: background 0.2s;
-                }
-                .sb-close-btn:hover { background: rgba(255,255,255,0.2); }
-
-                .sb-search {
-                    padding: 16px 20px;
-                    border-bottom: 1px solid #f1f5f9;
-                }
-                .sb-search input {
-                    width: 100%; padding: 10px 14px;
-                    border-radius: 10px; border: 1.5px solid #e2e8f0;
-                    background: #f8fafc; font-size: 14px; color: #0f172a;
-                    outline: none; box-sizing: border-box;
-                }
-                .sb-search input:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.12); }
-
-                .sb-nav { flex: 1; padding: 12px 0; }
-                .sb-link {
-                    display: flex; align-items: center; gap: 14px;
-                    padding: 14px 24px; text-decoration: none;
-                    color: #334155; font-size: 15px; font-weight: 600;
-                    transition: all 0.18s; border-left: 3px solid transparent;
-                }
-                .sb-link:hover { background: #f1f5f9; color: #6366f1; }
-                .sb-link.sb-active { background: #ede9fe; color: #6366f1; border-left-color: #6366f1; }
-                .sb-link-icon { font-size: 19px; width: 26px; text-align: center; }
-
-                .sb-footer {
-                    padding: 16px 20px 24px;
-                    border-top: 1px solid #f1f5f9;
-                }
-                .sb-user-card {
-                    display: flex; align-items: center; gap: 12px;
-                    background: #f8fafc; border-radius: 14px;
-                    padding: 12px 14px; margin-bottom: 12px;
-                    border: 1px solid #e2e8f0;
-                }
-                .sb-avatar {
-                    width: 42px; height: 42px; border-radius: 12px;
-                    background: linear-gradient(135deg,#6366f1,#8b5cf6);
-                    display: flex; align-items: center; justify-content: center;
-                    color: #fff; font-weight: 700; font-size: 17px;
-                    overflow: hidden; flex-shrink: 0;
-                }
-                .sb-btn {
-                    display: block; width: 100%; padding: 12px;
-                    border-radius: 12px; font-size: 14px; font-weight: 700;
-                    text-align: center; text-decoration: none; cursor: pointer;
-                    transition: all 0.2s; margin-bottom: 8px; border: none;
-                }
-                .sb-btn-primary {
-                    background: linear-gradient(135deg,#6366f1,#8b5cf6);
-                    color: #fff; box-shadow: 0 4px 12px rgba(99,102,241,0.3);
-                }
-                .sb-btn-primary:hover { transform: translateY(-1px); }
-                .sb-btn-outline {
-                    background: transparent; color: #ef4444;
-                    border: 2px solid #fecaca !important;
-                }
-                .sb-btn-outline:hover { background: #fef2f2; }
-                .sb-btn-login {
-                    background: #f8fafc; color: #475569;
-                    border: 2px solid #e2e8f0 !important;
-                }
-                .sb-btn-login:hover { background: #f1f5f9; }
-                .sb-btn-signup {
-                    background: linear-gradient(135deg,#3b82f6,#6366f1);
-                    color: #fff; box-shadow: 0 4px 12px rgba(59,130,246,0.3);
-                }
-            `}</style>
-
             {/* ── Top Navbar ── */}
-            <nav className="navbar fixed-top premium-navbar" style={{ padding: 21 }}>
-                <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'nowrap', gap: 0, padding: '0 16px' }}>
+            <nav className={`navbar fixed-top transition-all py-4 ${scrolled
+                ? 'bg-dark text-white shadow-lg border-bottom border-secondary border-opacity-25'
+                : 'bg-white text-dark shadow-sm border-bottom border-light'
+                }`} style={{ backdropFilter: scrolled ? 'blur(16px)' : 'none', background: scrolled ? 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)' : '#ffffff' }}>
+                <div className="container d-flex align-items-center justify-content-between">
 
-                    {/* Brand — always visible */}
-                    <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', flexShrink: 0 }}>
-                        <span style={{ fontSize: '1.6rem', lineHeight: 1 }}>🛍️</span>
-                        <span className="brand-logo">MyStore</span>
+                    {/* Brand */}
+                    <Link to="/" className="d-flex align-items-center gap-2 text-decoration-none">
+                        <span className="fs-3 lh-1">🛍️</span>
+                        <span className={`fw-extrabold fs-4 tracking-tight ${scrolled ? 'text-white' : 'text-dark'}`}>
+                            MyStore
+                        </span>
                     </Link>
 
                     {/* Desktop center nav links */}
-                    <div className="desktop-nav" style={{ alignItems: 'center', gap: 4, flex: 1, justifyContent: 'center' }}>
+                    <div className="d-none d-lg-flex align-items-center gap-1">
                         {navLinks.map(l => (
-                            <Link key={l.to} to={l.to} className={`nav-link-custom ${isActive(l.to) ? 'nav-active' : ''}`}>
+                            <Link
+                                key={l.to}
+                                to={l.to}
+                                className={`nav-link px-3 py-2 fw-medium position-relative text-decoration-none ${isActive(l.to)
+                                    ? (scrolled ? 'text-white fw-bold' : 'text-primary fw-bold')
+                                    : (scrolled ? 'text-white-50' : 'text-secondary')
+                                    }`}
+                                style={{ fontSize: '15px' }}
+                            >
                                 {l.label}
                             </Link>
                         ))}
                     </div>
 
                     {/* Desktop right: search + auth */}
-                    <div className="desktop-nav" style={{ alignItems: 'center', gap: 12, flexShrink: 0 }}>
-                        <form style={{ display: 'flex', position: 'relative' }} onSubmit={handleSearchSubmit}>
-                            <input type="text" className="form-control rounded-pill pe-5"
+                    <div className="d-none d-lg-flex align-items-center gap-3">
+                        <form className="position-relative" onSubmit={handleSearchSubmit}>
+                            <input
+                                type="text"
+                                className={`form-control rounded-pill pe-5 py-2 ${scrolled ? 'bg-dark bg-opacity-50 text-white border-light border-opacity-25' : 'bg-light border-light-subtle text-dark'}`}
                                 placeholder="Search products..."
-                                style={{ width: 190, background: scrolled ? 'rgba(255,255,255,0.1)' : '#f8fafc', border: scrolled ? '1px solid rgba(255,255,255,0.15)' : '1px solid #e2e8f0', color: scrolled ? '#fff' : '#0f172a' }}
-                                value={searchInput} onChange={e => setSearchInput(e.target.value)} />
-                            <button type="submit" className="btn position-absolute end-0 top-50 translate-middle-y border-0" style={{ background: 'transparent' }}>🔍</button>
+                                style={{ width: '190px', fontSize: '14px' }}
+                                value={searchInput}
+                                onChange={e => setSearchInput(e.target.value)}
+                            />
+                            <button type="submit" className="btn position-absolute end-0 top-50 translate-middle-y border-0 bg-transparent text-secondary">🔍</button>
                         </form>
+
                         {isAuth ? (
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                                <Link to="/dashboard" className="btn btn-primary btn-sm rounded-pill px-3 fw-semibold">Dashboard</Link>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                                    <span style={{ fontSize: 13, fontWeight: 600, color: scrolled ? 'rgba(255,255,255,0.8)' : '#475569', whiteSpace: 'nowrap' }}>{user?.fullName || 'User'}</span>
-                                    <div className="user-avatar">
+                            <div className="d-flex align-items-center gap-3">
+                                <Link to="/dashboard" className="btn btn-primary btn-sm rounded-pill px-3 fw-semibold shadow-sm">Dashboard</Link>
+                                <div className="d-flex align-items-center gap-2">
+                                    <span className={`small fw-semibold text-truncate ${scrolled ? 'text-white-50' : 'text-secondary'}`} style={{ maxWidth: '100px' }}>
+                                        {user?.fullName || 'User'}
+                                    </span>
+                                    <div className="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold overflow-hidden shadow-sm"
+                                        style={{
+                                            width: '38px',
+                                            height: '38px',
+                                            background: scrolled ? 'linear-gradient(135deg,#6366f1,#8b5cf6)' : '#3b82f6',
+                                            border: scrolled ? '2px solid rgba(255,255,255,0.2)' : 'none'
+                                        }}>
                                         {user?.profilePicture
-                                            ? <img src={user.profilePicture} alt="DP" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                            ? <img src={user.profilePicture} alt="DP" className="w-100 h-100 object-fit-cover" />
                                             : user?.fullName?.charAt(0)?.toUpperCase() || 'U'
                                         }
                                     </div>
@@ -334,16 +124,21 @@ const Navbar = () => {
                                 <button className="btn btn-outline-danger btn-sm rounded-pill px-3 fw-semibold" onClick={handleLogout}>Logout</button>
                             </div>
                         ) : (
-                            <div style={{ display: 'flex', gap: 8 }}>
-                                <Link to="/auth/login" className="btn btn-login rounded-pill px-4">Log In</Link>
-                                <Link to="/auth/register" className="btn btn-signup rounded-pill px-4">Sign Up</Link>
+                            <div className="d-flex gap-2">
+                                <Link to="/auth/login" className={`btn rounded-pill px-4 fw-semibold ${scrolled ? 'btn-outline-light text-white' : 'btn-outline-secondary text-secondary'}`}>Log In</Link>
+                                <Link to="/auth/register" className="btn btn-primary rounded-pill px-4 fw-semibold shadow-sm" style={{ background: scrolled ? 'linear-gradient(135deg,#6366f1,#8b5cf6)' : '#3b82f6', border: 'none' }}>Sign Up</Link>
                             </div>
                         )}
                     </div>
 
-                    {/* Mobile hamburger — only on small screens */}
-                    <button className={`mob-toggle ${sidebarOpen ? 'open' : ''}`} onClick={() => setSidebarOpen(o => !o)} aria-label="Menu" style={{ marginLeft: 'auto' }}>
-                        <span /><span /><span />
+                    {/* Mobile hamburger */}
+                    <button
+                        className={`navbar-toggler border-0 p-2 rounded-3 d-lg-none ${sidebarOpen ? 'collapsed' : ''}`}
+                        type="button"
+                        onClick={() => setSidebarOpen(o => !o)}
+                        aria-label="Toggle navigation"
+                    >
+                        <span className="navbar-toggler-icon" style={{ filter: scrolled ? 'invert(1)' : 'none' }}></span>
                     </button>
                 </div>
             </nav>
@@ -352,66 +147,86 @@ const Navbar = () => {
             <div style={{ height: scrolled ? '70px' : '84px', transition: 'height 0.3s ease' }} />
 
             {/* ── Mobile Sidebar Overlay ── */}
-            <div className={`sidebar-overlay ${sidebarOpen ? 'open' : ''}`} onClick={() => setSidebarOpen(false)} />
+            <div
+                className={`position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 transition-all ${sidebarOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
+                style={{ zIndex: 1200, backdropFilter: 'blur(2px)' }}
+                onClick={() => setSidebarOpen(false)}
+            />
 
             {/* ── Mobile Sidebar Drawer ── */}
-            <div className={`mob-sidebar ${sidebarOpen ? 'open' : ''}`}>
+            <div className={`position-fixed top-0 h-100 bg-white shadow-lg transition-all d-flex flex-column ${sidebarOpen ? 'start-0' : ''}`}
+                style={{ width: '300px', left: sidebarOpen ? '0' : '-100%', zIndex: 1300, transition: 'left 0.35s cubic-bezier(0.4,0,0.2,1)' }}>
 
                 {/* Sidebar Header */}
-                <div className="sb-header">
-                    <Link to="/" className="d-flex align-items-center gap-2" onClick={() => setSidebarOpen(false)}>
-                        <span style={{ fontSize: '1.4rem' }}>🛍️</span>
-                        <span style={{ fontWeight: 800, fontSize: '1.2rem', background: 'linear-gradient(135deg,#fff,#a5b4fc)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>MyStore</span>
+                <div className="d-flex align-items-center justify-content-between p-3 bg-dark text-white border-bottom border-secondary border-opacity-25"
+                    style={{ background: 'linear-gradient(135deg,#0f172a,#1e293b)' }}>
+                    <Link to="/" className="d-flex align-items-center gap-2 text-decoration-none" onClick={() => setSidebarOpen(false)}>
+                        <span className="fs-4">🛍️</span>
+                        <span className="fw-extrabold fs-5 text-white">MyStore</span>
                     </Link>
-                    <button className="sb-close-btn" onClick={() => setSidebarOpen(false)}>✕</button>
+                    <button className="btn btn-sm btn-outline-light rounded-3 border-opacity-25 p-1 px-2" onClick={() => setSidebarOpen(false)}>✕</button>
                 </div>
 
                 {/* Search */}
-                <div className="sb-search">
+                <div className="p-3 border-bottom bg-light">
                     <form onSubmit={handleSearchSubmit}>
-                        <input type="text" placeholder="🔍  Search products…"
-                            value={searchInput} onChange={e => setSearchInput(e.target.value)} />
+                        <input
+                            type="text"
+                            className="form-control rounded-3 border-light-subtle bg-white py-2"
+                            placeholder="🔍 Search products..."
+                            value={searchInput}
+                            onChange={e => setSearchInput(e.target.value)}
+                        />
                     </form>
                 </div>
 
                 {/* Nav Links */}
-                <nav className="sb-nav">
+                <div className="flex-grow-1 py-2 overflow-auto">
                     {navLinks.map(l => (
-                        <Link key={l.to} to={l.to} className={`sb-link ${isActive(l.to) ? 'sb-active' : ''}`}>
-                            <span className="sb-link-icon">{l.icon}</span>
-                            {l.label}
+                        <Link
+                            key={l.to}
+                            to={l.to}
+                            className={`d-flex align-items-center gap-3 px-4 py-3 text-decoration-none fw-semibold border-start border-4 ${isActive(l.to)
+                                ? 'bg-indigo-subtle text-primary border-primary bg-light'
+                                : 'text-secondary border-transparent'
+                                }`}
+                            style={{ fontSize: '15px' }}
+                        >
+                            <span className="fs-5 text-center" style={{ width: '24px' }}>{l.icon}</span>
+                            <span>{l.label}</span>
                         </Link>
                     ))}
-                </nav>
+                </div>
 
                 {/* Footer / Auth */}
-                <div className="sb-footer">
+                <div className="p-3 border-top bg-light">
                     {isAuth ? (
                         <>
-                            <div className="sb-user-card">
-                                <div className="sb-avatar">
+                            <div className="d-flex align-items-center gap-3 p-2 bg-white rounded-3 border border-light-subtle mb-3 shadow-sm">
+                                <div className="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold overflow-hidden flex-shrink-0"
+                                    style={{ width: '40px', height: '40px', background: 'linear-gradient(135deg,#6366f1,#8b5cf6)' }}>
                                     {user?.profilePicture
-                                        ? <img src={user.profilePicture} alt="DP" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                        ? <img src={user.profilePicture} alt="DP" className="w-100 h-100 object-fit-cover" />
                                         : user?.fullName?.charAt(0)?.toUpperCase() || 'U'
                                     }
                                 </div>
-                                <div>
-                                    <div style={{ fontWeight: 700, fontSize: 14, color: '#0f172a' }}>{user?.fullName || 'User'}</div>
-                                    <div style={{ fontSize: 12, color: '#94a3b8' }}>{user?.role === 'superAdmin' ? '👑 Super Admin' : '🛍 Customer'}</div>
+                                <div className="min-width-0">
+                                    <div className="fw-bold text-dark text-truncate" style={{ fontSize: '14px' }}>{user?.fullName || 'User'}</div>
+                                    <div className="text-muted" style={{ fontSize: '11px' }}>{user?.role === 'superAdmin' ? '👑 Super Admin' : '🛍 Customer'}</div>
                                 </div>
                             </div>
-                            <Link to="/dashboard" className="sb-btn sb-btn-primary" onClick={() => setSidebarOpen(false)}>
+                            <Link to="/dashboard" className="btn btn-primary w-100 rounded-3 py-2 fw-bold shadow-sm mb-2" style={{ background: 'linear-gradient(135deg,#6366f1,#8b5cf6)', border: 'none' }} onClick={() => setSidebarOpen(false)}>
                                 📊 Dashboard
                             </Link>
-                            <button className="sb-btn sb-btn-outline" onClick={() => { handleLogout(); setSidebarOpen(false); }}>
+                            <button className="btn btn-outline-danger w-100 rounded-3 py-2 fw-bold" onClick={() => { handleLogout(); setSidebarOpen(false); }}>
                                 🚪 Logout
                             </button>
                         </>
                     ) : (
-                        <>
-                            <Link to="/auth/login" className="sb-btn sb-btn-login" onClick={() => setSidebarOpen(false)}>Log In</Link>
-                            <Link to="/auth/register" className="sb-btn sb-btn-signup" onClick={() => setSidebarOpen(false)}>Sign Up →</Link>
-                        </>
+                        <div className="d-flex flex-column gap-2">
+                            <Link to="/auth/login" className="btn btn-light border border-light-subtle w-100 rounded-3 py-2 fw-semibold text-secondary" onClick={() => setSidebarOpen(false)}>Log In</Link>
+                            <Link to="/auth/register" className="btn btn-primary w-100 rounded-3 py-2 fw-semibold shadow-sm" style={{ background: 'linear-gradient(135deg,#3b82f6,#6366f1)', border: 'none' }} onClick={() => setSidebarOpen(false)}>Sign Up →</Link>
+                        </div>
                     )}
                 </div>
             </div>

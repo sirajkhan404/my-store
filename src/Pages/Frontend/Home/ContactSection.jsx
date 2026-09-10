@@ -18,93 +18,51 @@ const ContactSection = () => {
     };
 
     return (
-        <section className="py-5" style={{ background: '#f8fafc' }}>
-            <style>{`
-                .home-contact-box {
-                    background: white;
-                    border-radius: 20px;
-                    border: 1px solid #edf2f7;
-                    box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-                    overflow: hidden;
-                }
-                .home-contact-info {
-                    background: linear-gradient(135deg, #1e293b 0%, #3b82f6 100%);
-                    color: white;
-                    padding: 40px;
-                    height: 100%;
-                }
-                .home-form-control {
-                    border-radius: 12px;
-                    background: #f8fafc;
-                    border: 1px solid #e2e8f0;
-                    padding: 12px 16px;
-                    font-size: 15px;
-                }
-                .home-form-control:focus {
-                    background: white;
-                    border-color: #3b82f6;
-                    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
-                }
-                .home-submit-btn {
-                    background: #3b82f6;
-                    color: white;
-                    border: none;
-                    border-radius: 12px;
-                    padding: 12px 24px;
-                    font-weight: 700;
-                    transition: all 0.3s;
-                }
-                .home-submit-btn:hover {
-                    background: #2563eb;
-                    transform: translateY(-2px);
-                    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
-                }
-            `}</style>
-            <div className="container">
+        <section className="py-5 bg-light">
+            <div className="container py-4">
                 <div className="text-center mb-5">
-                    <h2 className="fw-bold mb-2">Have a Question?</h2>
+                    <h2 className="fw-bold mb-2 text-dark">Have a Question?</h2>
                     <p className="text-muted">Feel free to reach out to us at any time.</p>
                 </div>
 
-                <div className="home-contact-box mx-auto" style={{ maxWidth: 900 }}>
+                <div className="card mx-auto border border-light-subtle rounded-4 shadow-sm overflow-hidden" style={{ maxWidth: '900px' }}>
                     <div className="row g-0">
-                        {/* Info Side */}
-                        <div className="col-md-5 d-none d-md-block">
-                            <div className="home-contact-info d-flex flex-column justify-content-center">
-                                <h4 className="fw-bold mb-4">Contact Info</h4>
-                                <div className="d-flex align-items-center gap-3 mb-4">
-                                    <div className="fs-4">📍</div>
-                                    <div>
-                                        <div className="fw-semibold">Location</div>
-                                        <div className="small opacity-75">123 Business Ave, Tech City</div>
-                                    </div>
+                        {/* Info Side (Visible on medium screens and up) */}
+                        <div className="col-12 col-md-5 d-none d-md-flex flex-column justify-content-center text-white p-4 p-lg-5"
+                            style={{ background: 'linear-gradient(135deg, #1e293b 0%, #3b82f6 100%)' }}>
+                            <h4 className="fw-bold mb-4">Contact Info</h4>
+                            <div className="d-flex align-items-center gap-3 mb-4">
+                                <div className="fs-4">📍</div>
+                                <div>
+                                    <div className="fw-semibold">Location</div>
+                                    <div className="small opacity-75">123 Business Ave, Tech City</div>
                                 </div>
-                                <div className="d-flex align-items-center gap-3 mb-4">
-                                    <div className="fs-4">📞</div>
-                                    <div>
-                                        <div className="fw-semibold">Phone</div>
-                                        <div className="small opacity-75">+92 300 1234567</div>
-                                    </div>
+                            </div>
+                            <div className="d-flex align-items-center gap-3 mb-4">
+                                <div className="fs-4">📞</div>
+                                <div>
+                                    <div className="fw-semibold">Phone</div>
+                                    <div className="small opacity-75">+92 300 1234567</div>
                                 </div>
-                                <div className="d-flex align-items-center gap-3">
-                                    <div className="fs-4">✉️</div>
-                                    <div>
-                                        <div className="fw-semibold">Email</div>
-                                        <div className="small opacity-75">support@mystore.com</div>
-                                    </div>
+                            </div>
+                            <div className="d-flex align-items-center gap-3">
+                                <div className="fs-4">✉️</div>
+                                <div>
+                                    <div className="fw-semibold">Email</div>
+                                    <div className="small opacity-75">support@mystore.com</div>
                                 </div>
                             </div>
                         </div>
 
                         {/* Form Side */}
-                        <div className="col-md-7 p-4 p-lg-5">
-                            <h4 className="fw-bold mb-4">Send a Message</h4>
+                        <div className="col-12 col-md-7 p-4 p-lg-5 bg-white">
+                            <h4 className="fw-bold mb-4 text-dark">Send a Message</h4>
                             <form onSubmit={handleSubmit}>
                                 <div className="mb-3">
                                     <label className="form-label fw-semibold text-muted small ms-1">Full Name</label>
                                     <input
                                         type="text"
-                                        className="form-control home-form-control"
+                                        className="form-control rounded-3 bg-light border-light-subtle px-3 py-2"
                                         placeholder="John Doe"
                                         name="name"
                                         value={state.name}
@@ -116,7 +74,7 @@ const ContactSection = () => {
                                     <label className="form-label fw-semibold text-muted small ms-1">Email Address</label>
                                     <input
                                         type="email"
-                                        className="form-control home-form-control"
+                                        className="form-control rounded-3 bg-light border-light-subtle px-3 py-2"
                                         placeholder="hello@example.com"
                                         name="email"
                                         value={state.email}
@@ -127,7 +85,7 @@ const ContactSection = () => {
                                 <div className="mb-4">
                                     <label className="form-label fw-semibold text-muted small ms-1">Message</label>
                                     <textarea
-                                        className="form-control home-form-control"
+                                        className="form-control rounded-3 bg-light border-light-subtle px-3 py-2"
                                         rows={4}
                                         placeholder="How can we help you?"
                                         name="message"
@@ -136,7 +94,7 @@ const ContactSection = () => {
                                         required
                                     />
                                 </div>
-                                <button type="submit" className="home-submit-btn w-100" disabled={isSubmitting}>
+                                <button type="submit" className="btn btn-primary w-100 rounded-3 py-3 fw-bold shadow-sm" disabled={isSubmitting}>
                                     {isSubmitting ? 'Sending...' : 'Send Message'}
                                 </button>
                             </form>
