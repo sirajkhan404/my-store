@@ -9,16 +9,6 @@ const Navbar = () => {
 
     const [scrolled, setScrolled] = useState(false);
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [searchInput, setSearchInput] = useState('');
-
-    const handleSearchSubmit = (e) => {
-        e.preventDefault();
-        if (searchInput.trim()) {
-            navigate(`/products?search=${encodeURIComponent(searchInput.trim())}`);
-            setSearchInput('');
-            setSidebarOpen(false);
-        }
-    };
 
     // Close sidebar on route change
     useEffect(() => { setSidebarOpen(false); }, [location.pathname]);
@@ -87,20 +77,8 @@ const Navbar = () => {
                         ))}
                     </div>
 
-                    {/* Desktop right: search + auth */}
+                    {/* Desktop right: auth */}
                     <div className="d-none d-lg-flex align-items-center gap-3">
-                        <form className="position-relative" onSubmit={handleSearchSubmit}>
-                            <input
-                                type="text"
-                                className={`form-control rounded-pill pe-5 py-2 ${scrolled ? 'bg-dark bg-opacity-50 text-white border-light border-opacity-25' : 'bg-light border-light-subtle text-dark'}`}
-                                placeholder="Search products..."
-                                style={{ width: '190px', fontSize: '14px' }}
-                                value={searchInput}
-                                onChange={e => setSearchInput(e.target.value)}
-                            />
-                            <button type="submit" className="btn position-absolute end-0 top-50 translate-middle-y border-0 bg-transparent text-secondary">🔍</button>
-                        </form>
-
                         {isAuth ? (
                             <div className="d-flex align-items-center gap-3">
                                 <Link to="/dashboard" className="btn btn-primary btn-sm rounded-pill px-3 fw-semibold shadow-sm">Dashboard</Link>
@@ -126,7 +104,7 @@ const Navbar = () => {
                         ) : (
                             <div className="d-flex gap-2">
                                 <Link to="/auth/login" className={`btn rounded-pill px-4 fw-semibold ${scrolled ? 'btn-outline-light text-white' : 'btn-outline-secondary text-secondary'}`}>Log In</Link>
-                                <Link to="/auth/register" className="btn btn-primary rounded-pill px-4 fw-semibold shadow-sm" style={{ background: scrolled ? 'linear-gradient(135deg,#6366f1,#8b5cf6)' : '#3b82f6', border: 'none' }}>Sign Up</Link>
+                                <Link to="/auth/register" className="btn btn-primary rounded-pill px-4 fw-semibold shadow-sm" style={{ background: scrolled ? 'linear-gradient(135deg,#3b82f6,#6366f1)' : '#3b82f6', border: 'none' }}>Sign Up</Link>
                             </div>
                         )}
                     </div>
@@ -165,19 +143,6 @@ const Navbar = () => {
                         <span className="fw-extrabold fs-5 text-white">MyStore</span>
                     </Link>
                     <button className="btn btn-sm btn-outline-light rounded-3 border-opacity-25 p-1 px-2" onClick={() => setSidebarOpen(false)}>✕</button>
-                </div>
-
-                {/* Search */}
-                <div className="p-3 border-bottom bg-light">
-                    <form onSubmit={handleSearchSubmit}>
-                        <input
-                            type="text"
-                            className="form-control rounded-3 border-light-subtle bg-white py-2"
-                            placeholder="🔍 Search products..."
-                            value={searchInput}
-                            onChange={e => setSearchInput(e.target.value)}
-                        />
-                    </form>
                 </div>
 
                 {/* Nav Links */}
