@@ -10,6 +10,7 @@ const Home = () => {
     const [products, setProducts] = useState([])
     const [orders, setOrders] = useState([])
     const [users, setUsers] = useState([])
+    const [messages, setMessages] = useState([])
     const [loading, setLoading] = useState(true)
 
     const token = localStorage.getItem('jwt')
@@ -19,14 +20,16 @@ const Home = () => {
         const fetchAll = async () => {
             setLoading(true)
             try {
-                const [prodRes, orderRes, userRes] = await Promise.allSettled([
+                const [prodRes, orderRes, userRes, msgRes] = await Promise.allSettled([
                     axios.get(`${window.api}/api/products/all`, { headers }),
                     axios.get(`${window.api}/api/orders/all`, { headers }),
                     axios.get(`${window.api}/api/auth/users`, { headers }),
+                    axios.get(`${window.api}/api/contact/all`, { headers }),
                 ])
                 if (prodRes.status === 'fulfilled') setProducts(prodRes.value.data.products || [])
                 if (orderRes.status === 'fulfilled') setOrders(orderRes.value.data.orders || [])
                 if (userRes.status === 'fulfilled') setUsers(userRes.value.data.users || [])
+                if (msgRes.status === 'fulfilled') setMessages(msgRes.value.data.messages || [])
             } catch (err) {
                 console.error(err)
             } finally {
@@ -48,6 +51,7 @@ const Home = () => {
             .reduce((sum, o) => sum + (o.totalAmount || 0), 0),
         totalUsers: users.length,
         activeUsers: users.filter(u => u.status === 'active').length,
+        totalMessages: messages.length,
     }
 
     // ── Recent Orders ─────────────────────────────────────────────────
@@ -172,6 +176,13 @@ const Home = () => {
                                 sub: `${stats.activeUsers} active`,
                                 icon: '👥', color: 'info',
                                 link: '/dashboard/users',
+                                adminOnly: true
+                            },
+                            {
+                                label: 'Contact Messages', value: stats.totalMessages,
+                                sub: 'User inquiries & feedback',
+                                icon: '💬', color: 'primary',
+                                link: '/dashboard/messages',
                                 adminOnly: true
                             },
                         ]
@@ -341,6 +352,14 @@ const Home = () => {
                                     onClick={() => navigate('/dashboard/users')}
                                 >
                                     👥 View Users
+                                </button>
+                            )}
+                            {user?.role === 'superAdmin' && (
+                                <button
+                                    className="btn btn-outline-secondary"
+                                    onClick={() => navigate('/dashboard/messages')}
+                                >
+                                    💬 View Messages
                                 </button>
                             )}
                         </div>

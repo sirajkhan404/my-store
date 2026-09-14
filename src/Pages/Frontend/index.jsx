@@ -5,6 +5,7 @@ import Products from '../Frontend/Products'
 import Contact from '../Frontend/Contact'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
+import WhatsAppButton from '../../components/Misc/WhatsAppButton'
 
 const Frontend = () => {
     return (
@@ -17,6 +18,7 @@ const Frontend = () => {
                 <Route path='contact' element={<Contact />} />
             </Routes>
             <Footer />
+            <WhatsAppButton />
         </>
     )
 }
