@@ -23,17 +23,17 @@ const Contact = () => {
     };
 
     return (
-        <main className="d-flex flex-column flex-grow-1 bg-light" style={{ fontFamily: "'Inter', sans-serif" }}>
+        <main className="d-flex flex-column flex-grow-1" style={{ fontFamily: "'Inter', sans-serif", background: '#f0fdfa' }}>
 
             {/* ── Hero ── */}
             <section className="text-white text-center position-relative overflow-hidden py-5 py-md-6 py-lg-7"
-                style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e3a8a 55%, #3b82f6 100%)' }}>
+                style={{ background: 'linear-gradient(135deg, #042f2e 0%, #134e4a 55%, #0d9488 100%)' }}>
 
                 {/* Background glow effects */}
                 <div className="position-absolute rounded-circle pointer-event-none"
-                    style={{ width: '400px', height: '400px', background: 'radial-gradient(circle, rgba(99,102,241,0.2) 0%, transparent 70%)', top: '-120px', left: '-80px', zIndex: 0 }}></div>
+                    style={{ width: '400px', height: '400px', background: 'radial-gradient(circle, rgba(13,148,136,0.25) 0%, transparent 70%)', top: '-120px', left: '-80px', zIndex: 0 }}></div>
                 <div className="position-absolute rounded-circle pointer-event-none"
-                    style={{ width: '280px', height: '280px', background: 'radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%)', bottom: '-60px', right: '-40px', zIndex: 0 }}></div>
+                    style={{ width: '280px', height: '280px', background: 'radial-gradient(circle, rgba(245,158,11,0.18) 0%, transparent 70%)', bottom: '-60px', right: '-40px', zIndex: 0 }}></div>
 
                 <div className="container position-relative py-4" style={{ zIndex: 1 }}>
                     <span className="badge rounded-pill px-3 py-2 mb-3 fw-bold"
@@ -54,7 +54,7 @@ const Contact = () => {
 
                         {/* ── Left: Info Panel ── */}
                         <div className="col-12 col-lg-5 text-white p-4 p-md-5 d-flex flex-column justify-content-between position-relative overflow-hidden"
-                            style={{ background: 'linear-gradient(160deg, #4f46e5 0%, #3b82f6 60%, #06b6d4 100%)' }}>
+                            style={{ background: 'linear-gradient(160deg, #042f2e 0%, #0d9488 70%, #0891b2 100%)' }}>
 
                             <div className="position-absolute rounded-circle pointer-event-none"
                                 style={{ width: '200px', height: '200px', background: 'rgba(255,255,255,0.06)', bottom: '-60px', right: '-60px' }}></div>
@@ -184,8 +184,8 @@ const Contact = () => {
                                 </div>
 
                                 <button type="submit"
-                                    className="btn btn-primary w-100 rounded-3 py-3 fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2"
-                                    style={{ background: 'linear-gradient(135deg, #6366f1, #3b82f6)', border: 'none' }}
+                                    className="btn w-100 rounded-3 py-3 fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2 text-dark"
+                                    style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)', border: 'none' }}
                                     disabled={isSubmitting}>
                                     {isSubmitting ? (
                                         <>

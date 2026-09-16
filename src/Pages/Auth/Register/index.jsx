@@ -19,7 +19,6 @@ const Register = () => {
 
         const fullName = name.trim()
         if (fullName.length < 3) return window.toastify("Please enter your full name (min 3 chars)", "warning")
-        if (!window.isValidEmail(email)) return window.toastify("Please enter a valid email", "warning")
         if (password.length < 6) return window.toastify("Password must be at least 6 chars", "warning")
         if (confirmPassword !== password) return window.toastify("Passwords do not match", "warning")
 

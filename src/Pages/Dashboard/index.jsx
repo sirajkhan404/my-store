@@ -9,7 +9,7 @@ const navItems = [
     { key: "products",  label: "Products",   icon: "🛍",  path: "/dashboard/products",   roles: ["superAdmin"] },
     { key: "orders",    label: "Orders",     icon: "📋",  path: "/dashboard/orders",     roles: null },
     { key: "users",     label: "Users",      icon: "👥",  path: "/dashboard/users",      roles: ["superAdmin"] },
-    { key: "messages",  label: "Messages",   icon: "💬",  path: "/dashboard/messages",   roles: ["superAdmin"] },
+    { key: "messages",  label: "Messages",   icon: "💬",  path: "/dashboard/messages",   roles: null },
     { key: "profile",   label: "Profile",    icon: "👤",  path: "/dashboard/profile",    roles: null },
 ];
 

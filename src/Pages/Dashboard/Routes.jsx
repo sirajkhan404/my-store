@@ -17,7 +17,7 @@ const Index = () => {
             <Route path="/products/*" element={<ProtectedRoute Component={Products} allowedRoles={["superAdmin"]} />} />
             <Route path="/orders/*" element={<ProtectedRoute Component={Orders} allowedRoles={["superAdmin", "customer"]} />} />
             <Route path="/users/*" element={<ProtectedRoute Component={Users} allowedRoles={["superAdmin"]} />} />
-            <Route path="/messages/*" element={<ProtectedRoute Component={Messages} allowedRoles={["superAdmin"]} />} />
+            <Route path="/messages/*" element={<ProtectedRoute Component={Messages} allowedRoles={["superAdmin", "customer"]} />} />
             <Route path="/profile/*" element={<ProtectedRoute Component={Profile} allowedRoles={["superAdmin", "customer"]} />} />
         </Routes>
     )

@@ -137,11 +137,11 @@ const Products = () => {
   }
 
   return (
-    <main className="d-flex flex-column flex-grow-1 bg-light" style={{ minHeight: '100vh', fontFamily: "'Inter', sans-serif" }}>
+    <main className="d-flex flex-column flex-grow-1" style={{ minHeight: '100vh', fontFamily: "'Inter', sans-serif", background: '#f0fdfa' }}>
 
       {/* ── Header Banner ─────────────────────────────────── */}
       <section className="text-white text-center position-relative overflow-hidden py-5 py-md-6 py-lg-7"
-        style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #3b82f6 100%)' }}>
+        style={{ background: 'linear-gradient(135deg, #042f2e 0%, #134e4a 50%, #0d9488 100%)' }}>
 
         {/* Background glow shape */}
         <div className="position-absolute rounded-circle pointer-event-none"
@@ -181,13 +181,13 @@ const Products = () => {
                   <button
                     key={idx}
                     className={`btn rounded-3 px-3 py-2 fw-semibold text-nowrap transition-all ${selectedCategory === cat
-                        ? 'btn-primary text-white shadow-sm'
+                        ? 'text-white shadow-sm'
                         : 'btn-outline-secondary bg-white text-secondary border-light-subtle'
                       }`}
                     onClick={() => setSelectedCategory(cat)}
                     style={{
                       fontSize: '14px',
-                      background: selectedCategory === cat ? 'linear-gradient(135deg,#6366f1,#3b82f6)' : '',
+                      background: selectedCategory === cat ? 'linear-gradient(135deg,#0d9488,#0f766e)' : '',
                       border: selectedCategory === cat ? 'none' : undefined
                     }}
                   >
@@ -211,11 +211,11 @@ const Products = () => {
               <h5 className="text-muted fw-semibold">Fetching amazing products...</h5>
             </div>
           ) : filteredProducts.length === 0 ? (
-            <div className="text-center py-5 my-5 bg-white rounded-4 border p-5 shadow-sm mx-auto" style={{ maxWidth: '600px' }}>
+              <div className="text-center py-5 my-5 bg-white rounded-4 border p-5 shadow-sm mx-auto" style={{ maxWidth: '600px' }}>
               <div className="display-1 mb-3">😕</div>
               <h3 className="fw-bold text-dark">No products found</h3>
               <p className="text-muted mb-0">Try adjusting your search or selecting a different category.</p>
-              <button className="btn btn-outline-primary rounded-pill mt-4 px-4 py-2 fw-semibold" onClick={() => { setSearchQuery(''); setSelectedCategory('All'); }}>
+              <button className="btn rounded-pill mt-4 px-4 py-2 fw-semibold text-white" style={{ background: 'linear-gradient(135deg,#0d9488,#0f766e)', border: 'none' }} onClick={() => { setSearchQuery(''); setSelectedCategory('All'); }}>
                 Clear Filters
               </button>
             </div>
@@ -266,10 +266,10 @@ const Products = () => {
                         {product.description}
                       </p>
                       <div className="mt-auto">
-                        <div className="fs-5 fw-bold text-primary mb-3">Rs. {Number(product.price).toLocaleString()}</div>
+                        <div className="fs-5 fw-bold mb-3" style={{ color: '#0d9488' }}>Rs. {Number(product.price).toLocaleString()}</div>
                         <button
-                          className="btn btn-primary w-100 rounded-3 py-2.5 fw-bold shadow-sm"
-                          style={{ background: 'linear-gradient(135deg,#6366f1,#3b82f6)', border: 'none' }}
+                          className="btn w-100 rounded-3 py-2 fw-bold shadow-sm text-white"
+                          style={{ background: product.stock <= 0 ? '#9ca3af' : 'linear-gradient(135deg,#0d9488,#0f766e)', border: 'none' }}
                           onClick={() => openOrderModal(product)}
                           disabled={product.stock <= 0}
                         >
@@ -309,8 +309,8 @@ const Products = () => {
                     className="rounded-3 border border-light-subtle object-fit-cover flex-shrink-0" style={{ width: '64px', height: '64px' }} />
                   <div className="flex-grow-1 min-width-0">
                     <h6 className="fw-bold text-dark text-truncate mb-1">{selectedProduct.name}</h6>
-                    <div className="fs-6 fw-bold text-primary mb-1">Rs. {Number(selectedProduct.price).toLocaleString()}</div>
-                    <span className="badge rounded-pill fw-semibold" style={{ background: '#ede9fe', color: '#6366f1', fontSize: '11px' }}>{selectedProduct.category}</span>
+                    <div className="fs-6 fw-bold mb-1" style={{ color: '#0d9488' }}>Rs. {Number(selectedProduct.price).toLocaleString()}</div>
+                    <span className="badge rounded-pill fw-semibold" style={{ background: '#ccfbf1', color: '#0f766e', fontSize: '11px' }}>{selectedProduct.category}</span>
                   </div>
                 </div>
 
@@ -327,7 +327,7 @@ const Products = () => {
                     </div>
                     <div className="text-end">
                       <div className="text-muted fw-semibold" style={{ fontSize: '11px' }}>Total</div>
-                      <div className="fs-5 fw-bold text-primary">Rs. {(selectedProduct.price * quantity).toLocaleString()}</div>
+                      <div className="fs-5 fw-bold" style={{ color: '#0d9488' }}>Rs. {(selectedProduct.price * quantity).toLocaleString()}</div>
                     </div>
                   </div>
                 </div>
@@ -373,8 +373,8 @@ const Products = () => {
                     <button type="button" onClick={closeOrderModal}
                       className="btn btn-light border border-light-subtle rounded-3 py-2.5 px-4 text-secondary fw-semibold">Cancel</button>
                     <button type="submit" disabled={orderLoading}
-                      className="btn btn-primary flex-grow-1 rounded-3 py-2.5 fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2"
-                      style={{ background: orderLoading ? '#c7d2fe' : 'linear-gradient(135deg,#6366f1,#3b82f6)', border: 'none' }}>
+                      className="btn flex-grow-1 rounded-3 py-2 fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2 text-dark"
+                      style={{ background: orderLoading ? '#99f6e4' : 'linear-gradient(135deg,#f59e0b,#d97706)', border: 'none' }}>
                       {orderLoading
                         ? <><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />Processing...</>
                         : `Confirm Order — Rs. ${(selectedProduct.price * quantity).toLocaleString()}`

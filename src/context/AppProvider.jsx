@@ -1,8 +1,13 @@
 import AuthContext from './Auth'
+import CartProvider from './CartContext'
 
 const AppProvider = ({ children }) => {
     return (
-        <AuthContext>{children}</AuthContext>
+        <AuthContext>
+            <CartProvider>
+                {children}
+            </CartProvider>
+        </AuthContext>
     )
 }
 

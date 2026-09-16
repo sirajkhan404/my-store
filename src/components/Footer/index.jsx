@@ -20,7 +20,7 @@ const Footer = () => {
 
     return (
         <footer className="text-light position-relative overflow-hidden"
-            style={{ background: 'linear-gradient(180deg, #0f172a 0%, #090d16 100%)', fontFamily: "'Inter', sans-serif" }}>
+            style={{ background: 'linear-gradient(180deg, #042f2e 0%, #021a19 100%)', fontFamily: "'Inter', sans-serif" }}>
 
             {/* ── Top Highlights Banner ── */}
             <div className="border-bottom border-secondary border-opacity-15 py-4"
@@ -84,7 +84,7 @@ const Footer = () => {
 
                     {/* Column 2: Quick Links */}
                     <div className="col-6 col-md-3 col-lg-2">
-                        <h6 className="text-white fw-bold uppercase-spacing mb-3 pb-2 border-bottom border-primary border-2 d-inline-block" style={{ fontSize: '14px', letterSpacing: '0.8px' }}>
+                        <h6 className="text-white fw-bold mb-3 pb-2 d-inline-block" style={{ fontSize: '14px', letterSpacing: '0.8px', borderBottom: '2px solid #0d9488' }}>
                             Quick Links
                         </h6>
                         <ul className="list-unstyled m-0 d-flex flex-column gap-2.5">
@@ -106,7 +106,7 @@ const Footer = () => {
 
                     {/* Column 3: Customer Care */}
                     <div className="col-6 col-md-3 col-lg-2">
-                        <h6 className="text-white fw-bold uppercase-spacing mb-3 pb-2 border-bottom border-primary border-2 d-inline-block" style={{ fontSize: '14px', letterSpacing: '0.8px' }}>
+                        <h6 className="text-white fw-bold mb-3 pb-2 d-inline-block" style={{ fontSize: '14px', letterSpacing: '0.8px', borderBottom: '2px solid #0d9488' }}>
                             Support & Contact
                         </h6>
                         <ul className="list-unstyled m-0 d-flex flex-column gap-2.5">
@@ -153,8 +153,8 @@ const Footer = () => {
                                         style={{ fontSize: '13px' }}
                                     />
                                     <button type="submit"
-                                        className="btn btn-primary rounded-3 py-2 fw-bold small text-white shadow-sm"
-                                        style={{ background: 'linear-gradient(135deg, #6366f1, #3b82f6)', border: 'none' }}>
+                                        className="btn rounded-3 py-2 fw-bold small text-dark shadow-sm"
+                                        style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)', border: 'none' }}>
                                         Subscribe Now →
                                     </button>
                                 </form>

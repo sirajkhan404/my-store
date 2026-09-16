@@ -9,6 +9,6 @@ export const items = [
     { key: "3", label: <Link to={`${root}/products`} className="text-decoration-none">Products</Link>, icon: <DesktopOutlined />, allowedRoles: ["superAdmin"] },
     { key: "4", label: <Link to={`${root}/orders`} className="text-decoration-none">Orders</Link>, icon: <PieChartOutlined /> },
     { key: "5", label: <Link to={`${root}/users`} className="text-decoration-none">Users</Link>, icon: <TeamOutlined />, allowedRoles: ["superAdmin"] },
-    { key: "6", label: <Link to={`${root}/messages`} className="text-decoration-none">Messages</Link>, icon: <MessageOutlined />, allowedRoles: ["superAdmin"] },
+    { key: "6", label: <Link to={`${root}/messages`} className="text-decoration-none">Messages</Link>, icon: <MessageOutlined /> },
     { key: "7", label: <Link to={`${root}/profile`} className="text-decoration-none">Profile</Link>, icon: <UserOutlined /> }
 ];

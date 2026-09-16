@@ -18,7 +18,7 @@ const ContactSection = () => {
     };
 
     return (
-        <section className="py-5 bg-light">
+        <section className="py-5" style={{ background: '#f0fdfa' }}>
             <div className="container py-4">
                 <div className="text-center mb-5">
                     <h2 className="fw-bold mb-2 text-dark">Have a Question?</h2>
@@ -29,7 +29,7 @@ const ContactSection = () => {
                     <div className="row g-0">
                         {/* Info Side (Visible on medium screens and up) */}
                         <div className="col-12 col-md-5 d-none d-md-flex flex-column justify-content-center text-white p-4 p-lg-5"
-                            style={{ background: 'linear-gradient(135deg, #1e293b 0%, #3b82f6 100%)' }}>
+                            style={{ background: 'linear-gradient(135deg, #042f2e 0%, #0d9488 100%)' }}>
                             <h4 className="fw-bold mb-4">Contact Info</h4>
                             <div className="d-flex align-items-center gap-3 mb-4">
                                 <div className="fs-4">📍</div>
@@ -94,8 +94,9 @@ const ContactSection = () => {
                                         required
                                     />
                                 </div>
-                                <button type="submit" className="btn btn-primary w-100 rounded-3 py-3 fw-bold shadow-sm" disabled={isSubmitting}>
-                                    {isSubmitting ? 'Sending...' : 'Send Message'}
+                                <button type="submit" className="btn w-100 rounded-3 py-3 fw-bold shadow-sm text-white" disabled={isSubmitting}
+                                    style={{ background: 'linear-gradient(135deg, #0d9488, #0f766e)', border: 'none' }}>
+                                    {isSubmitting ? 'Sending...' : 'Send Message →'}
                                 </button>
                             </form>
                         </div>
