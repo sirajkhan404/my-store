@@ -1,7 +1,19 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { useAuth } from "../../../context/Auth"
 import axios from "axios"
+import {
+    MailOutlined,
+    LockOutlined,
+    EyeOutlined,
+    EyeInvisibleOutlined,
+    ArrowLeftOutlined,
+    SafetyCertificateOutlined,
+    CheckCircleFilled,
+    ThunderboltFilled,
+    ShoppingOutlined,
+    StarFilled
+} from "@ant-design/icons"
 
 const initialState = { email: "", password: "" }
 
@@ -12,6 +24,15 @@ const Login = () => {
     const [state, setState] = useState(initialState)
     const [isProcessing, setIsProcessing] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
+    const [rememberMe, setRememberMe] = useState(true)
+
+    // Load saved email if remember me was used
+    useEffect(() => {
+        const savedEmail = localStorage.getItem("mystore_remember_email")
+        if (savedEmail) {
+            setState(s => ({ ...s, email: savedEmail }))
+        }
+    }, [])
 
     const handleChange = e => setState(s => ({ ...s, [e.target.name]: e.target.value }))
 
@@ -20,23 +41,28 @@ const Login = () => {
         let { email, password } = state
 
         if (!email || !password) {
-            window.toastify("Please enter email and password", "warning")
+            window.toastify("Please enter both email and password", "warning")
             return
         }
 
-        const userData = { email, password }
+        const userData = { email: email.trim().toLowerCase(), password }
         setIsProcessing(true)
 
         axios.post(`${window.api}/api/auth/login`, userData)
             .then((res) => {
                 const { status, data } = res
                 if (status === 200) {
+                    if (rememberMe) {
+                        localStorage.setItem("mystore_remember_email", email.trim().toLowerCase())
+                    } else {
+                        localStorage.removeItem("mystore_remember_email")
+                    }
                     localStorage.setItem("jwt", data.token)
                     readProfile(data.token)
-                    window.toastify("Login successful 🎉", "success")
+                    window.toastify("Welcome back! Login successful 🎉", "success")
                     navigate("/dashboard")
                 } else {
-                    window.toastify(data.message, "error")
+                    window.toastify(data?.message || "Login failed", "error")
                 }
             })
             .catch(error => {
@@ -49,98 +75,592 @@ const Login = () => {
     }
 
     return (
-        <main className="d-flex justify-content-center align-items-center py-4 py-md-5 flex-grow-1 overflow-hidden position-relative w-100"
-            style={{ minHeight: 'calc(100vh - 140px)', background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)' }}>
+        <main
+            style={{
+                minHeight: "100vh",
+                background: "linear-gradient(135deg, #f0fdf4 0%, #f8fafc 50%, #e6fffa 100%)",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: "24px 16px",
+                position: "relative",
+                overflow: "hidden"
+            }}
+        >
+            {/* Ambient Background Glows */}
+            <div
+                style={{
+                    position: "absolute",
+                    width: "500px",
+                    height: "500px",
+                    borderRadius: "50%",
+                    background: "radial-gradient(circle, rgba(13, 148, 136, 0.15) 0%, rgba(20, 184, 166, 0) 70%)",
+                    top: "-100px",
+                    left: "-100px",
+                    pointerEvents: "none",
+                    zIndex: 0
+                }}
+            />
+            <div
+                style={{
+                    position: "absolute",
+                    width: "450px",
+                    height: "450px",
+                    borderRadius: "50%",
+                    background: "radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, rgba(5, 150, 105, 0) 70%)",
+                    bottom: "-80px",
+                    right: "-80px",
+                    pointerEvents: "none",
+                    zIndex: 0
+                }}
+            />
 
-            {/* Background glowing shapes */}
-            <div className="position-absolute rounded-circle bg-primary opacity-50 pointer-event-none"
-                style={{ width: '280px', height: '280px', top: '-50px', left: '-50px', filter: 'blur(60px)', zIndex: 1 }}></div>
-            <div className="position-absolute rounded-circle bg-info opacity-50 pointer-event-none"
-                style={{ width: '220px', height: '220px', bottom: '-50px', right: '-50px', filter: 'blur(60px)', zIndex: 1 }}></div>
+            {/* Top Navigation Bar */}
+            <div
+                style={{
+                    width: "100%",
+                    maxWidth: "1060px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    marginBottom: "20px",
+                    zIndex: 2
+                }}
+            >
+                <Link
+                    to="/"
+                    style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "8px",
+                        color: "#0f766e",
+                        textDecoration: "none",
+                        fontSize: "14px",
+                        fontWeight: 700,
+                        padding: "8px 16px",
+                        borderRadius: "12px",
+                        background: "rgba(255, 255, 255, 0.8)",
+                        backdropFilter: "blur(10px)",
+                        border: "1px solid rgba(13, 148, 136, 0.18)",
+                        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.04)",
+                        transition: "all 0.2s ease"
+                    }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = "translateX(-3px)"
+                        e.currentTarget.style.background = "#ffffff"
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = "translateX(0)"
+                        e.currentTarget.style.background = "rgba(255, 255, 255, 0.8)"
+                    }}
+                >
+                    <ArrowLeftOutlined /> Back to Store
+                </Link>
 
-            <div className="container position-relative px-3" style={{ zIndex: 3 }}>
-                <div className="row justify-content-center">
-                    <div className="col-12 col-sm-10 col-md-8 col-lg-5 col-xl-4">
-                        <div className="card bg-white border-0 shadow-lg rounded-4 overflow-hidden position-relative">
+                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                    <span
+                        style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "5px",
+                            fontSize: "12px",
+                            fontWeight: 700,
+                            color: "#0f766e",
+                            background: "rgba(204, 251, 241, 0.6)",
+                            padding: "6px 12px",
+                            borderRadius: "20px",
+                            border: "1px solid #99f6e4"
+                        }}
+                    >
+                        <SafetyCertificateOutlined /> 256-Bit SSL Secure
+                    </span>
+                </div>
+            </div>
 
-                            {/* Header */}
-                            <div className="text-white text-center p-4 p-md-5"
-                                style={{ background: 'linear-gradient(135deg, #1e293b 0%, #3b82f6 100%)' }}>
-                                <h2 className="fw-bold mb-2 fs-3 fs-md-2">Welcome Back! 👋</h2>
-                                <p className="mb-0 opacity-75 small fs-6">Sign in to continue to MyStore</p>
+            {/* Main Auth Container */}
+            <div
+                style={{
+                    width: "100%",
+                    maxWidth: "1060px",
+                    background: "#ffffff",
+                    borderRadius: "28px",
+                    boxShadow: "0 25px 60px -15px rgba(4, 47, 46, 0.12), 0 0 0 1px rgba(13, 148, 136, 0.08)",
+                    overflow: "hidden",
+                    display: "flex",
+                    flexWrap: "wrap",
+                    position: "relative",
+                    zIndex: 1
+                }}
+            >
+                {/* ══ LEFT HERO / SHOWCASE PANEL (Desktop & Tablet) ══ */}
+                <div
+                    className="col-12 col-lg-5 d-none d-lg-flex flex-column justify-content-between text-white p-4 p-xl-5"
+                    style={{
+                        background: "linear-gradient(150deg, #042f2e 0%, #064e3b 45%, #022c22 100%)",
+                        position: "relative",
+                        overflow: "hidden",
+                        minHeight: "580px"
+                    }}
+                >
+                    {/* Glowing background circles in hero */}
+                    <div
+                        style={{
+                            position: "absolute",
+                            width: "300px",
+                            height: "300px",
+                            borderRadius: "50%",
+                            background: "radial-gradient(circle, rgba(94, 234, 212, 0.2) 0%, rgba(94, 234, 212, 0) 70%)",
+                            top: "-50px",
+                            right: "-50px"
+                        }}
+                    />
+                    <div
+                        style={{
+                            position: "absolute",
+                            width: "250px",
+                            height: "250px",
+                            borderRadius: "50%",
+                            background: "radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0) 70%)",
+                            bottom: "-50px",
+                            left: "-50px"
+                        }}
+                    />
+
+                    {/* Top Brand & Badge */}
+                    <div style={{ position: "relative", zIndex: 2 }}>
+                        <div
+                            style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "8px",
+                                background: "rgba(255, 255, 255, 0.1)",
+                                border: "1px solid rgba(255, 255, 255, 0.15)",
+                                padding: "6px 14px",
+                                borderRadius: "30px",
+                                fontSize: "12px",
+                                fontWeight: 700,
+                                color: "#5eead4",
+                                marginBottom: "28px",
+                                backdropFilter: "blur(8px)"
+                            }}
+                        >
+                            <ThunderboltFilled /> Official Member Portal
+                        </div>
+
+                        <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "20px" }}>
+                            <div
+                                style={{
+                                    width: "48px",
+                                    height: "48px",
+                                    borderRadius: "14px",
+                                    background: "linear-gradient(135deg, #14b8a6, #0d9488)",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    boxShadow: "0 8px 20px rgba(13, 148, 136, 0.4)",
+                                    fontSize: "22px",
+                                    color: "#ffffff"
+                                }}
+                            >
+                                <ShoppingOutlined />
                             </div>
-
-                            {/* Form Body */}
-                            <div className="card-body p-4 p-md-5">
-                                <form onSubmit={handleLogin}>
-
-                                    {/* Email */}
-                                    <div className="mb-4">
-                                        <label className="form-label fw-semibold text-muted small ms-1 mb-1">Email Address</label>
-                                        <input
-                                            type="email"
-                                            className="form-control bg-light border-light-subtle rounded-3 px-3 py-2 shadow-sm"
-                                            placeholder="hello@example.com"
-                                            name="email"
-                                            value={state.email}
-                                            onChange={handleChange}
-                                            required
-                                            style={{ fontSize: '15px' }}
-                                        />
-                                    </div>
-
-                                    {/* Password */}
-                                    <div className="mb-4">
-                                        <div className="d-flex justify-content-between align-items-center mb-1 ms-1">
-                                            <label className="form-label fw-semibold text-muted small mb-0">Password</label>
-                                            <Link to="/auth/forgot-password" className="small text-decoration-none text-primary fw-semibold" style={{ fontSize: '13px' }}>Forgot Password?</Link>
-                                        </div>
-                                        <div className="position-relative">
-                                            <input
-                                                type={showPassword ? "text" : "password"}
-                                                className="form-control bg-light border-light-subtle rounded-3 px-3 py-2 pe-5 shadow-sm"
-                                                placeholder="••••••••"
-                                                name="password"
-                                                value={state.password}
-                                                onChange={handleChange}
-                                                required
-                                                style={{ fontSize: '15px' }}
-                                            />
-                                            <button
-                                                type="button"
-                                                className="position-absolute end-0 top-50 translate-middle-y bg-transparent border-0 text-secondary pe-3"
-                                                onClick={() => setShowPassword(!showPassword)}
-                                                tabIndex="-1"
-                                                style={{ fontSize: '16px' }}
-                                            >
-                                                {showPassword ? "👁️‍🗨️" : "👁️"}
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    {/* Submit Button */}
-                                    <button
-                                        type="submit"
-                                        className="btn btn-primary w-100 rounded-3 py-3 fw-bold shadow-sm mb-4"
-                                        style={{ background: '#3b82f6', border: 'none' }}
-                                        disabled={isProcessing}
-                                    >
-                                        {isProcessing ? (
-                                            <><span className="spinner-border spinner-border-sm me-2" /> Logging in...</>
-                                        ) : 'Sign In'}
-                                    </button>
-
-                                    {/* Link to Register */}
-                                    <div className="text-center">
-                                        <span className="text-muted small">Don't have an account? </span>
-                                        <Link to="/auth/register" className="text-primary text-decoration-none fw-bold small">Create Account</Link>
-                                    </div>
-
-                                </form>
+                            <div>
+                                <h3 style={{ margin: 0, fontSize: "22px", fontWeight: 800, letterSpacing: "-0.5px" }}>
+                                    MyStore<span style={{ color: "#5eead4" }}>.</span>
+                                </h3>
+                                <p style={{ margin: 0, fontSize: "12px", color: "rgba(255, 255, 255, 0.7)" }}>
+                                    Next-Gen E-Commerce
+                                </p>
                             </div>
                         </div>
+
+                        <h2 style={{ fontSize: "28px", fontWeight: 800, lineHeight: 1.25, marginBottom: "16px", color: "#ffffff" }}>
+                            Welcome back to your favorite shopping hub.
+                        </h2>
+                        <p style={{ fontSize: "14px", color: "rgba(255, 255, 255, 0.8)", lineHeight: 1.6, marginBottom: "32px" }}>
+                            Sign in to track orders, manage your wishlist, view exclusive stories and unlock member discounts.
+                        </p>
+
+                        {/* Feature Badges */}
+                        <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+                            {[
+                                { title: "Instant Express Delivery", desc: "Fast and reliable doorstep dispatch", icon: "⚡" },
+                                { title: "Exclusive Stories & Deals", desc: "Discover viral products first", icon: "🎬" },
+                                { title: "Encrypted & Safe Payments", desc: "100% money back guarantee", icon: "🛡️" }
+                            ].map((item, idx) => (
+                                <div
+                                    key={idx}
+                                    style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "12px",
+                                        background: "rgba(255, 255, 255, 0.06)",
+                                        border: "1px solid rgba(255, 255, 255, 0.08)",
+                                        padding: "10px 14px",
+                                        borderRadius: "14px",
+                                        backdropFilter: "blur(6px)"
+                                    }}
+                                >
+                                    <span style={{ fontSize: "18px" }}>{item.icon}</span>
+                                    <div>
+                                        <div style={{ fontSize: "13px", fontWeight: 700, color: "#ffffff" }}>{item.title}</div>
+                                        <div style={{ fontSize: "11px", color: "rgba(255, 255, 255, 0.65)" }}>{item.desc}</div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Bottom Social Proof Pill */}
+                    <div
+                        style={{
+                            marginTop: "30px",
+                            padding: "12px 16px",
+                            background: "rgba(0, 0, 0, 0.25)",
+                            border: "1px solid rgba(255, 255, 255, 0.1)",
+                            borderRadius: "16px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            zIndex: 2
+                        }}
+                    >
+                        <div style={{ display: "flex", alignItems: "center", gap: "4px", color: "#fbbf24", fontSize: "13px" }}>
+                            <StarFilled />
+                            <StarFilled />
+                            <StarFilled />
+                            <StarFilled />
+                            <StarFilled />
+                            <span style={{ color: "#ffffff", fontWeight: 700, fontSize: "12px", marginLeft: "4px" }}>4.9/5</span>
+                        </div>
+                        <span style={{ fontSize: "11px", color: "#5eead4", fontWeight: 600 }}>10,000+ Happy Customers</span>
                     </div>
                 </div>
+
+                {/* ══ RIGHT FORM AREA ══ */}
+                <div
+                    className="col-12 col-lg-7 p-4 p-sm-5 d-flex flex-column justify-content-center"
+                    style={{ background: "#ffffff", minHeight: "580px" }}
+                >
+                    <div style={{ maxWidth: "440px", width: "100%", margin: "0 auto" }}>
+
+                        {/* Top Tab Switcher */}
+                        <div
+                            style={{
+                                display: "flex",
+                                background: "#f1f5f9",
+                                padding: "4px",
+                                borderRadius: "14px",
+                                marginBottom: "28px"
+                            }}
+                        >
+                            <Link
+                                to="/auth/login"
+                                style={{
+                                    flex: 1,
+                                    textAlign: "center",
+                                    padding: "10px 0",
+                                    fontSize: "14px",
+                                    fontWeight: 700,
+                                    borderRadius: "11px",
+                                    textDecoration: "none",
+                                    color: "#0f766e",
+                                    background: "#ffffff",
+                                    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.06)",
+                                    transition: "all 0.2s ease"
+                                }}
+                            >
+                                Sign In
+                            </Link>
+                            <Link
+                                to="/auth/register"
+                                style={{
+                                    flex: 1,
+                                    textAlign: "center",
+                                    padding: "10px 0",
+                                    fontSize: "14px",
+                                    fontWeight: 600,
+                                    borderRadius: "11px",
+                                    textDecoration: "none",
+                                    color: "#64748b",
+                                    background: "transparent",
+                                    transition: "all 0.2s ease"
+                                }}
+                            >
+                                Register
+                            </Link>
+                        </div>
+
+                        {/* Header Text */}
+                        <div style={{ marginBottom: "26px" }}>
+                            <h1 style={{ fontSize: "26px", fontWeight: 800, color: "#0f172a", marginBottom: "6px", letterSpacing: "-0.5px" }}>
+                                Welcome Back 👋
+                            </h1>
+                            <p style={{ fontSize: "14px", color: "#64748b", margin: 0 }}>
+                                Enter your credentials to access your account.
+                            </p>
+                        </div>
+
+                        {/* Login Form */}
+                        <form onSubmit={handleLogin}>
+                            {/* Email Field */}
+                            <div style={{ marginBottom: "20px" }}>
+                                <label
+                                    htmlFor="login-email"
+                                    style={{
+                                        display: "block",
+                                        fontSize: "13px",
+                                        fontWeight: 700,
+                                        color: "#334155",
+                                        marginBottom: "8px"
+                                    }}
+                                >
+                                    Email Address
+                                </label>
+                                <div style={{ position: "relative" }}>
+                                    <span
+                                        style={{
+                                            position: "absolute",
+                                            left: "16px",
+                                            top: "50%",
+                                            transform: "translateY(-50%)",
+                                            color: "#94a3b8",
+                                            fontSize: "16px",
+                                            pointerEvents: "none"
+                                        }}
+                                    >
+                                        <MailOutlined />
+                                    </span>
+                                    <input
+                                        id="login-email"
+                                        type="email"
+                                        name="email"
+                                        placeholder="name@example.com"
+                                        value={state.email}
+                                        onChange={handleChange}
+                                        required
+                                        autoComplete="email"
+                                        style={{
+                                            width: "100%",
+                                            height: "48px",
+                                            padding: "0 16px 0 46px",
+                                            fontSize: "14px",
+                                            color: "#0f172a",
+                                            background: "#f8fafc",
+                                            border: "1.5px solid #e2e8f0",
+                                            borderRadius: "12px",
+                                            outline: "none",
+                                            transition: "all 0.2s ease",
+                                            boxSizing: "border-box"
+                                        }}
+                                        onFocus={(e) => {
+                                            e.target.style.borderColor = "#0d9488"
+                                            e.target.style.background = "#ffffff"
+                                            e.target.style.boxShadow = "0 0 0 4px rgba(13, 148, 136, 0.12)"
+                                        }}
+                                        onBlur={(e) => {
+                                            e.target.style.borderColor = "#e2e8f0"
+                                            e.target.style.background = "#f8fafc"
+                                            e.target.style.boxShadow = "none"
+                                        }}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Password Field */}
+                            <div style={{ marginBottom: "20px" }}>
+                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+                                    <label
+                                        htmlFor="login-password"
+                                        style={{
+                                            fontSize: "13px",
+                                            fontWeight: 700,
+                                            color: "#334155",
+                                            margin: 0
+                                        }}
+                                    >
+                                        Password
+                                    </label>
+                                    <Link
+                                        to="/auth/forgot-password"
+                                        style={{
+                                            fontSize: "12px",
+                                            fontWeight: 700,
+                                            color: "#0d9488",
+                                            textDecoration: "none"
+                                        }}
+                                    >
+                                        Forgot Password?
+                                    </Link>
+                                </div>
+                                <div style={{ position: "relative" }}>
+                                    <span
+                                        style={{
+                                            position: "absolute",
+                                            left: "16px",
+                                            top: "50%",
+                                            transform: "translateY(-50%)",
+                                            color: "#94a3b8",
+                                            fontSize: "16px",
+                                            pointerEvents: "none"
+                                        }}
+                                    >
+                                        <LockOutlined />
+                                    </span>
+                                    <input
+                                        id="login-password"
+                                        type={showPassword ? "text" : "password"}
+                                        name="password"
+                                        placeholder="••••••••••••"
+                                        value={state.password}
+                                        onChange={handleChange}
+                                        required
+                                        autoComplete="current-password"
+                                        style={{
+                                            width: "100%",
+                                            height: "48px",
+                                            padding: "0 46px 0 46px",
+                                            fontSize: "14px",
+                                            color: "#0f172a",
+                                            background: "#f8fafc",
+                                            border: "1.5px solid #e2e8f0",
+                                            borderRadius: "12px",
+                                            outline: "none",
+                                            transition: "all 0.2s ease",
+                                            boxSizing: "border-box"
+                                        }}
+                                        onFocus={(e) => {
+                                            e.target.style.borderColor = "#0d9488"
+                                            e.target.style.background = "#ffffff"
+                                            e.target.style.boxShadow = "0 0 0 4px rgba(13, 148, 136, 0.12)"
+                                        }}
+                                        onBlur={(e) => {
+                                            e.target.style.borderColor = "#e2e8f0"
+                                            e.target.style.background = "#f8fafc"
+                                            e.target.style.boxShadow = "none"
+                                        }}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        aria-label={showPassword ? "Hide password" : "Show password"}
+                                        style={{
+                                            position: "absolute",
+                                            right: "12px",
+                                            top: "50%",
+                                            transform: "translateY(-50%)",
+                                            background: "none",
+                                            border: "none",
+                                            color: "#64748b",
+                                            cursor: "pointer",
+                                            padding: "6px",
+                                            fontSize: "16px",
+                                            display: "flex",
+                                            alignItems: "center"
+                                        }}
+                                    >
+                                        {showPassword ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Remember Me Checkbox */}
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "24px" }}>
+                                <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "13px", color: "#475569", userSelect: "none" }}>
+                                    <input
+                                        type="checkbox"
+                                        checked={rememberMe}
+                                        onChange={(e) => setRememberMe(e.target.checked)}
+                                        style={{
+                                            width: "16px",
+                                            height: "16px",
+                                            accentColor: "#0d9488",
+                                            cursor: "pointer",
+                                            borderRadius: "4px"
+                                        }}
+                                    />
+                                    <span>Remember email on this device</span>
+                                </label>
+                            </div>
+
+                            {/* Submit CTA Button */}
+                            <button
+                                type="submit"
+                                disabled={isProcessing}
+                                style={{
+                                    width: "100%",
+                                    height: "50px",
+                                    borderRadius: "14px",
+                                    border: "none",
+                                    background: isProcessing
+                                        ? "#94a3b8"
+                                        : "linear-gradient(135deg, #0d9488 0%, #042f2e 100%)",
+                                    color: "#ffffff",
+                                    fontSize: "15px",
+                                    fontWeight: 700,
+                                    cursor: isProcessing ? "not-allowed" : "pointer",
+                                    boxShadow: isProcessing ? "none" : "0 10px 25px -5px rgba(13, 148, 136, 0.45)",
+                                    transition: "all 0.25s ease",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    gap: "10px"
+                                }}
+                                onMouseEnter={(e) => {
+                                    if (!isProcessing) {
+                                        e.currentTarget.style.transform = "translateY(-2px)"
+                                        e.currentTarget.style.boxShadow = "0 14px 30px -5px rgba(13, 148, 136, 0.55)"
+                                    }
+                                }}
+                                onMouseLeave={(e) => {
+                                    if (!isProcessing) {
+                                        e.currentTarget.style.transform = "translateY(0)"
+                                        e.currentTarget.style.boxShadow = "0 10px 25px -5px rgba(13, 148, 136, 0.45)"
+                                    }
+                                }}
+                            >
+                                {isProcessing ? (
+                                    <>
+                                        <div
+                                            className="spinner-border spinner-border-sm"
+                                            role="status"
+                                            style={{ width: "18px", height: "18px", borderWidth: "2px" }}
+                                        />
+                                        <span>Signing In...</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <span>Sign In to MyStore</span>
+                                        <span style={{ fontSize: "16px" }}>→</span>
+                                    </>
+                                )}
+                            </button>
+
+                            {/* Bottom Register Prompt */}
+                            <div style={{ marginTop: "24px", textAlign: "center", fontSize: "13px", color: "#64748b" }}>
+                                Don't have an account yet?{" "}
+                                <Link
+                                    to="/auth/register"
+                                    style={{
+                                        color: "#0d9488",
+                                        fontWeight: 800,
+                                        textDecoration: "none",
+                                        marginLeft: "4px"
+                                    }}
+                                >
+                                    Create Free Account
+                                </Link>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            {/* Footer Note */}
+            <div style={{ marginTop: "20px", textAlign: "center", fontSize: "12px", color: "#64748b", zIndex: 1 }}>
+                Protected by MyStore Security • All Rights Reserved © {new Date().getFullYear()}
             </div>
         </main>
     )

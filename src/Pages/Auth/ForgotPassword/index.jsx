@@ -1,11 +1,20 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
+import {
+    MailOutlined,
+    ArrowLeftOutlined,
+    SafetyCertificateOutlined,
+    KeyOutlined,
+    CheckCircleFilled,
+    ShoppingOutlined
+} from "@ant-design/icons"
 
 const initialState = { email: "" }
 
 const ForgotPassword = () => {
     const [state, setState] = useState(initialState)
     const [isProcessing, setIsProcessing] = useState(false)
+    const [isSent, setIsSent] = useState(false)
     const navigate = useNavigate()
 
     const handleChange = e => setState(s => ({ ...s, [e.target.name]: e.target.value }))
@@ -13,78 +22,338 @@ const ForgotPassword = () => {
     const handleForgotPassword = (e) => {
         e.preventDefault()
         let { email } = state
-        if (!email) return window.toastify("Please enter your email", "warning")
+        if (!email || !email.includes("@")) {
+            return window.toastify("Please enter a valid email address", "warning")
+        }
 
         setIsProcessing(true)
         setTimeout(() => {
             setIsProcessing(false)
-            window.toastify("Password reset instructions sent to your email! 📧", "success")
-            navigate("/auth/login")
+            setIsSent(true)
+            window.toastify("Password reset instructions sent! Please check your inbox 📧", "success")
         }, 1200)
     }
 
     return (
-        <main className="d-flex justify-content-center align-items-center py-4 py-md-5 flex-grow-1 overflow-hidden position-relative w-100"
-            style={{ minHeight: 'calc(100vh - 140px)', background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)' }}>
+        <main
+            style={{
+                minHeight: "100vh",
+                background: "linear-gradient(135deg, #f0fdf4 0%, #f8fafc 50%, #e6fffa 100%)",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: "24px 16px",
+                position: "relative",
+                overflow: "hidden"
+            }}
+        >
+            {/* Ambient Background Glows */}
+            <div
+                style={{
+                    position: "absolute",
+                    width: "450px",
+                    height: "450px",
+                    borderRadius: "50%",
+                    background: "radial-gradient(circle, rgba(13, 148, 136, 0.15) 0%, rgba(20, 184, 166, 0) 70%)",
+                    top: "-80px",
+                    left: "-80px",
+                    pointerEvents: "none",
+                    zIndex: 0
+                }}
+            />
+            <div
+                style={{
+                    position: "absolute",
+                    width: "400px",
+                    height: "400px",
+                    borderRadius: "50%",
+                    background: "radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, rgba(5, 150, 105, 0) 70%)",
+                    bottom: "-60px",
+                    right: "-60px",
+                    pointerEvents: "none",
+                    zIndex: 0
+                }}
+            />
 
-            {/* Decorative background blur shapes */}
-            <div className="position-absolute rounded-circle bg-primary opacity-50 pointer-event-none"
-                style={{ width: '280px', height: '280px', top: '-50px', left: '-50px', filter: 'blur(60px)', zIndex: 1 }}></div>
-            <div className="position-absolute rounded-circle bg-info opacity-50 pointer-event-none"
-                style={{ width: '220px', height: '220px', bottom: '-50px', right: '-50px', filter: 'blur(60px)', zIndex: 1 }}></div>
+            {/* Top Navigation Bar */}
+            <div
+                style={{
+                    width: "100%",
+                    maxWidth: "520px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    marginBottom: "20px",
+                    zIndex: 2
+                }}
+            >
+                <Link
+                    to="/auth/login"
+                    style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "8px",
+                        color: "#0f766e",
+                        textDecoration: "none",
+                        fontSize: "14px",
+                        fontWeight: 700,
+                        padding: "8px 16px",
+                        borderRadius: "12px",
+                        background: "rgba(255, 255, 255, 0.8)",
+                        backdropFilter: "blur(10px)",
+                        border: "1px solid rgba(13, 148, 136, 0.18)",
+                        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.04)",
+                        transition: "all 0.2s ease"
+                    }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = "translateX(-3px)"
+                        e.currentTarget.style.background = "#ffffff"
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = "translateX(0)"
+                        e.currentTarget.style.background = "rgba(255, 255, 255, 0.8)"
+                    }}
+                >
+                    <ArrowLeftOutlined /> Back to Sign In
+                </Link>
 
-            <div className="container position-relative px-3" style={{ zIndex: 3 }}>
-                <div className="row justify-content-center">
-                    <div className="col-12 col-sm-10 col-md-8 col-lg-5 col-xl-4">
-                        <div className="card bg-white border-0 shadow-lg rounded-4 overflow-hidden position-relative">
-
-                            {/* Header */}
-                            <div className="text-white text-center p-4 p-md-5"
-                                style={{ background: 'linear-gradient(135deg, #1e293b 0%, #3b82f6 100%)' }}>
-                                <h2 className="fw-bold mb-2 fs-3 fs-md-2">Reset Password 🔑</h2>
-                                <p className="mb-0 opacity-75 small fs-6">Enter your email to receive reset link</p>
-                            </div>
-
-                            {/* Body */}
-                            <div className="card-body p-4 p-md-5">
-                                <form onSubmit={handleForgotPassword}>
-
-                                    <div className="mb-4">
-                                        <label className="form-label fw-semibold text-muted small ms-1 mb-1">Email Address</label>
-                                        <input
-                                            type="email"
-                                            className="form-control bg-light border-light-subtle rounded-3 px-3 py-2 shadow-sm"
-                                            placeholder="hello@example.com"
-                                            name="email"
-                                            value={state.email}
-                                            onChange={handleChange}
-                                            required
-                                            style={{ fontSize: '15px' }}
-                                        />
-                                    </div>
-
-                                    <button
-                                        type="submit"
-                                        className="btn btn-primary w-100 rounded-3 py-3 fw-bold shadow-sm mb-4"
-                                        style={{ background: '#3b82f6', border: 'none' }}
-                                        disabled={isProcessing}
-                                    >
-                                        {isProcessing ? (
-                                            <><span className="spinner-border spinner-border-sm me-2" /> Sending Link...</>
-                                        ) : 'Send Reset Link'}
-                                    </button>
-
-                                    <div className="text-center">
-                                        <span className="text-muted small">Remember your password? </span>
-                                        <Link to="/auth/login" className="text-primary text-decoration-none fw-bold small">Login here</Link>
-                                    </div>
-
-                                </form>
-                            </div>
-
-                        </div>
-                    </div>
+                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                    <span
+                        style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "5px",
+                            fontSize: "12px",
+                            fontWeight: 700,
+                            color: "#0f766e",
+                            background: "rgba(204, 251, 241, 0.6)",
+                            padding: "6px 12px",
+                            borderRadius: "20px",
+                            border: "1px solid #99f6e4"
+                        }}
+                    >
+                        <SafetyCertificateOutlined /> Secure Recovery
+                    </span>
                 </div>
+            </div>
+
+            {/* Main Recovery Card */}
+            <div
+                style={{
+                    width: "100%",
+                    maxWidth: "520px",
+                    background: "#ffffff",
+                    borderRadius: "28px",
+                    boxShadow: "0 25px 60px -15px rgba(4, 47, 46, 0.12), 0 0 0 1px rgba(13, 148, 136, 0.08)",
+                    overflow: "hidden",
+                    padding: "36px 30px",
+                    position: "relative",
+                    zIndex: 1
+                }}
+            >
+                {/* Header Icon */}
+                <div style={{ textAlign: "center", marginBottom: "24px" }}>
+                    <div
+                        style={{
+                            width: "64px",
+                            height: "64px",
+                            borderRadius: "20px",
+                            background: "linear-gradient(135deg, #14b8a6, #0d9488)",
+                            color: "#ffffff",
+                            fontSize: "26px",
+                            display: "inline-flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            boxShadow: "0 10px 25px rgba(13, 148, 136, 0.35)",
+                            marginBottom: "16px"
+                        }}
+                    >
+                        <KeyOutlined />
+                    </div>
+                    <h1 style={{ fontSize: "24px", fontWeight: 800, color: "#0f172a", marginBottom: "8px", letterSpacing: "-0.5px" }}>
+                        Reset Your Password
+                    </h1>
+                    <p style={{ fontSize: "14px", color: "#64748b", maxWidth: "380px", margin: "0 auto", lineHeight: 1.5 }}>
+                        Enter the email associated with your MyStore account and we'll send a secure reset link.
+                    </p>
+                </div>
+
+                {isSent ? (
+                    <div
+                        style={{
+                            background: "#f0fdf4",
+                            border: "1px solid #bbf7d0",
+                            borderRadius: "16px",
+                            padding: "24px 20px",
+                            textAlign: "center"
+                        }}
+                    >
+                        <div style={{ fontSize: "36px", color: "#10b981", marginBottom: "12px" }}>
+                            <CheckCircleFilled />
+                        </div>
+                        <h4 style={{ fontSize: "17px", fontWeight: 800, color: "#166534", marginBottom: "8px" }}>
+                            Recovery Link Sent!
+                        </h4>
+                        <p style={{ fontSize: "13px", color: "#15803d", marginBottom: "20px" }}>
+                            We've sent an email to <strong>{state.email}</strong> with instructions to reset your password.
+                        </p>
+                        <button
+                            type="button"
+                            onClick={() => navigate("/auth/login")}
+                            style={{
+                                width: "100%",
+                                height: "46px",
+                                borderRadius: "12px",
+                                border: "none",
+                                background: "#0d9488",
+                                color: "#ffffff",
+                                fontSize: "14px",
+                                fontWeight: 700,
+                                cursor: "pointer"
+                            }}
+                        >
+                            Return to Sign In
+                        </button>
+                    </div>
+                ) : (
+                    <form onSubmit={handleForgotPassword}>
+                        <div style={{ marginBottom: "22px" }}>
+                            <label
+                                htmlFor="reset-email"
+                                style={{
+                                    display: "block",
+                                    fontSize: "13px",
+                                    fontWeight: 700,
+                                    color: "#334155",
+                                    marginBottom: "8px"
+                                }}
+                            >
+                                Registered Email Address
+                            </label>
+                            <div style={{ position: "relative" }}>
+                                <span
+                                    style={{
+                                        position: "absolute",
+                                        left: "16px",
+                                        top: "50%",
+                                        transform: "translateY(-50%)",
+                                        color: "#94a3b8",
+                                        fontSize: "16px",
+                                        pointerEvents: "none"
+                                    }}
+                                >
+                                    <MailOutlined />
+                                </span>
+                                <input
+                                    id="reset-email"
+                                    type="email"
+                                    name="email"
+                                    placeholder="name@example.com"
+                                    value={state.email}
+                                    onChange={handleChange}
+                                    required
+                                    autoComplete="email"
+                                    style={{
+                                        width: "100%",
+                                        height: "48px",
+                                        padding: "0 16px 0 46px",
+                                        fontSize: "14px",
+                                        color: "#0f172a",
+                                        background: "#f8fafc",
+                                        border: "1.5px solid #e2e8f0",
+                                        borderRadius: "12px",
+                                        outline: "none",
+                                        transition: "all 0.2s ease",
+                                        boxSizing: "border-box"
+                                    }}
+                                    onFocus={(e) => {
+                                        e.target.style.borderColor = "#0d9488"
+                                        e.target.style.background = "#ffffff"
+                                        e.target.style.boxShadow = "0 0 0 4px rgba(13, 148, 136, 0.12)"
+                                    }}
+                                    onBlur={(e) => {
+                                        e.target.style.borderColor = "#e2e8f0"
+                                        e.target.style.background = "#f8fafc"
+                                        e.target.style.boxShadow = "none"
+                                    }}
+                                />
+                            </div>
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={isProcessing}
+                            style={{
+                                width: "100%",
+                                height: "50px",
+                                borderRadius: "14px",
+                                border: "none",
+                                background: isProcessing
+                                    ? "#94a3b8"
+                                    : "linear-gradient(135deg, #0d9488 0%, #042f2e 100%)",
+                                color: "#ffffff",
+                                fontSize: "15px",
+                                fontWeight: 700,
+                                cursor: isProcessing ? "not-allowed" : "pointer",
+                                boxShadow: isProcessing ? "none" : "0 10px 25px -5px rgba(13, 148, 136, 0.45)",
+                                transition: "all 0.25s ease",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                gap: "10px"
+                            }}
+                            onMouseEnter={(e) => {
+                                if (!isProcessing) {
+                                    e.currentTarget.style.transform = "translateY(-2px)"
+                                    e.currentTarget.style.boxShadow = "0 14px 30px -5px rgba(13, 148, 136, 0.55)"
+                                }
+                            }}
+                            onMouseLeave={(e) => {
+                                if (!isProcessing) {
+                                    e.currentTarget.style.transform = "translateY(0)"
+                                    e.currentTarget.style.boxShadow = "0 10px 25px -5px rgba(13, 148, 136, 0.45)"
+                                }
+                            }}
+                        >
+                            {isProcessing ? (
+                                <>
+                                    <div
+                                        className="spinner-border spinner-border-sm"
+                                        role="status"
+                                        style={{ width: "18px", height: "18px", borderWidth: "2px" }}
+                                    />
+                                    <span>Sending Link...</span>
+                                </>
+                            ) : (
+                                <>
+                                    <span>Send Password Reset Link</span>
+                                    <span style={{ fontSize: "16px" }}>→</span>
+                                </>
+                            )}
+                        </button>
+
+                        <div style={{ marginTop: "24px", textAlign: "center", fontSize: "13px", color: "#64748b" }}>
+                            Remember your password?{" "}
+                            <Link
+                                to="/auth/login"
+                                style={{
+                                    color: "#0d9488",
+                                    fontWeight: 800,
+                                    textDecoration: "none",
+                                    marginLeft: "4px"
+                                }}
+                            >
+                                Sign In
+                            </Link>
+                        </div>
+                    </form>
+                )}
+            </div>
+
+            {/* Footer */}
+            <div style={{ marginTop: "20px", textAlign: "center", fontSize: "12px", color: "#64748b", zIndex: 1 }}>
+                Protected by MyStore Security • All Rights Reserved © {new Date().getFullYear()}
             </div>
         </main>
     )
