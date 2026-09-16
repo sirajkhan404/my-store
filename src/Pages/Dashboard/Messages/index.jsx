@@ -12,6 +12,7 @@ const Messages = () => {
     const [filterTab, setFilterTab] = useState('all'); // 'all', 'pending', 'replied'
     const [selectedMessage, setSelectedMessage] = useState(null);
     const [deletingId, setDeletingId] = useState(null);
+    const [showMobileDetail, setShowMobileDetail] = useState(false);
 
     // Reply state
     const [replyText, setReplyText] = useState('');
@@ -46,7 +47,7 @@ const Messages = () => {
             }
         } catch (error) {
             console.error(error);
-            window.toastify(error?.response?.data?.message || 'Failed to fetch contact messages', 'error');
+            window.toastify(error?.response?.data?.message || 'Failed to fetch messages', 'error');
         } finally {
             setLoading(false);
         }
@@ -66,7 +67,9 @@ const Messages = () => {
             const updated = messages.filter(m => m.id !== id);
             setMessages(updated);
             if (selectedMessage?.id === id) {
-                setSelectedMessage(updated.length > 0 ? updated[0] : null);
+                const next = updated.length > 0 ? updated[0] : null;
+                setSelectedMessage(next);
+                if (!next) setShowMobileDetail(false);
             }
         } catch (error) {
             console.error(error);
@@ -151,470 +154,682 @@ const Messages = () => {
     const pendingCount = messages.filter(m => !m.isReplied).length;
     const repliedCount = messages.filter(m => m.isReplied).length;
 
+    const selectConversation = (msg) => {
+        setSelectedMessage(msg);
+        setShowMobileDetail(true);
+    };
+
     return (
-        <div className="p-3 p-md-4 p-lg-5 bg-light" style={{ minHeight: 'calc(100vh - 70px)', fontFamily: "'Inter', sans-serif" }}>
+        <div className="msg-wrapper" style={{ minHeight: '100%', padding: 'clamp(14px, 3vw, 28px)', fontFamily: "'Inter', sans-serif", background: '#f8fafc' }}>
+            <style>{`
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-            {/* ── Top Header & Action Banner ─────────────────────────────── */}
-            <div className="mb-4 bg-white p-4 rounded-4 shadow-sm border border-light-subtle">
-                <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
-                    <div>
-                        <div className="d-flex align-items-center gap-2 mb-1">
-                            <span className="fs-3">💬</span>
-                            <h3 className="fw-bold mb-0 text-dark">
-                                {isSuperAdmin ? 'Support Messages Inbox' : 'My Inquiries & Responses'}
-                            </h3>
-                        </div>
-                        <p className="text-muted mb-0 small">
-                            {isSuperAdmin
-                                ? 'Manage visitor inquiries, review questions, and send replies directly to users.'
-                                : 'Track your support inquiries and view official replies from SuperAdmin.'}
-                        </p>
+                @keyframes msg-fade {
+                    from { opacity: 0; transform: translateY(10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+
+                @keyframes msg-spin {
+                    to { transform: rotate(360deg); }
+                }
+
+                .msg-card {
+                    background: #ffffff;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 20px;
+                    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+                    transition: all 0.25s ease;
+                }
+
+                .msg-search-input:focus {
+                    outline: none;
+                    border-color: #0d9488 !important;
+                    box-shadow: 0 0 0 3px rgba(13,148,136,0.15) !important;
+                }
+
+                .msg-tab-btn {
+                    border: 1px solid #e2e8f0;
+                    background: #f8fafc;
+                    color: #64748b;
+                    font-size: 12px;
+                    font-weight: 600;
+                    border-radius: 999px;
+                    padding: 6px 14px;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    white-space: nowrap;
+                }
+
+                .msg-tab-btn.active {
+                    background: linear-gradient(135deg, #0d9488, #042f2e);
+                    color: #ffffff;
+                    border-color: transparent;
+                    box-shadow: 0 2px 8px rgba(13,148,136,0.25);
+                }
+
+                .msg-tab-btn:hover:not(.active) {
+                    background: #f1f5f9;
+                    color: #0f172a;
+                }
+
+                .msg-item {
+                    border-bottom: 1px solid #f1f5f9;
+                    padding: 14px 16px;
+                    cursor: pointer;
+                    transition: all 0.18s ease;
+                    background: #ffffff;
+                    position: relative;
+                }
+
+                .msg-item:hover {
+                    background: #f0fdfa !important;
+                }
+
+                .msg-item.active {
+                    background: #f0fdfa !important;
+                }
+
+                .msg-item.active::before {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    bottom: 0;
+                    width: 4px;
+                    background: linear-gradient(180deg, #0d9488, #042f2e);
+                    border-radius: 0 4px 4px 0;
+                }
+
+                .msg-custom-scrollbar::-webkit-scrollbar {
+                    width: 6px;
+                    height: 6px;
+                }
+                .msg-custom-scrollbar::-webkit-scrollbar-track {
+                    background: #f8fafc;
+                    border-radius: 4px;
+                }
+                .msg-custom-scrollbar::-webkit-scrollbar-thumb {
+                    background: #cbd5e1;
+                    border-radius: 4px;
+                }
+                .msg-custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                    background: #94a3b8;
+                }
+
+                .msg-reply-textarea:focus {
+                    outline: none;
+                    border-color: #0d9488 !important;
+                    box-shadow: 0 0 0 3px rgba(13,148,136,0.15) !important;
+                }
+
+                .msg-template-btn {
+                    border: 1px solid #ccfbf1;
+                    background: #f0fdfa;
+                    color: #0f766e;
+                    font-size: 11.5px;
+                    font-weight: 600;
+                    border-radius: 8px;
+                    padding: 4px 10px;
+                    cursor: pointer;
+                    transition: all 0.15s ease;
+                }
+                .msg-template-btn:hover {
+                    background: #ccfbf1;
+                    color: #042f2e;
+                    transform: translateY(-1px);
+                }
+
+                .msg-btn-primary {
+                    background: linear-gradient(135deg, #0d9488, #042f2e);
+                    color: #ffffff;
+                    border: none;
+                    border-radius: 12px;
+                    padding: 10px 20px;
+                    font-size: 13.5px;
+                    font-weight: 700;
+                    cursor: pointer;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 8px;
+                    box-shadow: 0 4px 14px rgba(13,148,136,0.25);
+                    transition: all 0.2s ease;
+                }
+                .msg-btn-primary:hover:not(:disabled) {
+                    transform: translateY(-2px);
+                    box-shadow: 0 8px 22px rgba(13,148,136,0.35);
+                }
+                .msg-btn-primary:disabled {
+                    opacity: 0.6;
+                    cursor: not-allowed;
+                }
+
+                /* Responsive Split Layout */
+                .msg-split-container {
+                    display: grid;
+                    grid-template-columns: 380px 1fr;
+                    gap: 0;
+                    background: #ffffff;
+                    border-radius: 20px;
+                    border: 1px solid #e2e8f0;
+                    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+                    overflow: hidden;
+                    height: calc(100vh - 270px);
+                    min-height: 580px;
+                }
+
+                @media (max-width: 991px) {
+                    .msg-split-container {
+                        grid-template-columns: 1fr;
+                        height: auto;
+                        min-height: 520px;
+                    }
+                    .msg-list-pane {
+                        display: ${showMobileDetail ? 'none' : 'flex'} !important;
+                        height: calc(100vh - 300px);
+                        min-height: 480px;
+                    }
+                    .msg-detail-pane {
+                        display: ${showMobileDetail ? 'flex' : 'none'} !important;
+                        height: calc(100vh - 280px);
+                        min-height: 500px;
+                    }
+                }
+            `}</style>
+
+            {/* ── Top Header Banner ────────────────────────────────────────── */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, flexWrap: 'wrap', gap: 12, animation: 'msg-fade 0.35s ease' }}>
+                <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span style={{ fontSize: 24 }}>💬</span>
+                        <h1 style={{ margin: 0, fontSize: 'clamp(20px, 4vw, 24px)', fontWeight: 800, color: '#0f172a', letterSpacing: -0.5 }}>
+                            {isSuperAdmin ? 'Support Messages & Inquiries' : 'My Support Inquiries'}
+                        </h1>
                     </div>
-                    <div className="d-flex align-items-center gap-2">
-                        {!isSuperAdmin && (
-                            <button
-                                className="btn rounded-pill px-4 py-2 fw-semibold shadow-sm d-flex align-items-center gap-2 border-0 text-white"
-                                style={{ background: 'linear-gradient(135deg, #0d9488, #042f2e)' }}
-                                onClick={() => setNewInquiryModalOpen(true)}
-                            >
-                                ➕ New Inquiry
-                            </button>
-                        )}
-                        <button
-                            className="btn btn-outline-secondary rounded-pill px-3 py-2 fw-semibold d-flex align-items-center gap-2"
-                            onClick={fetchMessages}
-                            disabled={loading}
-                        >
-                            <span>🔄</span> Refresh
+                    <p style={{ margin: '4px 0 0', fontSize: 13, color: '#64748b' }}>
+                        {isSuperAdmin
+                            ? 'Manage customer questions, provide instant replies and track support resolutions.'
+                            : 'View replies from SuperAdmin or send a new inquiry to get support.'}
+                    </p>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    {!isSuperAdmin && (
+                        <button className="msg-btn-primary" onClick={() => setNewInquiryModalOpen(true)}>
+                            <span>➕</span> New Inquiry
                         </button>
-                    </div>
+                    )}
+                    <button
+                        onClick={fetchMessages}
+                        disabled={loading}
+                        style={{
+                            padding: '9px 16px', borderRadius: 12, border: '1.5px solid #ccfbf1',
+                            background: '#ffffff', color: '#0d9488', fontSize: 13, fontWeight: 700,
+                            cursor: loading ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', gap: 6,
+                            boxShadow: '0 2px 8px rgba(13,148,136,0.08)'
+                        }}
+                    >
+                        <span style={{ display: 'inline-block', animation: loading ? 'msg-spin 0.8s linear infinite' : 'none' }}>🔄</span>
+                        Refresh
+                    </button>
                 </div>
             </div>
 
-            {/* ── Overview Stat Badges ───────────────────────────────────── */}
-            <div className="row g-3 mb-4">
-                <div className="col-12 col-sm-4">
-                    <div className="card bg-white border border-light-subtle rounded-4 p-3 px-4 shadow-sm d-flex flex-row align-items-center gap-3 h-100">
-                        <div className="d-flex align-items-center justify-content-center rounded-3 fw-bold flex-shrink-0"
-                            style={{ width: '44px', height: '44px', background: '#f0fdfa', color: '#0d9488', fontSize: '20px' }}>
-                            📩
+            {/* ── Stat Summary Cards ───────────────────────────────────────── */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 14, marginBottom: 20, animation: 'msg-fade 0.35s ease 0.05s both' }}>
+                {[
+                    { label: 'Total Messages', value: totalCount, icon: '📩', bg: '#ccfbf1', color: '#0d9488' },
+                    { label: 'Pending Reply', value: pendingCount, icon: '⏳', bg: '#fef3c7', color: '#d97706' },
+                    { label: 'Replied / Resolved', value: repliedCount, icon: '✅', bg: '#dcfce7', color: '#16a34a' },
+                ].map((s, i) => (
+                    <div key={i} className="msg-card" style={{ padding: '14px 18px', display: 'flex', alignItems: 'center', gap: 14 }}>
+                        <div style={{ width: 44, height: 44, borderRadius: 12, background: s.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }}>
+                            {s.icon}
                         </div>
                         <div>
-                            <div className="fw-bold fs-4 text-dark lh-1">{totalCount}</div>
-                            <div className="text-muted small fw-semibold mt-1">Total Messages</div>
+                            <div style={{ fontSize: 22, fontWeight: 800, color: '#0f172a', lineHeight: 1 }}>{s.value}</div>
+                            <div style={{ fontSize: 12, fontWeight: 600, color: '#64748b', marginTop: 4 }}>{s.label}</div>
                         </div>
                     </div>
-                </div>
-                <div className="col-12 col-sm-4">
-                    <div className="card bg-white border border-light-subtle rounded-4 p-3 px-4 shadow-sm d-flex flex-row align-items-center gap-3 h-100">
-                        <div className="d-flex align-items-center justify-content-center rounded-3 text-warning fw-bold flex-shrink-0"
-                            style={{ width: '44px', height: '44px', background: '#fef3c7', fontSize: '20px' }}>
-                            ⏳
-                        </div>
-                        <div>
-                            <div className="fw-bold fs-4 text-dark lh-1">{pendingCount}</div>
-                            <div className="text-muted small fw-semibold mt-1">Pending Response</div>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-12 col-sm-4">
-                    <div className="card bg-white border border-light-subtle rounded-4 p-3 px-4 shadow-sm d-flex flex-row align-items-center gap-3 h-100">
-                        <div className="d-flex align-items-center justify-content-center rounded-3 text-success fw-bold flex-shrink-0"
-                            style={{ width: '44px', height: '44px', background: '#dcfce7', fontSize: '20px' }}>
-                            ✅
-                        </div>
-                        <div>
-                            <div className="fw-bold fs-4 text-dark lh-1">{repliedCount}</div>
-                            <div className="text-muted small fw-semibold mt-1">Replied / Solved</div>
-                        </div>
-                    </div>
-                </div>
+                ))}
             </div>
 
-            {/* ── Main Split View Card ────────────────────────────────────── */}
-            <div className="card bg-white border border-light-subtle rounded-4 shadow-sm overflow-hidden" style={{ minHeight: '600px' }}>
-                <div className="row g-0 h-100">
+            {/* ── Main Split View Box ──────────────────────────────────────── */}
+            <div className="msg-split-container" style={{ animation: 'msg-fade 0.35s ease 0.1s both' }}>
 
-                    {/* ── Left Sidebar (List of Messages) ────────────────────── */}
-                    <div className="col-12 col-lg-5 border-end d-flex flex-column" style={{ maxHeight: '720px' }}>
-                        {/* Search & Tabs */}
-                        <div className="p-3 border-bottom bg-light bg-opacity-50">
-                            <div className="position-relative mb-2">
-                                <input
-                                    type="text"
-                                    className="form-control rounded-pill ps-5 bg-white border-light-subtle shadow-none small"
-                                    placeholder="Search by name, subject, email..."
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                    style={{ fontSize: '13px', padding: '9px 16px 9px 38px' }}
-                                />
-                                <span className="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted" style={{ fontSize: '14px' }}>
-                                    🔍
-                                </span>
-                            </div>
+                {/* ── Left Pane: Conversation List ─────────────────────────── */}
+                <div className="msg-list-pane" style={{ borderRight: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', height: '100%', background: '#ffffff' }}>
 
-                            {/* Filter Tabs */}
-                            <div className="d-flex align-items-center gap-1 overflow-auto pb-1">
-                                {[
-                                    { id: 'all', label: `All (${totalCount})` },
-                                    { id: 'pending', label: `⏳ Pending (${pendingCount})` },
-                                    { id: 'replied', label: `✓ Replied (${repliedCount})` },
-                                ].map(tab => (
-                                    <button
-                                        key={tab.id}
-                                        className={`btn btn-sm rounded-pill px-3 py-1 fw-semibold text-nowrap ${filterTab === tab.id ? 'shadow-sm text-white' : 'btn-outline-secondary bg-white text-secondary border-light-subtle'}`}
-                                        onClick={() => setFilterTab(tab.id)}
-                                        style={{ fontSize: '12.5px', background: filterTab === tab.id ? 'linear-gradient(135deg, #0d9488 0%, #042f2e 100%)' : '', border: filterTab === tab.id ? 'none' : undefined }}
-                                    >
-                                        {tab.label}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Scrollable List Items */}
-                        <div className="flex-grow-1 overflow-auto">
-                            {loading ? (
-                                <div className="text-center py-5">
-                                    <div className="spinner-border spinner-border-sm" style={{ color: '#0d9488' }} role="status" />
-                                    <p className="mt-2 text-muted small fw-medium">Loading inbox...</p>
-                                </div>
-                            ) : filteredMessages.length === 0 ? (
-                                <div className="text-center py-5 text-muted px-3">
-                                    <div className="fs-2 mb-2">📭</div>
-                                    <h6 className="fw-bold text-dark mb-1" style={{ fontSize: '14px' }}>No Messages Found</h6>
-                                    <p className="small mb-0 opacity-75">
-                                        {searchTerm ? 'Try adjusting your search query.' : 'Inbox is currently empty.'}
-                                    </p>
-                                </div>
-                            ) : (
-                                filteredMessages.map(msg => (
-                                    <div
-                                        key={msg.id}
-                                        className={`p-3 border-bottom cursor-pointer transition-all ${selectedMessage?.id === msg.id ? 'border-start border-4' : 'bg-white'}`}
-                                        onClick={() => setSelectedMessage(msg)}
-                                        style={{
-                                            cursor: 'pointer',
-                                            background: selectedMessage?.id === msg.id ? '#f0fdfa' : '#ffffff',
-                                            borderLeft: selectedMessage?.id === msg.id ? '4px solid #0d9488' : '1px solid #f1f5f9'
-                                        }}
-                                    >
-                                        <div className="d-flex justify-content-between align-items-start mb-1">
-                                            <div className="fw-bold text-dark text-truncate" style={{ fontSize: '14px', maxWidth: '180px' }}>
-                                                {isSuperAdmin ? msg.name : msg.subject}
-                                            </div>
-                                            <span className="small text-muted" style={{ fontSize: '11px' }}>
-                                                {msg.createdAt
-                                                    ? new Date(msg.createdAt).toLocaleDateString('en-PK', { month: 'short', day: 'numeric' })
-                                                    : ''}
-                                            </span>
-                                        </div>
-
-                                        <div className="fw-semibold mb-1 text-truncate" style={{ fontSize: '13px', color: '#0d9488' }}>
-                                            {isSuperAdmin ? msg.subject : `Email: ${msg.email}`}
-                                        </div>
-
-                                        <div className="text-muted small text-truncate mb-2" style={{ fontSize: '12px' }}>
-                                            {msg.message}
-                                        </div>
-
-                                        <div className="d-flex justify-content-between align-items-center">
-                                            {msg.isReplied ? (
-                                                <span className="badge bg-success-subtle text-success border border-success-subtle rounded-pill fw-semibold" style={{ fontSize: '11px' }}>
-                                                    ✓ Replied
-                                                </span>
-                                            ) : (
-                                                <span className="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill fw-semibold" style={{ fontSize: '11px' }}>
-                                                    ⏳ Pending
-                                                </span>
-                                            )}
-                                            {isSuperAdmin && (
-                                                <span className="text-muted small text-truncate" style={{ fontSize: '11px', maxWidth: '140px' }}>
-                                                    {msg.email}
-                                                </span>
-                                            )}
-                                        </div>
-                                    </div>
-                                ))
+                    {/* Search & Filter Header */}
+                    <div style={{ padding: '14px 16px', borderBottom: '1px solid #f1f5f9', background: '#f8fafc' }}>
+                        <div style={{ position: 'relative', marginBottom: 10 }}>
+                            <input
+                                className="msg-search-input"
+                                type="text"
+                                placeholder="🔍 Search name, subject, email..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                style={{
+                                    width: '100%', padding: '9px 14px 9px 36px', borderRadius: 10,
+                                    border: '1.5px solid #e2e8f0', fontSize: 13, background: '#ffffff',
+                                    color: '#0f172a', boxSizing: 'border-box', transition: 'all 0.2s'
+                                }}
+                            />
+                            <span style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', fontSize: 13, color: '#94a3b8' }}>🔍</span>
+                            {searchTerm && (
+                                <button
+                                    onClick={() => setSearchTerm('')}
+                                    style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent', color: '#94a3b8', cursor: 'pointer', fontSize: 13 }}
+                                >
+                                    ✕
+                                </button>
                             )}
                         </div>
+
+                        {/* Filter Tabs */}
+                        <div style={{ display: 'flex', gap: 6, overflowX: 'auto', paddingBottom: 2 }}>
+                            {[
+                                { id: 'all', label: `All (${totalCount})` },
+                                { id: 'pending', label: `⏳ Pending (${pendingCount})` },
+                                { id: 'replied', label: `✓ Replied (${repliedCount})` },
+                            ].map(tab => (
+                                <button
+                                    key={tab.id}
+                                    className={`msg-tab-btn ${filterTab === tab.id ? 'active' : ''}`}
+                                    onClick={() => setFilterTab(tab.id)}
+                                >
+                                    {tab.label}
+                                </button>
+                            ))}
+                        </div>
                     </div>
-                </div>
 
-                {/* ── Right Column: Selected Message Details & Reply Panel ── */}
-                <div className={`col-12 col-lg-8 ${!selectedMessage && 'd-none d-lg-block'}`}>
-                    <div className="card bg-white border border-light-subtle rounded-4 shadow-sm overflow-hidden h-100 d-flex flex-column">
-                        {selectedMessage ? (
-                            <div className="d-flex flex-column h-100">
-
-                                {/* Panel Top Header */}
-                                <div className="p-4 border-bottom bg-white d-flex justify-content-between align-items-center">
-                                    <div className="d-flex align-items-center gap-3">
-                                        <button
-                                            className="btn btn-sm btn-light border d-lg-none"
-                                            onClick={() => setSelectedMessage(null)}
-                                        >
-                                            ← Back
-                                        </button>
-                                        <div className="d-flex align-items-center justify-content-center text-white fw-bold rounded-circle flex-shrink-0 shadow-sm"
-                                            style={{ width: '44px', height: '44px', background: 'linear-gradient(135deg, #4f46e5, #3b82f6)', fontSize: '18px' }}>
-                                            {selectedMessage.name?.charAt(0)?.toUpperCase() || 'U'}
-                                        </div>
-                                        <div>
-                                            <h5 className="fw-bold mb-0 text-dark fs-6">{selectedMessage.name}</h5>
-                                            <div className="text-muted small">{selectedMessage.email}</div>
-                                        </div>
-                                    </div>
-
-                                    <div className="d-flex align-items-center gap-2">
-                                        {selectedMessage.isReplied ? (
-                                            <span className="badge bg-success text-white px-3 py-2 rounded-pill fw-semibold">
-                                                ✓ Replied
-                                            </span>
-                                        ) : (
-                                            <span className="badge bg-warning text-dark px-3 py-2 rounded-pill fw-semibold">
-                                                ⏳ Pending
-                                            </span>
-                                        )}
-                                        {isSuperAdmin && (
-                                            <button
-                                                className="btn btn-outline-danger btn-sm rounded-pill px-3 py-1 fw-semibold shadow-sm"
-                                                disabled={deletingId === selectedMessage.id}
-                                                onClick={() => handleDelete(selectedMessage.id)}
-                                            >
-                                                {deletingId === selectedMessage.id ? 'Deleting...' : '🗑️ Delete'}
-                                            </button>
-                                        )}
-                                    </div>
+                    {/* Scrollable List */}
+                    <div className="msg-custom-scrollbar" style={{ flex: 1, overflowY: 'auto' }}>
+                        {loading ? (
+                            <div style={{ padding: 48, textAlign: 'center' }}>
+                                <div style={{ width: 32, height: 32, border: '3px solid #ccfbf1', borderTop: '3px solid #0d9488', borderRadius: '50%', animation: 'msg-spin 0.8s linear infinite', margin: '0 auto 10px' }} />
+                                <div style={{ fontSize: 13, color: '#94a3b8', fontWeight: 600 }}>Loading inbox...</div>
+                            </div>
+                        ) : filteredMessages.length === 0 ? (
+                            <div style={{ padding: '48px 20px', textAlign: 'center' }}>
+                                <div style={{ fontSize: 40, marginBottom: 10 }}>📭</div>
+                                <div style={{ fontSize: 14, fontWeight: 700, color: '#334155' }}>No Messages Found</div>
+                                <div style={{ fontSize: 12, color: '#94a3b8', marginTop: 4 }}>
+                                    {searchTerm ? 'Try changing your search terms.' : 'Your inbox is currently clear.'}
                                 </div>
-
-                                {/* Panel Scrollable Thread View */}
-                                <div className="flex-grow-1 p-4 overflow-auto bg-light" style={{ minHeight: '320px' }}>
-
-                                    {/* Subject Header Banner */}
-                                    <div className="bg-white p-3 rounded-4 border mb-4 shadow-sm d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2">
-                                        <div>
-                                            <span className="text-muted small fw-bold text-uppercase d-block mb-1">Subject</span>
-                                            <h6 className="fw-bold text-dark mb-0">{selectedMessage.subject}</h6>
-                                        </div>
-                                        <div className="text-muted small text-sm-end">
-                                            <div className="fw-semibold">{selectedMessage.createdAt ? new Date(selectedMessage.createdAt).toLocaleDateString('en-PK', { weekday: 'short', month: 'short', day: 'numeric' }) : ''}</div>
-                                            <div>{selectedMessage.createdAt ? new Date(selectedMessage.createdAt).toLocaleTimeString('en-PK', { hour: '2-digit', minute: '2-digit' }) : ''}</div>
-                                        </div>
-                                    </div>
-
-                                    {/* User Message Bubble */}
-                                    <div className="mb-4">
-                                        <div className="d-flex align-items-center gap-2 mb-2 ms-1">
-                                            <span className="fw-bold small text-dark">👤 {selectedMessage.name}</span>
-                                            <span className="text-muted small" style={{ fontSize: '11px' }}>
-                                                {selectedMessage.createdAt ? new Date(selectedMessage.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
-                                            </span>
-                                        </div>
-                                        <div className="p-4 bg-white rounded-4 border shadow-sm text-dark fs-6 lh-base"
-                                            style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
-                                            {selectedMessage.message}
-                                        </div>
-                                    </div>
-
-                                    {/* SuperAdmin Reply Bubble */}
-                                    {selectedMessage.isReplied && (
-                                        <div className="mt-4 ms-md-4">
-                                            <div className="d-flex align-items-center justify-content-between mb-2 me-1">
-                                                <div className="d-flex align-items-center gap-2">
-                                                    <span className="fw-bold small" style={{ color: '#0d9488' }}>👑 SuperAdmin Response</span>
-                                                    <span className="badge bg-success-subtle text-success border border-success-subtle px-2 py-0.5 rounded-pill small">
-                                                        ✓ Sent to User Dashboard
-                                                    </span>
-                                                </div>
-                                                {selectedMessage.repliedAt && (
-                                                    <span className="text-muted small" style={{ fontSize: '11px' }}>
-                                                        {new Date(selectedMessage.repliedAt).toLocaleString('en-PK', { dateStyle: 'short', timeStyle: 'short' })}
-                                                    </span>
-                                                )}
-                                            </div>
-                                            <div className="p-4 rounded-4 text-white shadow-sm fs-6 lh-base"
-                                                style={{ background: 'linear-gradient(135deg, #042f2e 0%, #0d9488 100%)', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
-                                                {selectedMessage.replyText}
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-
-                                {/* SuperAdmin Inline Quick Reply Box */}
-                                {isSuperAdmin ? (
-                                    <div className="p-4 bg-white border-top">
-                                        <form onSubmit={handleSendReply}>
-                                            <div className="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-2">
-                                                <label className="form-label fw-bold text-dark small mb-0">
-                                                    {selectedMessage.isReplied ? '✏️ Edit / Send New Reply:' : '✉️ Reply to User:'}
-                                                </label>
-
-                                                {/* Preset Templates */}
-                                                <div className="d-flex gap-1 flex-wrap">
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-sm btn-light border rounded-pill px-2 py-1"
-                                                        style={{ fontSize: '11px' }}
-                                                        onClick={() => setReplyText(`Hi ${selectedMessage.name},\n\nThank you for reaching out! We have received your message and will process your request shortly.\n\nBest regards,\nMyStore Team`)}
-                                                    >
-                                                        ⚡ Thank You
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-sm btn-light border rounded-pill px-2 py-1"
-                                                        style={{ fontSize: '11px' }}
-                                                        onClick={() => setReplyText(`Hi ${selectedMessage.name},\n\nThank you for contacting MyStore. Your request regarding "${selectedMessage.subject}" has been successfully resolved.\n\nBest regards,\nMyStore Team`)}
-                                                    >
-                                                        ⚡ Resolved
-                                                    </button>
-                                                </div>
-                                            </div>
-
-                                            <div className="position-relative mb-3">
-                                                <textarea
-                                                    className="form-control rounded-4 p-3 bg-light border border-light-subtle shadow-sm"
-                                                    rows={3}
-                                                    placeholder={`Type your reply to ${selectedMessage.name}... (This reply will appear on their dashboard)`}
-                                                    value={replyText}
-                                                    onChange={e => setReplyText(e.target.value)}
-                                                    required
-                                                    style={{ fontSize: '14px', resize: 'vertical' }}
-                                                />
-                                            </div>
-
-                                            <div className="d-flex justify-content-end">
-                                                <button
-                                                    type="submit"
-                                                    className="btn rounded-pill px-4 py-2 fw-bold shadow-sm d-flex align-items-center gap-2 border-0 text-white"
-                                                    style={{ background: 'linear-gradient(135deg, #0d9488 0%, #042f2e 100%)' }}
-                                                    disabled={isSendingReply}
-                                                >
-                                                    {isSendingReply ? (
-                                                        <>
-                                                            <span className="spinner-border spinner-border-sm" role="status" />
-                                                            <span>Sending Reply...</span>
-                                                        </>
-                                                    ) : (
-                                                        <>
-                                                            <span>🚀</span> Send Reply to User
-                                                        </>
-                                                    )}
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                ) : (
-                                    <div className="p-3 bg-white border-top text-center text-muted small">
-                                        {selectedMessage.isReplied
-                                            ? '✓ SuperAdmin has responded to your inquiry above.'
-                                            : '⏳ Your inquiry is under review by SuperAdmin. Check back soon!'}
-                                    </div>
-                                )}
-
                             </div>
                         ) : (
-                            <div className="d-flex flex-column align-items-center justify-content-center h-100 p-5 text-center text-muted">
-                                <div className="fs-1 mb-3">💬</div>
-                                <h5 className="fw-bold text-dark mb-1">Select a Message</h5>
-                                <p className="small mb-0 opacity-75">
-                                    Click on any conversation from the left to view details and reply.
-                                </p>
-                            </div>
+                            filteredMessages.map(msg => {
+                                const isSelected = selectedMessage?.id === msg.id;
+                                const initials = (msg.name || 'User').charAt(0).toUpperCase();
+
+                                return (
+                                    <div
+                                        key={msg.id}
+                                        className={`msg-item ${isSelected ? 'active' : ''}`}
+                                        onClick={() => selectConversation(msg)}
+                                    >
+                                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                                            {/* Avatar Initial */}
+                                            <div style={{
+                                                width: 36, height: 36, borderRadius: 10, flexShrink: 0,
+                                                background: isSelected ? 'linear-gradient(135deg, #0d9488, #042f2e)' : '#f1f5f9',
+                                                color: isSelected ? '#ffffff' : '#0d9488',
+                                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                fontSize: 14, fontWeight: 700
+                                            }}>
+                                                {initials}
+                                            </div>
+
+                                            <div style={{ flex: 1, minWidth: 0 }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6, marginBottom: 2 }}>
+                                                    <div style={{ fontSize: 13, fontWeight: 700, color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                        {isSuperAdmin ? msg.name : msg.subject}
+                                                    </div>
+                                                    <span style={{ fontSize: 11, color: '#94a3b8', flexShrink: 0, fontWeight: 500 }}>
+                                                        {msg.createdAt ? new Date(msg.createdAt).toLocaleDateString('en-PK', { month: 'short', day: 'numeric' }) : ''}
+                                                    </span>
+                                                </div>
+
+                                                <div style={{ fontSize: 12, fontWeight: 600, color: '#0d9488', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', marginBottom: 2 }}>
+                                                    {isSuperAdmin ? msg.subject : msg.email}
+                                                </div>
+
+                                                <div style={{ fontSize: 12, color: '#64748b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', marginBottom: 6 }}>
+                                                    {msg.message}
+                                                </div>
+
+                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6 }}>
+                                                    {msg.isReplied ? (
+                                                        <span style={{ fontSize: 10.5, fontWeight: 700, padding: '2px 8px', borderRadius: 999, background: '#dcfce7', color: '#16a34a', border: '1px solid #bbf7d0', display: 'inline-flex', alignItems: 'center', gap: 3 }}>
+                                                            ✓ Replied
+                                                        </span>
+                                                    ) : (
+                                                        <span style={{ fontSize: 10.5, fontWeight: 700, padding: '2px 8px', borderRadius: 999, background: '#fffbeb', color: '#d97706', border: '1px solid #fde68a', display: 'inline-flex', alignItems: 'center', gap: 3 }}>
+                                                            ⏳ Pending
+                                                        </span>
+                                                    )}
+
+                                                    {isSuperAdmin && (
+                                                        <span style={{ fontSize: 10.5, color: '#94a3b8', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '140px' }}>
+                                                            {msg.email}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })
                         )}
                     </div>
                 </div>
 
+                {/* ── Right Pane: Active Thread Details & Reply Box ─────────── */}
+                <div className="msg-detail-pane" style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#ffffff' }}>
+                    {selectedMessage ? (
+                        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+
+                            {/* Thread Header */}
+                            <div style={{ padding: '16px 20px', borderBottom: '1px solid #e2e8f0', background: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>
+                                    {/* Mobile Back Button */}
+                                    <button
+                                        onClick={() => setShowMobileDetail(false)}
+                                        className="d-lg-none"
+                                        style={{ padding: '6px 12px', borderRadius: 8, border: '1px solid #cbd5e1', background: '#f8fafc', color: '#0f172a', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
+                                    >
+                                        ← Back
+                                    </button>
+
+                                    <div style={{
+                                        width: 42, height: 42, borderRadius: 12, flexShrink: 0,
+                                        background: 'linear-gradient(135deg, #0d9488, #042f2e)',
+                                        color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                        fontSize: 16, fontWeight: 800, boxShadow: '0 2px 8px rgba(13,148,136,0.25)'
+                                    }}>
+                                        {selectedMessage.name?.charAt(0)?.toUpperCase() || 'U'}
+                                    </div>
+
+                                    <div style={{ minWidth: 0 }}>
+                                        <div style={{ fontSize: 15, fontWeight: 800, color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                            {selectedMessage.name}
+                                        </div>
+                                        <div style={{ fontSize: 12, color: '#64748b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                            {selectedMessage.email}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                    {selectedMessage.isReplied ? (
+                                        <span style={{ fontSize: 12, fontWeight: 700, padding: '4px 12px', borderRadius: 999, background: '#dcfce7', color: '#16a34a', border: '1px solid #bbf7d0' }}>
+                                            ✓ Replied
+                                        </span>
+                                    ) : (
+                                        <span style={{ fontSize: 12, fontWeight: 700, padding: '4px 12px', borderRadius: 999, background: '#fffbeb', color: '#d97706', border: '1px solid #fde68a' }}>
+                                            ⏳ Pending Reply
+                                        </span>
+                                    )}
+
+                                    {isSuperAdmin && (
+                                        <button
+                                            onClick={() => handleDelete(selectedMessage.id)}
+                                            disabled={deletingId === selectedMessage.id}
+                                            style={{
+                                                padding: '6px 12px', borderRadius: 10, border: '1px solid #fecaca',
+                                                background: '#fef2f2', color: '#dc2626', fontSize: 12, fontWeight: 700,
+                                                cursor: deletingId === selectedMessage.id ? 'not-allowed' : 'pointer',
+                                                display: 'flex', alignItems: 'center', gap: 4, transition: 'all 0.15s'
+                                            }}
+                                            title="Delete Message"
+                                        >
+                                            {deletingId === selectedMessage.id ? 'Deleting...' : '🗑️ Delete'}
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Thread Message Scroll Body */}
+                            <div className="msg-custom-scrollbar" style={{ flex: 1, overflowY: 'auto', padding: '20px', background: '#f8fafc', display: 'flex', flexDirection: 'column', gap: 16 }}>
+
+                                {/* Subject Card Banner */}
+                                <div style={{ background: '#ffffff', borderRadius: 14, padding: '14px 18px', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.03)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
+                                    <div>
+                                        <div style={{ fontSize: 10.5, fontWeight: 700, color: '#0d9488', textTransform: 'uppercase', letterSpacing: 0.8 }}>Subject / Topic</div>
+                                        <div style={{ fontSize: 15, fontWeight: 800, color: '#0f172a', marginTop: 2 }}>{selectedMessage.subject}</div>
+                                    </div>
+                                    <div style={{ textAlign: 'right', fontSize: 11.5, color: '#94a3b8' }}>
+                                        <div style={{ fontWeight: 600 }}>{selectedMessage.createdAt ? new Date(selectedMessage.createdAt).toLocaleDateString('en-PK', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) : ''}</div>
+                                        <div>{selectedMessage.createdAt ? new Date(selectedMessage.createdAt).toLocaleTimeString('en-PK', { hour: '2-digit', minute: '2-digit' }) : ''}</div>
+                                    </div>
+                                </div>
+
+                                {/* Customer Message Bubble */}
+                                <div style={{ maxWidth: '85%', alignSelf: 'flex-start' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4, paddingLeft: 4 }}>
+                                        <span style={{ fontSize: 12, fontWeight: 700, color: '#334155' }}>👤 {selectedMessage.name}</span>
+                                        <span style={{ fontSize: 10.5, color: '#94a3b8' }}>
+                                            {selectedMessage.createdAt ? new Date(selectedMessage.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
+                                        </span>
+                                    </div>
+                                    <div style={{
+                                        background: '#ffffff', borderRadius: '4px 18px 18px 18px', padding: '16px 18px',
+                                        border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.03)',
+                                        color: '#0f172a', fontSize: 14, lineHeight: 1.6, whiteSpace: 'pre-wrap', wordBreak: 'break-word'
+                                    }}>
+                                        {selectedMessage.message}
+                                    </div>
+                                </div>
+
+                                {/* SuperAdmin Response Bubble (If Replied) */}
+                                {selectedMessage.isReplied && (
+                                    <div style={{ maxWidth: '85%', alignSelf: 'flex-end', animation: 'msg-fade 0.3s ease' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 6, marginBottom: 4, paddingRight: 4 }}>
+                                            <span style={{ fontSize: 10.5, fontWeight: 700, padding: '1px 8px', borderRadius: 999, background: '#ccfbf1', color: '#0f766e' }}>
+                                                ✓ Sent to User Dashboard
+                                            </span>
+                                            <span style={{ fontSize: 12, fontWeight: 700, color: '#0d9488' }}>👑 SuperAdmin Response</span>
+                                            {selectedMessage.repliedAt && (
+                                                <span style={{ fontSize: 10.5, color: '#94a3b8' }}>
+                                                    {new Date(selectedMessage.repliedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                </span>
+                                            )}
+                                        </div>
+                                        <div style={{
+                                            background: 'linear-gradient(135deg, #0d9488 0%, #042f2e 100%)',
+                                            borderRadius: '18px 4px 18px 18px', padding: '16px 18px',
+                                            boxShadow: '0 4px 16px rgba(13,148,136,0.25)',
+                                            color: '#ffffff', fontSize: 14, lineHeight: 1.6, whiteSpace: 'pre-wrap', wordBreak: 'break-word'
+                                        }}>
+                                            {selectedMessage.replyText}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Reply Input Box (SuperAdmin) or Customer Status Note */}
+                            {isSuperAdmin ? (
+                                <div style={{ padding: '16px 20px', borderTop: '1px solid #e2e8f0', background: '#ffffff' }}>
+                                    <form onSubmit={handleSendReply}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, flexWrap: 'wrap', gap: 6 }}>
+                                            <label style={{ fontSize: 12, fontWeight: 700, color: '#334155', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                                                {selectedMessage.isReplied ? '✏️ Update / Send New Reply:' : '✉️ Reply to Customer:'}
+                                            </label>
+
+                                            {/* Preset Templates */}
+                                            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                                                <button
+                                                    type="button"
+                                                    className="msg-template-btn"
+                                                    onClick={() => setReplyText(`Hi ${selectedMessage.name},\n\nThank you for reaching out to MyStore! We have received your inquiry and are actively handling your request.\n\nBest regards,\nMyStore Support Team`)}
+                                                >
+                                                    ⚡ Quick Thanks
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className="msg-template-btn"
+                                                    onClick={() => setReplyText(`Hi ${selectedMessage.name},\n\nYour issue regarding "${selectedMessage.subject}" has been successfully resolved. Please let us know if you need any further assistance!\n\nBest regards,\nMyStore Team`)}
+                                                >
+                                                    ⚡ Resolved
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className="msg-template-btn"
+                                                    onClick={() => setReplyText(`Hi ${selectedMessage.name},\n\nCould you please provide your Order ID or additional details so we can assist you better?\n\nThank you,\nMyStore Support`)}
+                                                >
+                                                    ⚡ Need Info
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div style={{ marginBottom: 10 }}>
+                                            <textarea
+                                                className="msg-reply-textarea"
+                                                rows={3}
+                                                placeholder={`Type your reply to ${selectedMessage.name}... (This reply will appear on their customer dashboard)`}
+                                                value={replyText}
+                                                onChange={e => setReplyText(e.target.value)}
+                                                required
+                                                style={{
+                                                    width: '100%', padding: '12px 14px', borderRadius: 12,
+                                                    border: '1.5px solid #e2e8f0', background: '#f8fafc',
+                                                    fontSize: 13.5, color: '#0f172a', boxSizing: 'border-box',
+                                                    resize: 'vertical', minHeight: '75px', transition: 'all 0.2s'
+                                                }}
+                                            />
+                                        </div>
+
+                                        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 10 }}>
+                                            <button
+                                                type="submit"
+                                                className="msg-btn-primary"
+                                                disabled={isSendingReply}
+                                            >
+                                                {isSendingReply ? (
+                                                    <>
+                                                        <span style={{ width: 14, height: 14, border: '2px solid rgba(255,255,255,0.4)', borderTop: '2px solid #fff', borderRadius: '50%', animation: 'msg-spin 0.8s linear infinite', display: 'inline-block' }} />
+                                                        Sending...
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <span>🚀</span> Send Reply
+                                                    </>
+                                                )}
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            ) : (
+                                <div style={{ padding: '14px 20px', borderTop: '1px solid #e2e8f0', background: '#f0fdfa', textAlign: 'center', color: '#0f766e', fontSize: 13, fontWeight: 600 }}>
+                                    {selectedMessage.isReplied
+                                        ? '✓ SuperAdmin has responded to your inquiry above.'
+                                        : '⏳ Your inquiry is under review by SuperAdmin. We will respond soon!'}
+                                </div>
+                            )}
+
+                        </div>
+                    ) : (
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', padding: 40, textAlign: 'center' }}>
+                            <div style={{ width: 70, height: 70, borderRadius: '50%', background: '#ccfbf1', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, marginBottom: 14 }}>
+                                💬
+                            </div>
+                            <div style={{ fontSize: 18, fontWeight: 800, color: '#0f172a', marginBottom: 4 }}>Select a Message</div>
+                            <div style={{ fontSize: 13, color: '#94a3b8', maxWidth: 300 }}>
+                                Click on any conversation from the list to view full thread details and responses.
+                            </div>
+                        </div>
+                    )}
+                </div>
             </div>
 
-            {/* ── Customer New Inquiry Modal ──────────────────────── */}
+            {/* ── Customer New Inquiry Modal ───────────────────────────────── */}
             {newInquiryModalOpen && (
                 <div
-                    className="modal show d-block"
-                    tabIndex="-1"
-                    style={{ background: 'rgba(15, 23, 42, 0.7)', backdropFilter: 'blur(5px)', zIndex: 1070 }}
-                    onClick={e => { if (e.target.classList.contains('modal')) setNewInquiryModalOpen(false); }}
+                    style={{ position: 'fixed', inset: 0, background: 'rgba(4, 47, 46, 0.65)', backdropFilter: 'blur(5px)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}
+                    onClick={e => { if (e.target === e.currentTarget) setNewInquiryModalOpen(false); }}
                 >
-                    <div className="modal-dialog modal-dialog-centered modal-lg">
-                        <div className="modal-content rounded-4 border-0 shadow-lg overflow-hidden">
-                            <div
-                                className="modal-header text-white p-4"
-                                style={{ background: 'linear-gradient(135deg, #0d9488 0%, #042f2e 100%)' }}
-                            >
-                                <div className="d-flex align-items-center gap-2">
-                                    <span className="fs-4">➕</span>
-                                    <div>
-                                        <h5 className="modal-title fw-bold mb-0">Send New Support Inquiry</h5>
-                                        <small className="opacity-75">Send a message directly to SuperAdmin</small>
-                                    </div>
+                    <div style={{ background: '#ffffff', borderRadius: 24, width: '100%', maxWidth: 540, boxShadow: '0 24px 64px rgba(0,0,0,0.2)', overflow: 'hidden', animation: 'msg-fade 0.25s ease' }}>
+
+                        {/* Modal Header */}
+                        <div style={{ padding: '20px 24px', background: 'linear-gradient(135deg, #0d9488, #042f2e)', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                                <span style={{ fontSize: 22 }}>➕</span>
+                                <div>
+                                    <div style={{ fontSize: 17, fontWeight: 800 }}>New Support Inquiry</div>
+                                    <div style={{ fontSize: 12, color: '#5eead4', marginTop: 1 }}>Send a message directly to store support</div>
                                 </div>
+                            </div>
+                            <button
+                                onClick={() => setNewInquiryModalOpen(false)}
+                                style={{ border: 'none', background: 'rgba(255,255,255,0.15)', color: '#ffffff', width: 32, height: 32, borderRadius: '50%', cursor: 'pointer', fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                            >
+                                ✕
+                            </button>
+                        </div>
+
+                        {/* Modal Form */}
+                        <form onSubmit={handleSendInquiry}>
+                            <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: 16 }}>
+                                <div>
+                                    <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: 0.8, marginBottom: 6 }}>
+                                        Subject / Topic <span style={{ color: '#ef4444' }}>*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        placeholder="e.g. Order delivery status, Product warranty..."
+                                        value={inquiryData.subject}
+                                        onChange={e => setInquiryData(s => ({ ...s, subject: e.target.value }))}
+                                        required
+                                        style={{ width: '100%', padding: '12px 14px', borderRadius: 10, border: '1.5px solid #e2e8f0', fontSize: 14, color: '#0f172a', background: '#f8fafc', boxSizing: 'border-box' }}
+                                    />
+                                </div>
+
+                                <div>
+                                    <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: 0.8, marginBottom: 6 }}>
+                                        Your Message <span style={{ color: '#ef4444' }}>*</span>
+                                    </label>
+                                    <textarea
+                                        rows={5}
+                                        placeholder="Please describe your question or issue in detail..."
+                                        value={inquiryData.message}
+                                        onChange={e => setInquiryData(s => ({ ...s, message: e.target.value }))}
+                                        required
+                                        style={{ width: '100%', padding: '12px 14px', borderRadius: 10, border: '1.5px solid #e2e8f0', fontSize: 14, color: '#0f172a', background: '#f8fafc', boxSizing: 'border-box', resize: 'vertical', minHeight: '120px' }}
+                                    />
+                                </div>
+                            </div>
+
+                            <div style={{ padding: '16px 24px', background: '#f8fafc', borderTop: '1px solid #e2e8f0', display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
                                 <button
                                     type="button"
-                                    className="btn-close btn-close-white shadow-none"
                                     onClick={() => setNewInquiryModalOpen(false)}
-                                />
+                                    disabled={isSendingInquiry}
+                                    style={{ padding: '10px 18px', borderRadius: 10, border: '1.5px solid #e2e8f0', background: '#ffffff', color: '#64748b', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="msg-btn-primary"
+                                    disabled={isSendingInquiry}
+                                >
+                                    {isSendingInquiry ? (
+                                        <>
+                                            <span style={{ width: 14, height: 14, border: '2px solid rgba(255,255,255,0.4)', borderTop: '2px solid #fff', borderRadius: '50%', animation: 'msg-spin 0.8s linear infinite', display: 'inline-block' }} />
+                                            Sending...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <span>🚀</span> Submit Inquiry
+                                        </>
+                                    )}
+                                </button>
                             </div>
-                            <form onSubmit={handleSendInquiry}>
-                                <div className="modal-body p-4 bg-white">
-                                    <div className="mb-3">
-                                        <label className="form-label small text-muted fw-bold text-uppercase mb-1">Subject <span className="text-danger">*</span></label>
-                                        <input
-                                            type="text"
-                                            className="form-control rounded-3 p-3 border shadow-sm"
-                                            placeholder="e.g. Order issue, Product inquiry..."
-                                            value={inquiryData.subject}
-                                            onChange={e => setInquiryData(s => ({ ...s, subject: e.target.value }))}
-                                            required
-                                            style={{ fontSize: '15px' }}
-                                        />
-                                    </div>
-
-                                    <div className="mb-2">
-                                        <label className="form-label small text-muted fw-bold text-uppercase mb-1">Your Message <span className="text-danger">*</span></label>
-                                        <textarea
-                                            className="form-control rounded-3 p-3 border shadow-sm"
-                                            rows={5}
-                                            placeholder="Describe your question or issue in detail..."
-                                            value={inquiryData.message}
-                                            onChange={e => setInquiryData(s => ({ ...s, message: e.target.value }))}
-                                            required
-                                            style={{ fontSize: '15px', resize: 'vertical', minHeight: '120px' }}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="modal-footer bg-light p-3 d-flex justify-content-end gap-2">
-                                    <button
-                                        type="button"
-                                        className="btn btn-secondary px-4 py-2 rounded-3 fw-semibold"
-                                        onClick={() => setNewInquiryModalOpen(false)}
-                                        disabled={isSendingInquiry}
-                                    >
-                                        Cancel
-                                    </button>
-                                    <button
-                                        type="submit"
-                                        className="btn px-4 py-2 rounded-3 fw-semibold d-flex align-items-center gap-2 border-0 shadow-sm text-white"
-                                        style={{ background: 'linear-gradient(135deg, #0d9488, #042f2e)' }}
-                                        disabled={isSendingInquiry}
-                                    >
-                                        {isSendingInquiry ? (
-                                            <>
-                                                <span className="spinner-border spinner-border-sm" role="status" />
-                                                <span>Sending...</span>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <span>🚀</span> Send Message
-                                            </>
-                                        )}
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
+                        </form>
                     </div>
                 </div>
             )}
-
         </div>
     );
 };
