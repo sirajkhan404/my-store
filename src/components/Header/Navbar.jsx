@@ -63,17 +63,17 @@ const Navbar = () => {
     const isActive = (path) => location.pathname === path;
 
     const navLinks = [
-        { to: '/', label: 'Home', icon: '✨' },
-        { to: '/about', label: 'About', icon: '🏛️' },
+        { to: '/', label: 'Home', icon: '🏠' },
+        { to: '/about', label: 'About Us', icon: '✨' },
         { to: '/products', label: 'Products', icon: '🛍️', badge: 'Hot' },
-        { to: '/contact', label: 'Contact', icon: '💬' },
+        { to: '/contact', label: 'Contact', icon: '📞' },
     ];
 
     return (
         <>
             {/* ── Fixed Header Wrapper ── */}
             <header className="fixed-top w-100" style={{ zIndex: 1040, transition: 'all 0.35s cubic-bezier(0.4, 0, 0.2, 1)' }}>
-                {/* ── Top Announcement Banner (Responsive) ── */}
+                {/* ── Top Announcement Banner ── */}
                 {showTopBar && (
                     <div
                         className="py-1 px-2 px-sm-3 d-flex align-items-center justify-content-between text-white position-relative"
@@ -180,7 +180,7 @@ const Navbar = () => {
                             </div>
                         </Link>
 
-                        {/* ── Desktop Center Nav Links (Hidden on mobile/tablet < 992px) ── */}
+                        {/* ── Desktop Center Nav Links ── */}
                         <div
                             className="d-none d-lg-flex align-items-center gap-1 p-1 rounded-pill"
                             style={{
@@ -238,7 +238,7 @@ const Navbar = () => {
                             })}
                         </div>
 
-                        {/* ── Desktop Right Actions (Hidden on mobile/tablet < 992px) ── */}
+                        {/* ── Desktop Right Actions ── */}
                         <div className="d-none d-lg-flex align-items-center gap-2.5">
                             {/* 🛒 Cart Button */}
                             <button
@@ -453,7 +453,7 @@ const Navbar = () => {
                             )}
                         </div>
 
-                        {/* ── Mobile / Tablet Actions (Visible on < 992px) ── */}
+                        {/* ── Mobile / Tablet Actions ── */}
                         <div className="d-flex d-lg-none align-items-center gap-2">
                             {/* Mobile Cart Button */}
                             <button
@@ -527,7 +527,7 @@ const Navbar = () => {
                 </nav>
             </header>
 
-            {/* Responsive Spacer so page content never goes underneath navbar */}
+            {/* Responsive Spacer */}
             <div
                 style={{
                     height: showTopBar ? (scrolled ? '66px' : '78px') : (scrolled ? '48px' : '60px'),
@@ -535,73 +535,89 @@ const Navbar = () => {
                 }}
             />
 
-            {/* ── Mobile Sidebar Drawer Overlay (High z-index) ── */}
+            {/* ── Premium Mobile Sidebar Overlay ── */}
             <div
                 className={`position-fixed top-0 start-0 w-100 h-100 transition-all ${sidebarOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
                 style={{
                     zIndex: 9998,
-                    background: 'rgba(4, 47, 46, 0.7)',
+                    background: 'rgba(4, 47, 46, 0.72)',
                     backdropFilter: 'blur(8px)',
                     WebkitBackdropFilter: 'blur(8px)',
-                    transition: 'opacity 0.3s ease, visibility 0.3s ease',
+                    transition: 'all 0.35s ease',
                 }}
                 onClick={() => setSidebarOpen(false)}
             />
 
-            {/* ── Mobile Sidebar Drawer (High z-index) ── */}
+            {/* ── Luxury Mobile Sidebar Drawer ── */}
             <div
-                className="position-fixed top-0 h-100 bg-white shadow-2xl d-flex flex-column"
+                className="position-fixed top-0 h-100 bg-white d-flex flex-column"
                 style={{
-                    width: '300px',
+                    width: '320px',
                     maxWidth: '85vw',
                     left: sidebarOpen ? '0' : '-100%',
                     zIndex: 9999,
-                    transition: 'left 0.32s cubic-bezier(0.16, 1, 0.3, 1)',
-                    boxShadow: sidebarOpen ? '0 0 50px rgba(0, 0, 0, 0.4)' : 'none',
+                    transition: 'left 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
+                    boxShadow: sidebarOpen ? '10px 0 50px rgba(0, 0, 0, 0.4)' : 'none',
                 }}
             >
-                {/* Header in Drawer */}
+                {/* 1. Header with Gradient & Brand */}
                 <div
-                    className="p-3.5 px-4 text-white d-flex align-items-center justify-content-between"
+                    className="p-3.5 px-4 text-white d-flex align-items-center justify-content-between position-relative overflow-hidden"
                     style={{
                         background: 'linear-gradient(135deg, #042f2e 0%, #0d9488 100%)',
-                        borderBottom: '1px solid rgba(94, 234, 212, 0.2)',
+                        borderBottom: '1px solid rgba(94, 234, 212, 0.25)',
                     }}
                 >
-                    <Link to="/" className="d-flex align-items-center gap-2 text-decoration-none" onClick={() => setSidebarOpen(false)}>
+                    <Link to="/" className="d-flex align-items-center gap-2.5 text-decoration-none" onClick={() => setSidebarOpen(false)}>
                         <div
                             className="rounded-3 d-flex align-items-center justify-content-center shadow-sm"
                             style={{
-                                width: '36px',
-                                height: '36px',
-                                background: 'rgba(255, 255, 255, 0.15)',
+                                width: '38px',
+                                height: '38px',
+                                background: 'rgba(255, 255, 255, 0.18)',
                                 border: '1px solid rgba(94, 234, 212, 0.4)',
-                                fontSize: '18px',
+                                fontSize: '19px',
                             }}
                         >
                             🛍️
                         </div>
-                        <span className="fw-bold fs-4 text-white tracking-tight">
-                            My<span style={{ color: '#5eead4' }}>Store</span>
-                        </span>
+                        <div className="d-flex flex-column">
+                            <span className="fw-bold fs-4 lh-1 text-white tracking-tight">
+                                My<span style={{ color: '#5eead4' }}>Store</span>
+                            </span>
+                            <span style={{ fontSize: '9px', letterSpacing: '1.2px', textTransform: 'uppercase', color: '#5eead4', fontWeight: 600, marginTop: '2px' }}>
+                                Navigation Menu
+                            </span>
+                        </div>
                     </Link>
+
                     <button
                         className="btn btn-sm text-white rounded-circle p-0 d-flex align-items-center justify-content-center border-0 shadow-none"
-                        style={{ width: '32px', height: '32px', background: 'rgba(255, 255, 255, 0.15)' }}
+                        style={{
+                            width: '34px',
+                            height: '34px',
+                            background: 'rgba(255, 255, 255, 0.15)',
+                            transition: 'background 0.2s',
+                        }}
                         onClick={() => setSidebarOpen(false)}
-                        aria-label="Close menu"
+                        aria-label="Close sidebar"
                     >
                         ✕
                     </button>
                 </div>
 
-                {/* User Info Card if Authenticated */}
+                {/* 2. User Profile Card if logged in */}
                 {isAuth && (
-                    <div className="p-3 mx-3 mt-3 rounded-4" style={{ background: 'linear-gradient(135deg, #f0fdfa, #e6fffa)', border: '1px solid #ccfbf1' }}>
-                        <div className="d-flex align-items-center gap-2.5">
+                    <div className="p-3 mx-3 mt-3 rounded-4 shadow-sm" style={{ background: 'linear-gradient(135deg, #f0fdfa 0%, #e6fffa 100%)', border: '1px solid #99f6e4' }}>
+                        <div className="d-flex align-items-center gap-3">
                             <div
                                 className="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold overflow-hidden shadow-sm flex-shrink-0"
-                                style={{ width: '40px', height: '40px', background: 'linear-gradient(135deg, #0d9488, #042f2e)' }}
+                                style={{
+                                    width: '44px',
+                                    height: '44px',
+                                    background: 'linear-gradient(135deg, #0d9488, #042f2e)',
+                                    border: '2px solid #5eead4',
+                                }}
                             >
                                 {user?.profilePicture ? (
                                     <img src={user.profilePicture} alt="DP" className="w-100 h-100 object-fit-cover" />
@@ -609,27 +625,39 @@ const Navbar = () => {
                                     user?.fullName?.charAt(0)?.toUpperCase() || 'U'
                                 )}
                             </div>
-                            <div className="min-width-0">
-                                <div className="fw-bold text-dark text-truncate" style={{ fontSize: '13.5px' }}>
+                            <div className="min-width-0 flex-grow-1">
+                                <div className="fw-bold text-dark text-truncate" style={{ fontSize: '14px' }}>
                                     {user?.fullName || 'User'}
                                 </div>
                                 <div className="text-muted text-truncate" style={{ fontSize: '11px' }}>
                                     {user?.email}
                                 </div>
-                                <span className="badge rounded-pill mt-1" style={{ fontSize: '9px', background: user?.role === 'superAdmin' ? '#f59e0b' : '#0d9488', color: '#ffffff' }}>
-                                    {user?.role === 'superAdmin' ? '👑 Super Admin' : '🛍 Member'}
-                                </span>
+                                <div className="mt-1">
+                                    <span
+                                        className="badge rounded-pill fw-bold"
+                                        style={{
+                                            fontSize: '9.5px',
+                                            background: user?.role === 'superAdmin' ? 'linear-gradient(135deg, #f59e0b, #d97706)' : 'linear-gradient(135deg, #0d9488, #0f766e)',
+                                            color: '#ffffff',
+                                            padding: '2px 7px',
+                                        }}
+                                    >
+                                        {user?.role === 'superAdmin' ? '👑 Super Admin' : '🛍 Member'}
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 )}
 
-                {/* Nav Links List */}
+                {/* 3. Navigation Links List */}
                 <div className="flex-grow-1 py-3 px-3 overflow-auto">
-                    <div className="text-muted fw-bold text-uppercase px-2 mb-2" style={{ fontSize: '10.5px', letterSpacing: '1px' }}>
-                        Navigation
+                    <div className="text-muted fw-bold text-uppercase px-2 mb-2 d-flex align-items-center justify-content-between" style={{ fontSize: '10.5px', letterSpacing: '1px' }}>
+                        <span>Explore</span>
+                        <span className="badge bg-light text-muted border rounded-pill">4 Pages</span>
                     </div>
-                    <div className="d-flex flex-column gap-1">
+
+                    <div className="d-flex flex-column gap-1.5">
                         {navLinks.map((l) => {
                             const active = isActive(l.to);
                             return (
@@ -639,17 +667,27 @@ const Navbar = () => {
                                     className="d-flex align-items-center justify-content-between px-3 py-2.5 rounded-3 text-decoration-none fw-semibold transition-all"
                                     style={{
                                         fontSize: '14.5px',
-                                        background: active ? 'linear-gradient(135deg, #0d9488, #0f766e)' : 'transparent',
-                                        color: active ? '#ffffff' : '#374151',
+                                        background: active
+                                            ? 'linear-gradient(135deg, #0d9488 0%, #0f766e 100%)'
+                                            : 'transparent',
+                                        color: active ? '#ffffff' : '#1f2937',
+                                        boxShadow: active ? '0 4px 12px rgba(13, 148, 136, 0.3)' : 'none',
                                     }}
                                     onClick={() => setSidebarOpen(false)}
                                 >
                                     <div className="d-flex align-items-center gap-3">
-                                        <span style={{ fontSize: '17px' }}>{l.icon}</span>
+                                        <span style={{ fontSize: '18px' }}>{l.icon}</span>
                                         <span>{l.label}</span>
                                     </div>
                                     {l.badge && (
-                                        <span className="badge bg-warning text-dark rounded-pill fw-bold" style={{ fontSize: '9.5px' }}>
+                                        <span
+                                            className="badge rounded-pill fw-bold"
+                                            style={{
+                                                fontSize: '9.5px',
+                                                background: active ? '#ffffff' : 'linear-gradient(135deg, #f59e0b, #d97706)',
+                                                color: active ? '#0d9488' : '#ffffff',
+                                            }}
+                                        >
                                             {l.badge}
                                         </span>
                                     )}
@@ -658,6 +696,7 @@ const Navbar = () => {
                         })}
                     </div>
 
+                    {/* My Account Links if Authenticated */}
                     {isAuth && (
                         <>
                             <div className="text-muted fw-bold text-uppercase px-2 mt-4 mb-2" style={{ fontSize: '10.5px', letterSpacing: '1px' }}>
@@ -666,40 +705,40 @@ const Navbar = () => {
                             <div className="d-flex flex-column gap-1">
                                 <Link
                                     to="/dashboard"
-                                    className="d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none text-dark fw-semibold"
+                                    className="d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none text-dark fw-semibold transition-all hover-nav-item"
                                     style={{ fontSize: '14px' }}
                                     onClick={() => setSidebarOpen(false)}
                                 >
-                                    <span>📊</span>
-                                    <span>Dashboard</span>
+                                    <span style={{ fontSize: '16px' }}>📊</span>
+                                    <span>Dashboard Overview</span>
                                 </Link>
                                 <Link
                                     to="/dashboard/profile"
-                                    className="d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none text-dark fw-semibold"
+                                    className="d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none text-dark fw-semibold transition-all hover-nav-item"
                                     style={{ fontSize: '14px' }}
                                     onClick={() => setSidebarOpen(false)}
                                 >
-                                    <span>👤</span>
-                                    <span>Profile</span>
+                                    <span style={{ fontSize: '16px' }}>👤</span>
+                                    <span>Profile Settings</span>
                                 </Link>
                                 <Link
                                     to="/dashboard/orders"
-                                    className="d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none text-dark fw-semibold"
+                                    className="d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none text-dark fw-semibold transition-all hover-nav-item"
                                     style={{ fontSize: '14px' }}
                                     onClick={() => setSidebarOpen(false)}
                                 >
-                                    <span>📋</span>
-                                    <span>Orders</span>
+                                    <span style={{ fontSize: '16px' }}>📋</span>
+                                    <span>My Orders</span>
                                 </Link>
                                 {user?.role === 'superAdmin' && (
                                     <Link
                                         to="/dashboard/messages"
-                                        className="d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none text-dark fw-semibold"
+                                        className="d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none text-dark fw-semibold transition-all hover-nav-item"
                                         style={{ fontSize: '14px' }}
                                         onClick={() => setSidebarOpen(false)}
                                     >
-                                        <span>💬</span>
-                                        <span>Messages</span>
+                                        <span style={{ fontSize: '16px' }}>💬</span>
+                                        <span>Customer Messages</span>
                                     </Link>
                                 )}
                             </div>
@@ -707,15 +746,15 @@ const Navbar = () => {
                     )}
                 </div>
 
-                {/* Footer Buttons */}
-                <div className="p-3 border-top bg-light">
+                {/* 4. Bottom Footer Actions (Cart CTA + Auth buttons) */}
+                <div className="p-3 border-top" style={{ background: '#f8fafc', borderColor: '#e2e8f0' }}>
                     {/* Cart Trigger */}
                     <button
-                        className="btn w-100 rounded-pill py-2.5 fw-bold mb-2.5 d-flex align-items-center justify-content-center gap-2 border-0"
+                        className="btn w-100 rounded-pill py-2.5 fw-bold mb-2.5 d-flex align-items-center justify-content-between px-3.5 border-0 shadow-sm"
                         style={{
-                            background: 'linear-gradient(135deg, #0d9488, #0f766e)',
+                            background: 'linear-gradient(135deg, #0d9488 0%, #0f766e 100%)',
                             color: '#ffffff',
-                            boxShadow: '0 4px 12px rgba(13, 148, 136, 0.3)',
+                            boxShadow: '0 4px 14px rgba(13, 148, 136, 0.35)',
                             fontSize: '14px',
                         }}
                         onClick={() => {
@@ -723,18 +762,19 @@ const Navbar = () => {
                             setCartOpen(true);
                         }}
                     >
-                        <span>🛒 View Cart</span>
-                        {totalItems > 0 && (
-                            <span className="badge rounded-pill bg-warning text-dark px-2 py-0.5" style={{ fontSize: '10.5px' }}>
-                                {totalItems} items
-                            </span>
-                        )}
+                        <div className="d-flex align-items-center gap-2">
+                            <span>🛒</span>
+                            <span>View Shopping Cart</span>
+                        </div>
+                        <span className="badge rounded-pill bg-warning text-dark px-2 py-0.5 fw-bold" style={{ fontSize: '10.5px' }}>
+                            {totalItems} items
+                        </span>
                     </button>
 
                     {isAuth ? (
                         <button
                             className="btn btn-outline-danger w-100 rounded-pill py-2 fw-semibold d-flex align-items-center justify-content-center gap-2"
-                            style={{ fontSize: '14px' }}
+                            style={{ fontSize: '13.5px' }}
                             onClick={() => {
                                 handleLogout();
                                 setSidebarOpen(false);
@@ -747,7 +787,7 @@ const Navbar = () => {
                             <Link
                                 to="/auth/login"
                                 className="btn btn-outline-secondary w-100 rounded-pill py-2 fw-semibold"
-                                style={{ fontSize: '14px' }}
+                                style={{ fontSize: '13.5px' }}
                                 onClick={() => setSidebarOpen(false)}
                             >
                                 Log In
@@ -755,7 +795,7 @@ const Navbar = () => {
                             <Link
                                 to="/auth/register"
                                 className="btn w-100 rounded-pill py-2 fw-semibold text-white shadow-sm border-0"
-                                style={{ background: 'linear-gradient(135deg, #042f2e, #0d9488)', fontSize: '14px' }}
+                                style={{ background: 'linear-gradient(135deg, #042f2e, #0d9488)', fontSize: '13.5px' }}
                                 onClick={() => setSidebarOpen(false)}
                             >
                                 Create Free Account →
@@ -783,6 +823,7 @@ const Navbar = () => {
                 .hover-nav-item:hover {
                     background: #f0fdfa !important;
                     color: #0d9488 !important;
+                    transform: translateX(3px);
                 }
                 .animate-pulse {
                     animation: cartPulse 1.8s infinite;
