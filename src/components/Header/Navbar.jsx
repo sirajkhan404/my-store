@@ -105,15 +105,15 @@ const Navbar = () => {
                         backdropFilter: 'blur(20px)',
                         WebkitBackdropFilter: 'blur(20px)',
                         background: scrolled
-                            ? 'rgba(4, 47, 46, 0.92)'
-                            : 'rgba(255, 255, 255, 0.94)',
+                            ? 'rgba(4, 47, 46, 0.95)'
+                            : 'rgba(255, 255, 255, 0.96)',
                         borderBottom: scrolled
                             ? '1px solid rgba(94, 234, 212, 0.2)'
                             : '1px solid rgba(13, 148, 136, 0.12)',
                         boxShadow: scrolled
                             ? '0 12px 36px -10px rgba(0, 0, 0, 0.35)'
                             : '0 4px 20px -2px rgba(13, 148, 136, 0.08)',
-                        padding: scrolled ? '12px 0' : '16px 0',
+                        padding: scrolled ? '10px 0' : '14px 0',
                         transition: 'all 0.35s ease',
                     }}
                 >
@@ -127,8 +127,8 @@ const Navbar = () => {
                             <div
                                 className="rounded-3 d-flex align-items-center justify-content-center shadow-sm"
                                 style={{
-                                    width: '42px',
-                                    height: '42px',
+                                    width: '40px',
+                                    height: '40px',
                                     background: 'linear-gradient(135deg, #0d9488 0%, #042f2e 100%)',
                                     border: '1.5px solid rgba(94, 234, 212, 0.4)',
                                     fontSize: '20px',
@@ -138,19 +138,14 @@ const Navbar = () => {
                             </div>
                             <div className="d-flex flex-column">
                                 <span
-                                    className="fw-black fs-4 lh-1 tracking-tight"
+                                    className="fw-bold fs-4 lh-1 tracking-tight"
                                     style={{
                                         fontFamily: "'Inter', sans-serif",
-                                        fontWeight: 800,
-                                        background: scrolled
-                                            ? 'linear-gradient(135deg, #ffffff 30%, #5eead4 100%)'
-                                            : 'linear-gradient(135deg, #042f2e 30%, #0d9488 100%)',
-                                        WebkitBackgroundClip: 'text',
-                                        WebkitTextFillColor: 'transparent',
                                         letterSpacing: '-0.5px',
+                                        color: scrolled ? '#ffffff' : '#042f2e',
                                     }}
                                 >
-                                    My<span style={{ color: '#0d9488' }}>Store</span>
+                                    My<span style={{ color: scrolled ? '#5eead4' : '#0d9488' }}>Store</span>
                                 </span>
                                 <span
                                     style={{
@@ -172,10 +167,10 @@ const Navbar = () => {
                             className="d-none d-lg-flex align-items-center gap-1 p-1 rounded-pill"
                             style={{
                                 background: scrolled
-                                    ? 'rgba(255, 255, 255, 0.06)'
+                                    ? 'rgba(255, 255, 255, 0.08)'
                                     : 'rgba(13, 148, 136, 0.05)',
                                 border: scrolled
-                                    ? '1px solid rgba(255, 255, 255, 0.08)'
+                                    ? '1px solid rgba(255, 255, 255, 0.12)'
                                     : '1px solid rgba(13, 148, 136, 0.1)',
                             }}
                         >
@@ -185,13 +180,13 @@ const Navbar = () => {
                                     <Link
                                         key={l.to}
                                         to={l.to}
-                                        className="position-relative px-3 py-2 rounded-pill text-decoration-none d-flex align-items-center gap-1.5 transition-all"
+                                        className="position-relative px-3 py-1.5 rounded-pill text-decoration-none d-flex align-items-center gap-1.5 transition-all"
                                         style={{
                                             fontSize: '14.5px',
                                             fontWeight: active ? 700 : 500,
                                             color: active
                                                 ? (scrolled ? '#ffffff' : '#042f2e')
-                                                : (scrolled ? 'rgba(255, 255, 255, 0.72)' : '#4b5563'),
+                                                : (scrolled ? 'rgba(255, 255, 255, 0.75)' : '#4b5563'),
                                             background: active
                                                 ? (scrolled
                                                     ? 'linear-gradient(135deg, #0d9488, #0f766e)'
@@ -239,7 +234,7 @@ const Navbar = () => {
                                     border: scrolled
                                         ? '1px solid rgba(94, 234, 212, 0.35)'
                                         : '1px solid rgba(13, 148, 136, 0.22)',
-                                    padding: '8px 18px',
+                                    padding: '7px 18px',
                                     fontSize: '14px',
                                     transition: 'all 0.2s ease',
                                     boxShadow: totalItems > 0 ? '0 0 16px rgba(13, 148, 136, 0.3)' : 'none',
@@ -282,11 +277,11 @@ const Navbar = () => {
                                         <div
                                             className="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold overflow-hidden flex-shrink-0 shadow-sm"
                                             style={{
-                                                width: '36px',
-                                                height: '36px',
+                                                width: '34px',
+                                                height: '34px',
                                                 background: 'linear-gradient(135deg, #0d9488 0%, #042f2e 100%)',
                                                 border: '1.5px solid #5eead4',
-                                                fontSize: '14px',
+                                                fontSize: '13.5px',
                                             }}
                                         >
                                             {user?.profilePicture ? (
@@ -522,7 +517,7 @@ const Navbar = () => {
             {/* Spacer so page content never goes underneath navbar */}
             <div
                 style={{
-                    height: showTopBar ? (scrolled ? '72px' : '88px') : (scrolled ? '54px' : '70px'),
+                    height: showTopBar ? (scrolled ? '68px' : '82px') : (scrolled ? '50px' : '64px'),
                     transition: 'height 0.35s ease',
                 }}
             />
