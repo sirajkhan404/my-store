@@ -12,7 +12,6 @@ import {
     MessageOutlined,
     UserOutlined,
     LogoutOutlined,
-    ShopOutlined,
     CloseOutlined,
     MenuOutlined,
     CrownOutlined,
@@ -582,40 +581,6 @@ const SidebarContent = ({ user, navSections, isActive, handleLogout, onClose, is
                 flexDirection: "column",
                 gap: "10px"
             }}>
-                {/* View Store Quick Card */}
-                <Link
-                    to="/"
-                    target="_blank"
-                    style={{
-                        textDecoration: "none",
-                        background: "rgba(255, 255, 255, 0.05)",
-                        border: "1px solid rgba(255, 255, 255, 0.1)",
-                        borderRadius: "12px",
-                        padding: "10px 14px",
-                        color: "rgba(255, 255, 255, 0.85)",
-                        fontSize: "12px",
-                        fontWeight: 600,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        transition: "all 0.2s"
-                    }}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.background = "rgba(13, 148, 136, 0.2)";
-                        e.currentTarget.style.borderColor = "#5eead4";
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.background = "rgba(255, 255, 255, 0.05)";
-                        e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.1)";
-                    }}
-                >
-                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                        <ShopOutlined style={{ color: "#5eead4" }} />
-                        <span>Visit Store</span>
-                    </div>
-                    <span style={{ fontSize: "11px", color: "#5eead4" }}>↗</span>
-                </Link>
-
                 {/* Logout Button */}
                 <button
                     onClick={handleLogout}
