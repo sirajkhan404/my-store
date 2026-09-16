@@ -62,7 +62,29 @@ const StoryViewer = ({ stories = [], initialIndex = 0, onClose }) => {
             ...prev,
             [sId]: prev[sId] || { isLiked: isUserLiked, count: count }
         }));
-    }, [currentStory, visitorId]);
+
+        // Record Story View
+        const recordView = async () => {
+            try {
+                const jwt = localStorage.getItem('jwt');
+                const headers = jwt ? { Authorization: `Bearer ${jwt}` } : {};
+                await axios.post(
+                    `${window.api}/api/stories/view/${sId}`,
+                    {
+                        uid: user?.uid || visitorId,
+                        name: user?.fullName || user?.name || "Guest Visitor",
+                        email: user?.email || "",
+                        avatar: user?.profilePicture || user?.avatar || "",
+                        role: user?.role || "customer"
+                    },
+                    { headers }
+                );
+            } catch (vErr) {
+                // Silently ignore view recording errors
+            }
+        };
+        recordView();
+    }, [currentStory, visitorId, user]);
 
     // Handle Like Toggle
     const handleToggleLike = async (e) => {

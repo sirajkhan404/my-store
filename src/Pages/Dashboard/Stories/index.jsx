@@ -12,9 +12,13 @@ import {
     CloudUploadOutlined,
     LinkOutlined,
     ThunderboltOutlined,
-    HeartFilled
+    HeartFilled,
+    TeamOutlined,
+    UserOutlined,
+    SearchOutlined,
+    FireFilled
 } from '@ant-design/icons';
-import { Modal, Tooltip, Switch, Popconfirm } from 'antd';
+import { Modal, Tooltip, Switch, Popconfirm, Avatar, Input, Badge } from 'antd';
 import StoryViewer from '@/components/Stories/StoryViewer';
 
 const StoriesManagement = () => {
@@ -36,6 +40,13 @@ const StoriesManagement = () => {
 
     // Story viewer state for preview
     const [previewStoryIndex, setPreviewStoryIndex] = useState(null);
+
+    // Story Viewers Modal State
+    const [viewersModalOpen, setViewersModalOpen] = useState(false);
+    const [selectedStoryForViewers, setSelectedStoryForViewers] = useState(null);
+    const [viewersList, setViewersList] = useState([]);
+    const [viewersLoading, setViewersLoading] = useState(false);
+    const [viewerSearchQuery, setViewerSearchQuery] = useState('');
 
     const fileInputRef = useRef(null);
 
@@ -74,6 +85,28 @@ const StoriesManagement = () => {
         fetchStories();
         fetchProducts();
     }, []);
+
+    // Open Viewers Modal & Fetch Viewers Details
+    const handleOpenViewersModal = async (story) => {
+        setSelectedStoryForViewers(story);
+        setViewersModalOpen(true);
+        setViewersLoading(true);
+        setViewerSearchQuery('');
+        try {
+            const jwt = localStorage.getItem('jwt');
+            const res = await axios.get(`${window.api}/api/stories/viewers/${story.id}`, {
+                headers: { Authorization: `Bearer ${jwt}` }
+            });
+            if (res.data && res.data.viewers) {
+                setViewersList(res.data.viewers);
+            }
+        } catch (err) {
+            console.error('Fetch viewers error:', err);
+            window.toastify?.(err.response?.data?.message || 'Failed to fetch story viewers', 'error');
+        } finally {
+            setViewersLoading(false);
+        }
+    };
 
     // Handle file selection
     const handleFileChange = (e) => {
@@ -187,6 +220,19 @@ const StoriesManagement = () => {
         }
     };
 
+    // Filter viewers by query
+    const filteredViewers = viewersList.filter(v => {
+        const q = viewerSearchQuery.toLowerCase();
+        return (
+            (v.name && v.name.toLowerCase().includes(q)) ||
+            (v.email && v.email.toLowerCase().includes(q)) ||
+            (v.role && v.role.toLowerCase().includes(q))
+        );
+    });
+
+    const totalLikes = stories.reduce((acc, s) => acc + (s.likesCount || s.likes?.length || 0), 0);
+    const totalViews = stories.reduce((acc, s) => acc + (s.viewsCount || s.views?.length || 0), 0);
+
     return (
         <div style={{ padding: '24px', maxWidth: '1400px', margin: '0 auto' }}>
             {/* Header Banner */}
@@ -204,7 +250,7 @@ const StoriesManagement = () => {
                 gap: '20px'
             }}>
                 <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
                         <span style={{ 
                             background: 'rgba(255,255,255,0.15)', 
                             padding: '6px 14px', 
@@ -215,37 +261,56 @@ const StoriesManagement = () => {
                         }}>
                             ✨ Visual Marketing
                         </span>
+
                         <span style={{ 
                             background: '#10b981', 
                             color: '#fff',
-                            padding: '4px 10px', 
+                            padding: '4px 12px', 
                             borderRadius: '12px', 
                             fontSize: '12px', 
                             fontWeight: 700 
                         }}>
                             {stories.filter(s => s.isActive).length} Active Stories
                         </span>
+
                         <span style={{ 
                             background: 'rgba(239, 68, 68, 0.25)', 
                             border: '1px solid rgba(239, 68, 68, 0.4)',
                             color: '#fecaca',
-                            padding: '4px 10px', 
+                            padding: '4px 12px', 
                             borderRadius: '12px', 
                             fontSize: '12px', 
                             fontWeight: 700,
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '4px'
+                            gap: '5px'
                         }}>
                             <HeartFilled style={{ color: '#ef4444' }} />
-                            {stories.reduce((acc, s) => acc + (s.likesCount || s.likes?.length || 0), 0)} Total Likes
+                            {totalLikes} Total Likes
+                        </span>
+
+                        <span style={{ 
+                            background: 'rgba(56, 189, 248, 0.25)', 
+                            border: '1px solid rgba(56, 189, 248, 0.4)',
+                            color: '#bae6fd',
+                            padding: '4px 12px', 
+                            borderRadius: '12px', 
+                            fontSize: '12px', 
+                            fontWeight: 700,
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '5px'
+                        }}>
+                            <EyeOutlined style={{ color: '#38bdf8' }} />
+                            {totalViews} Total Views
                         </span>
                     </div>
+
                     <h1 style={{ margin: 0, fontSize: '28px', fontWeight: 800, letterSpacing: '-0.5px' }}>
                         Product Stories Dashboard
                     </h1>
                     <p style={{ margin: '8px 0 0 0', color: 'rgba(255,255,255,0.8)', fontSize: '15px' }}>
-                        Create Instagram-style product stories to highlight new arrivals, flash deals, and promotions.
+                        Create Instagram-style product stories to highlight new arrivals, flash deals, and promotions. Track who views and likes your stories!
                     </p>
                 </div>
 
@@ -327,11 +392,14 @@ const StoriesManagement = () => {
             ) : (
                 <div style={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
                     gap: '24px'
                 }}>
                     {stories.map((story, index) => {
                         const isVideo = story.mediaType === 'video' || story.mediaURL?.endsWith('.mp4');
+                        const storyViews = story.viewsCount || (Array.isArray(story.views) ? story.views.length : 0);
+                        const storyLikes = story.likesCount || (Array.isArray(story.likes) ? story.likes.length : 0);
+
                         return (
                             <div
                                 key={story.id}
@@ -483,32 +551,59 @@ const StoriesManagement = () => {
                                             fontSize: '15px',
                                             fontWeight: 700,
                                             color: '#0f172a',
-                                            margin: '0 0 6px 0',
+                                            margin: '0 0 4px 0',
                                             whiteSpace: 'nowrap',
                                             overflow: 'hidden',
                                             textOverflow: 'ellipsis'
                                         }}>
                                             {story.title || 'Untitled Story'}
                                         </h4>
-                                        <div style={{ fontSize: '12px', color: '#64748b', display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '4px' }}>
-                                            <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+
+                                        {/* Date and Metrics Row */}
+                                        <div style={{ fontSize: '12px', color: '#64748b', display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '6px' }}>
+                                            <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                                                 <ClockCircleOutlined />
-                                                {new Date(story.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                                                {new Date(story.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                                             </span>
-                                            <span style={{ 
-                                                display: 'flex', 
-                                                alignItems: 'center', 
-                                                gap: '4px', 
-                                                color: '#ef4444', 
-                                                fontWeight: 700,
-                                                background: '#fef2f2',
-                                                padding: '2px 8px',
-                                                borderRadius: '10px',
-                                                fontSize: '11px'
-                                            }}>
-                                                <HeartFilled />
-                                                {story.likesCount || (Array.isArray(story.likes) ? story.likes.length : 0)}
-                                            </span>
+
+                                            {/* Likes & Views tags */}
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                                <span style={{ 
+                                                    display: 'flex', 
+                                                    alignItems: 'center', 
+                                                    gap: '3px', 
+                                                    color: '#ef4444', 
+                                                    fontWeight: 700,
+                                                    background: '#fef2f2',
+                                                    padding: '2px 7px',
+                                                    borderRadius: '8px',
+                                                    fontSize: '11px'
+                                                }}>
+                                                    <HeartFilled /> {storyLikes}
+                                                </span>
+
+                                                <button
+                                                    onClick={() => handleOpenViewersModal(story)}
+                                                    style={{ 
+                                                        display: 'flex', 
+                                                        alignItems: 'center', 
+                                                        gap: '4px', 
+                                                        color: '#0284c7', 
+                                                        fontWeight: 700,
+                                                        background: '#f0f9ff',
+                                                        border: '1px solid #bae6fd',
+                                                        padding: '2px 8px',
+                                                        borderRadius: '8px',
+                                                        fontSize: '11px',
+                                                        cursor: 'pointer',
+                                                        transition: 'all 0.2s'
+                                                    }}
+                                                    onMouseEnter={(e) => e.currentTarget.style.background = '#e0f2fe'}
+                                                    onMouseLeave={(e) => e.currentTarget.style.background = '#f0f9ff'}
+                                                >
+                                                    <TeamOutlined /> {storyViews} Viewers
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -533,6 +628,26 @@ const StoriesManagement = () => {
                                         </div>
 
                                         <div style={{ display: 'flex', gap: '8px' }}>
+                                            <Tooltip title="See Who Viewed">
+                                                <button
+                                                    onClick={() => handleOpenViewersModal(story)}
+                                                    style={{
+                                                        border: 'none',
+                                                        background: '#f0f9ff',
+                                                        color: '#0284c7',
+                                                        width: '34px',
+                                                        height: '34px',
+                                                        borderRadius: '8px',
+                                                        cursor: 'pointer',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center'
+                                                    }}
+                                                >
+                                                    <TeamOutlined />
+                                                </button>
+                                            </Tooltip>
+
                                             <Tooltip title="Preview Story">
                                                 <button
                                                     onClick={() => setPreviewStoryIndex(index)}
@@ -588,6 +703,153 @@ const StoriesManagement = () => {
                     })}
                 </div>
             )}
+
+            {/* ══ Story Viewers List Modal ══ */}
+            <Modal
+                title={
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <div style={{
+                            width: '40px',
+                            height: '40px',
+                            borderRadius: '10px',
+                            background: '#f0f9ff',
+                            color: '#0284c7',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: '20px'
+                        }}>
+                            <TeamOutlined />
+                        </div>
+                        <div>
+                            <div style={{ fontSize: '17px', fontWeight: 800, color: '#0f172a' }}>
+                                Story Viewers Activity
+                            </div>
+                            <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 500 }}>
+                                {selectedStoryForViewers?.title || 'Story'} • {viewersList.length} total viewers
+                            </div>
+                        </div>
+                    </div>
+                }
+                open={viewersModalOpen}
+                onCancel={() => setViewersModalOpen(false)}
+                footer={null}
+                centered
+                width={560}
+                bodyStyle={{ padding: '16px 0 0 0' }}
+            >
+                {/* Search Bar */}
+                <div style={{ padding: '0 20px 16px 20px' }}>
+                    <Input
+                        prefix={<SearchOutlined style={{ color: '#94a3b8' }} />}
+                        placeholder="Search viewers by name or email..."
+                        value={viewerSearchQuery}
+                        onChange={(e) => setViewerSearchQuery(e.target.value)}
+                        style={{
+                            borderRadius: '12px',
+                            padding: '10px 14px',
+                            background: '#f8fafc',
+                            border: '1px solid #e2e8f0'
+                        }}
+                    />
+                </div>
+
+                {/* Viewers List */}
+                <div style={{
+                    maxHeight: '440px',
+                    overflowY: 'auto',
+                    padding: '0 20px 20px 20px'
+                }}>
+                    {viewersLoading ? (
+                        <div style={{ textAlign: 'center', padding: '40px 0' }}>
+                            <LoadingOutlined style={{ fontSize: '32px', color: '#0d9488' }} />
+                            <p style={{ marginTop: '12px', color: '#64748b' }}>Loading viewers list...</p>
+                        </div>
+                    ) : filteredViewers.length === 0 ? (
+                        <div style={{ textAlign: 'center', padding: '40px 0', background: '#f8fafc', borderRadius: '16px' }}>
+                            <div style={{ fontSize: '32px', marginBottom: '8px' }}>👀</div>
+                            <div style={{ fontWeight: 700, color: '#334155' }}>No viewers found</div>
+                            <div style={{ fontSize: '12px', color: '#94a3b8' }}>
+                                {viewerSearchQuery ? 'Try another search term' : 'No one has viewed this story yet'}
+                            </div>
+                        </div>
+                    ) : (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                            {filteredViewers.map((viewer, vIdx) => (
+                                <div
+                                    key={vIdx}
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                        padding: '12px 14px',
+                                        borderRadius: '14px',
+                                        background: '#f8fafc',
+                                        border: '1px solid #f1f5f9',
+                                        transition: 'background 0.2s'
+                                    }}
+                                >
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                        <Avatar
+                                            src={viewer.avatar}
+                                            icon={!viewer.avatar && <UserOutlined />}
+                                            style={{
+                                                backgroundColor: viewer.role === 'superAdmin' ? '#0d9488' : '#0284c7',
+                                                flexShrink: 0
+                                            }}
+                                            size={42}
+                                        />
+                                        <div>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                                <span style={{ fontWeight: 700, color: '#0f172a', fontSize: '14px' }}>
+                                                    {viewer.name || 'Guest Visitor'}
+                                                </span>
+                                                {viewer.role === 'superAdmin' && (
+                                                    <span style={{
+                                                        background: '#fef3c7',
+                                                        color: '#d97706',
+                                                        fontSize: '10px',
+                                                        fontWeight: 800,
+                                                        padding: '1px 6px',
+                                                        borderRadius: '6px'
+                                                    }}>
+                                                        ADMIN
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <div style={{ fontSize: '12px', color: '#64748b' }}>
+                                                {viewer.email || 'Website Visitor'}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Right side: Time & Like status */}
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                        {viewer.hasLiked && (
+                                            <span style={{
+                                                background: '#fef2f2',
+                                                color: '#ef4444',
+                                                padding: '4px 8px',
+                                                borderRadius: '8px',
+                                                fontSize: '11px',
+                                                fontWeight: 700,
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '4px'
+                                            }}>
+                                                <HeartFilled /> Liked
+                                            </span>
+                                        )}
+                                        <span style={{ fontSize: '11px', color: '#94a3b8' }}>
+                                            {viewer.viewedAt ? new Date(viewer.viewedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Just now'}
+                                        </span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            </Modal>
 
             {/* Add Story Modal */}
             <Modal
