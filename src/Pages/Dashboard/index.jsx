@@ -193,30 +193,8 @@ const Dashboard = () => {
                         </div>
                     </div>
 
-                    {/* Right: Quick live store button, user info & logout */}
+                    {/* Right: User info & logout */}
                     <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-                        <Link
-                            to="/"
-                            target="_blank"
-                            style={{
-                                background: "#f0fdfa",
-                                border: "1px solid #99f6e4",
-                                color: "#0d9488",
-                                padding: "7px 14px",
-                                borderRadius: "10px",
-                                fontSize: "12px",
-                                fontWeight: 700,
-                                textDecoration: "none",
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "6px",
-                                transition: "all 0.2s ease"
-                            }}
-                            className="d-none d-md-flex"
-                        >
-                            <ShopOutlined /> View Live Store ↗
-                        </Link>
-
                         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                             <div className="d-none d-md-block text-end">
                                 <div style={{ fontSize: "13px", fontWeight: 700, color: "#0f172a", lineHeight: 1.2 }}>
