@@ -121,7 +121,7 @@ const Navbar = () => {
                         {/* ── Brand Logo ── */}
                         <Link
                             to="/"
-                            className="d-flex align-items-center gap-2 text-decoration-none group-hover-scale"
+                            className="d-flex align-items-center gap-2 text-decoration-none"
                             style={{ transition: 'transform 0.2s ease' }}
                         >
                             <div
@@ -243,14 +243,6 @@ const Navbar = () => {
                                     fontSize: '14px',
                                     transition: 'all 0.2s ease',
                                     boxShadow: totalItems > 0 ? '0 0 16px rgba(13, 148, 136, 0.3)' : 'none',
-                                }}
-                                onMouseEnter={(e) => {
-                                    e.currentTarget.style.transform = 'translateY(-2px)';
-                                    e.currentTarget.style.background = scrolled ? 'rgba(13, 148, 136, 0.4)' : 'rgba(13, 148, 136, 0.15)';
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.style.transform = 'translateY(0)';
-                                    e.currentTarget.style.background = scrolled ? 'rgba(13, 148, 136, 0.25)' : 'rgba(13, 148, 136, 0.08)';
                                 }}
                             >
                                 <span style={{ fontSize: '16px' }}>🛒</span>
@@ -416,8 +408,6 @@ const Navbar = () => {
                                                         setDropdownOpen(false);
                                                         handleLogout();
                                                     }}
-                                                    onMouseEnter={(e) => { e.currentTarget.style.background = '#fef2f2'; }}
-                                                    onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
                                                 >
                                                     <span style={{ fontSize: '16px' }}>🚪</span>
                                                     <span>Sign Out</span>
@@ -448,14 +438,6 @@ const Navbar = () => {
                                             border: 'none',
                                             fontSize: '14px',
                                             boxShadow: '0 4px 14px rgba(13, 148, 136, 0.35)',
-                                        }}
-                                        onMouseEnter={(e) => {
-                                            e.currentTarget.style.transform = 'translateY(-1px)';
-                                            e.currentTarget.style.boxShadow = '0 6px 18px rgba(13, 148, 136, 0.45)';
-                                        }}
-                                        onMouseLeave={(e) => {
-                                            e.currentTarget.style.transform = 'translateY(0)';
-                                            e.currentTarget.style.boxShadow = '0 4px 14px rgba(13, 148, 136, 0.35)';
                                         }}
                                     >
                                         Get Started →
