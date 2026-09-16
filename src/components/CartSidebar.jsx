@@ -59,7 +59,7 @@ const CartSidebar = ({ isOpen, onClose }) => {
         <>
             {/* ── Cart Drawer Backdrop ── */}
             <div
-                className={`position-fixed top-0 start-0 w-100 h-100 transition-all ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
+                className={`position-fixed top-0 start-0 w-100 h-100 ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
                 style={{
                     zIndex: 9998,
                     background: "rgba(4, 47, 46, 0.7)",
@@ -72,7 +72,7 @@ const CartSidebar = ({ isOpen, onClose }) => {
 
             {/* ── Cart Drawer Panel ── */}
             <div
-                className="position-fixed top-0 h-100 bg-white shadow-2xl d-flex flex-column"
+                className="position-fixed top-0 h-100 bg-white shadow-lg d-flex flex-column"
                 style={{
                     width: "100%",
                     maxWidth: "420px",
@@ -84,15 +84,14 @@ const CartSidebar = ({ isOpen, onClose }) => {
             >
                 {/* 1. Header */}
                 <div
-                    className="p-3.5 px-4 text-white d-flex align-items-center justify-content-between position-relative"
+                    className="p-3 px-4 text-white d-flex align-items-center justify-content-between position-relative border-bottom border-teal border-opacity-25"
                     style={{
                         background: "linear-gradient(135deg, #042f2e 0%, #0d9488 100%)",
-                        borderBottom: "1px solid rgba(94, 234, 212, 0.25)",
                     }}
                 >
-                    <div className="d-flex align-items-center gap-2.5">
+                    <div className="d-flex align-items-center gap-2">
                         <div
-                            className="rounded-3 d-flex align-items-center justify-content-center"
+                            className="rounded-3 d-flex align-items-center justify-content-center text-white shadow-sm"
                             style={{
                                 width: "36px",
                                 height: "36px",
@@ -122,8 +121,8 @@ const CartSidebar = ({ isOpen, onClose }) => {
 
                 {/* 2. Free Delivery Meter */}
                 {cartItems.length > 0 && (
-                    <div className="px-4 py-2.5 border-bottom" style={{ background: "#f0fdfa", borderColor: "#ccfbf1" }}>
-                        <div className="d-flex align-items-center justify-content-between mb-1.5" style={{ fontSize: "11.5px" }}>
+                    <div className="px-4 py-2.5 border-bottom bg-light" style={{ borderColor: "#ccfbf1" }}>
+                        <div className="d-flex align-items-center justify-content-between mb-1" style={{ fontSize: "11.5px" }}>
                             <span className="fw-semibold text-dark">
                                 {totalAmount >= freeShippingThreshold ? (
                                     <span className="text-success fw-bold">🎉 You unlocked FREE Delivery!</span>
@@ -167,26 +166,23 @@ const CartSidebar = ({ isOpen, onClose }) => {
                             </p>
                             <button
                                 onClick={() => { onClose(); navigate("/products"); }}
-                                className="btn rounded-pill px-4 py-2 fw-bold text-white shadow-sm"
-                                style={{ background: "linear-gradient(135deg, #0d9488, #0f766e)", border: "none", fontSize: "14px" }}
+                                className="btn rounded-pill px-4 py-2 fw-bold text-white shadow-sm border-0"
+                                style={{ background: "linear-gradient(135deg, #0d9488, #0f766e)", fontSize: "14px" }}
                             >
                                 Browse Products →
                             </button>
                         </div>
                     ) : (
-                        <div className="d-flex flex-column gap-2.5">
+                        <div className="d-flex flex-column gap-3">
                             {cartItems.map(item => (
                                 <div
                                     key={item.productId}
-                                    className="d-flex align-items-center gap-3 p-2.5 rounded-4 border shadow-2xs transition-all"
-                                    style={{
-                                        background: "#ffffff",
-                                        borderColor: "#e5e7eb",
-                                    }}
+                                    className="d-flex align-items-center gap-3 p-3 rounded-4 border bg-white shadow-sm"
+                                    style={{ borderColor: "#e5e7eb" }}
                                 >
                                     <div
-                                        className="rounded-3 overflow-hidden flex-shrink-0 border"
-                                        style={{ width: "65px", height: "65px", background: "#f8fafc", borderColor: "#f1f5f9" }}
+                                        className="rounded-3 overflow-hidden flex-shrink-0 border bg-light"
+                                        style={{ width: "65px", height: "65px", borderColor: "#f1f5f9" }}
                                     >
                                         <img
                                             src={item.imageURL || "https://via.placeholder.com/65"}
@@ -200,30 +196,30 @@ const CartSidebar = ({ isOpen, onClose }) => {
                                         <div className="fw-semibold text-dark text-truncate" style={{ fontSize: "13.5px" }}>
                                             {item.name}
                                         </div>
-                                        <div className="fw-bold mt-0.5" style={{ fontSize: "13px", color: "#0d9488" }}>
+                                        <div className="fw-bold mt-1" style={{ fontSize: "13px", color: "#0d9488" }}>
                                             Rs. {Number(item.price).toLocaleString()}
                                         </div>
 
                                         {/* Stepper */}
-                                        <div className="d-flex align-items-center gap-2 mt-1.5">
+                                        <div className="d-flex align-items-center gap-2 mt-2">
                                             <div
-                                                className="d-flex align-items-center border rounded-pill p-0.5"
-                                                style={{ background: "#f8fafc", borderColor: "#e2e8f0" }}
+                                                className="d-flex align-items-center border rounded-pill p-1 bg-light"
+                                                style={{ borderColor: "#e2e8f0" }}
                                             >
                                                 <button
-                                                    className="btn btn-sm p-0 rounded-circle d-flex align-items-center justify-content-center border-0"
-                                                    style={{ width: "22px", height: "22px", background: "#ffffff", color: "#374151" }}
+                                                    className="btn btn-sm p-0 rounded-circle d-flex align-items-center justify-content-center border-0 bg-white text-secondary shadow-sm"
+                                                    style={{ width: "22px", height: "22px", fontSize: "12px" }}
                                                     onClick={() => updateQty(item.productId, item.quantity - 1)}
                                                     aria-label="Decrease quantity"
                                                 >
-                                                    -
+                                                    −
                                                 </button>
                                                 <span className="fw-bold px-2" style={{ fontSize: "12px", minWidth: "20px", textAlign: "center" }}>
                                                     {item.quantity}
                                                 </span>
                                                 <button
-                                                    className="btn btn-sm p-0 rounded-circle d-flex align-items-center justify-content-center border-0"
-                                                    style={{ width: "22px", height: "22px", background: "#ffffff", color: "#374151" }}
+                                                    className="btn btn-sm p-0 rounded-circle d-flex align-items-center justify-content-center border-0 bg-white text-secondary shadow-sm"
+                                                    style={{ width: "22px", height: "22px", fontSize: "12px" }}
                                                     disabled={item.stock && item.quantity >= item.stock}
                                                     onClick={() => updateQty(item.productId, item.quantity + 1)}
                                                     aria-label="Increase quantity"
@@ -243,7 +239,7 @@ const CartSidebar = ({ isOpen, onClose }) => {
                                         >
                                             🗑️
                                         </button>
-                                        <div className="fw-bold text-dark mt-2" style={{ fontSize: "13px" }}>
+                                        <div className="fw-bold text-dark mt-3" style={{ fontSize: "13px" }}>
                                             Rs. {(item.price * item.quantity).toLocaleString()}
                                         </div>
                                     </div>
@@ -255,12 +251,12 @@ const CartSidebar = ({ isOpen, onClose }) => {
 
                 {/* 4. Footer Checkout Box */}
                 {cartItems.length > 0 && (
-                    <div className="p-3.5 px-4 border-top" style={{ background: "#f8fafc", borderColor: "#e2e8f0" }}>
+                    <div className="p-3 px-4 border-top bg-light" style={{ borderColor: "#e2e8f0" }}>
                         <div className="d-flex justify-content-between align-items-center mb-1">
                             <span className="text-muted fw-semibold" style={{ fontSize: "13px" }}>Subtotal:</span>
                             <span className="fw-semibold text-dark" style={{ fontSize: "14px" }}>Rs. {totalAmount.toLocaleString()}</span>
                         </div>
-                        <div className="d-flex justify-content-between align-items-center mb-2.5">
+                        <div className="d-flex justify-content-between align-items-center mb-2">
                             <span className="text-muted fw-semibold" style={{ fontSize: "13px" }}>Estimated Shipping:</span>
                             <span className="fw-semibold text-success" style={{ fontSize: "13px" }}>
                                 {totalAmount >= freeShippingThreshold ? "FREE" : "Rs. 200"}
@@ -284,10 +280,9 @@ const CartSidebar = ({ isOpen, onClose }) => {
                             {isAuth ? (
                                 <button
                                     onClick={() => setShowCheckout(true)}
-                                    className="btn text-white rounded-pill flex-grow-1 fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2"
+                                    className="btn text-white rounded-pill flex-grow-1 fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2 border-0"
                                     style={{
                                         background: "linear-gradient(135deg, #0d9488 0%, #0f766e 100%)",
-                                        border: "none",
                                         fontSize: "14px",
                                         padding: "10px 16px",
                                     }}
@@ -298,10 +293,9 @@ const CartSidebar = ({ isOpen, onClose }) => {
                             ) : (
                                 <button
                                     onClick={() => { onClose(); navigate("/auth/login"); }}
-                                    className="btn text-white rounded-pill flex-grow-1 fw-bold d-flex align-items-center justify-content-center gap-1.5"
+                                    className="btn text-white rounded-pill flex-grow-1 fw-bold d-flex align-items-center justify-content-center gap-1 border-0 shadow-sm"
                                     style={{
                                         background: "linear-gradient(135deg, #f59e0b, #d97706)",
-                                        border: "none",
                                         fontSize: "14px",
                                         padding: "10px 16px",
                                     }}
@@ -316,9 +310,9 @@ const CartSidebar = ({ isOpen, onClose }) => {
 
             {/* ── Checkout Modal ── */}
             {showCheckout && (
-                <div className="modal d-block" style={{ zIndex: 10000 }} tabIndex="-1">
+                <div className="modal show d-block" style={{ zIndex: 10000, background: 'rgba(15, 23, 42, 0.65)', backdropFilter: 'blur(4px)' }} tabIndex="-1">
                     <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable" style={{ maxWidth: "480px" }}>
-                        <div className="modal-content rounded-4 border-0 overflow-hidden shadow-2xl">
+                        <div className="modal-content rounded-4 border-0 overflow-hidden shadow-lg">
                             {/* Modal Header */}
                             <div
                                 className="modal-header border-0 px-4 pt-4 pb-3 text-white"
@@ -330,7 +324,7 @@ const CartSidebar = ({ isOpen, onClose }) => {
                                 </div>
                                 <button
                                     onClick={() => { setShowCheckout(false); setError(""); setSuccess(false); }}
-                                    className="btn btn-sm text-white rounded-circle p-0 d-flex align-items-center justify-content-center border-0 ms-auto"
+                                    className="btn btn-sm text-white rounded-circle p-0 d-flex align-items-center justify-content-center border-0 ms-auto shadow-none"
                                     style={{ width: "30px", height: "30px", background: "rgba(255,255,255,0.2)" }}
                                 >
                                     ✕
@@ -339,7 +333,7 @@ const CartSidebar = ({ isOpen, onClose }) => {
 
                             {/* Summary strip */}
                             <div className="px-4 pt-3">
-                                <div className="rounded-3 p-3" style={{ background: "linear-gradient(135deg, #f0fdfa, #ccfbf1)", border: "1px solid #99f6e4" }}>
+                                <div className="rounded-3 p-3 bg-light border border-teal-subtle" style={{ borderColor: "#99f6e4" }}>
                                     <div className="fw-bold text-dark small mb-2 d-flex justify-content-between align-items-center">
                                         <span>Order Summary ({cartItems.length} items)</span>
                                         <span style={{ color: "#0d9488" }}>Rs. {totalAmount.toLocaleString()}</span>
@@ -366,30 +360,30 @@ const CartSidebar = ({ isOpen, onClose }) => {
                                 ) : (
                                     <form onSubmit={handleOrder}>
                                         {error && <div className="alert alert-danger py-2 small rounded-3 mb-3">{error}</div>}
-                                        <div className="mb-2.5">
+                                        <div className="mb-3">
                                             <label className="form-label fw-semibold small text-dark mb-1">Full Name</label>
                                             <input
-                                                className="form-control rounded-3"
+                                                className="form-control rounded-3 bg-light border-light-subtle px-3 py-2 shadow-sm"
                                                 style={{ fontSize: "14px" }}
                                                 placeholder="Recipient full name"
                                                 value={form.fullName}
                                                 onChange={e => setForm({ ...form, fullName: e.target.value })}
                                             />
                                         </div>
-                                        <div className="mb-2.5">
+                                        <div className="mb-3">
                                             <label className="form-label fw-semibold small text-dark mb-1">Phone Number</label>
                                             <input
-                                                className="form-control rounded-3"
+                                                className="form-control rounded-3 bg-light border-light-subtle px-3 py-2 shadow-sm"
                                                 style={{ fontSize: "14px" }}
                                                 placeholder="03XX-XXXXXXX"
                                                 value={form.phone}
                                                 onChange={e => setForm({ ...form, phone: e.target.value })}
                                             />
                                         </div>
-                                        <div className="mb-2.5">
+                                        <div className="mb-3">
                                             <label className="form-label fw-semibold small text-dark mb-1">Street Address</label>
                                             <textarea
-                                                className="form-control rounded-3"
+                                                className="form-control rounded-3 bg-light border-light-subtle px-3 py-2 shadow-sm"
                                                 rows={2}
                                                 style={{ fontSize: "14px" }}
                                                 placeholder="House/Apartment #, Street, Area"
@@ -400,7 +394,7 @@ const CartSidebar = ({ isOpen, onClose }) => {
                                         <div className="mb-3">
                                             <label className="form-label fw-semibold small text-dark mb-1">City</label>
                                             <input
-                                                className="form-control rounded-3"
+                                                className="form-control rounded-3 bg-light border-light-subtle px-3 py-2 shadow-sm"
                                                 style={{ fontSize: "14px" }}
                                                 placeholder="City name (e.g., Karachi, Lahore)"
                                                 value={form.city}
@@ -409,8 +403,7 @@ const CartSidebar = ({ isOpen, onClose }) => {
                                         </div>
 
                                         <div
-                                            className="d-flex align-items-center gap-2.5 p-2.5 rounded-3 mb-3"
-                                            style={{ background: "#f0fdf4", border: "1px solid #bbf7d0" }}
+                                            className="d-flex align-items-center gap-3 p-3 rounded-3 mb-3 bg-success bg-opacity-10 border border-success border-opacity-25"
                                         >
                                             <span style={{ fontSize: "18px" }}>💵</span>
                                             <div>
@@ -422,8 +415,8 @@ const CartSidebar = ({ isOpen, onClose }) => {
                                         <button
                                             type="submit"
                                             disabled={loading}
-                                            className="btn w-100 rounded-pill text-white fw-bold py-2.5 shadow-sm"
-                                            style={{ background: "linear-gradient(135deg, #0d9488 0%, #0f766e 100%)", border: "none" }}
+                                            className="btn w-100 rounded-pill text-white fw-bold py-2.5 shadow-sm border-0"
+                                            style={{ background: "linear-gradient(135deg, #0d9488 0%, #0f766e 100%)" }}
                                         >
                                             {loading ? (
                                                 <><span className="spinner-border spinner-border-sm me-2" />Processing Order...</>
@@ -436,7 +429,6 @@ const CartSidebar = ({ isOpen, onClose }) => {
                             </div>
                         </div>
                     </div>
-                    <div className="modal-backdrop show" style={{ zIndex: -1 }} />
                 </div>
             )}
         </>

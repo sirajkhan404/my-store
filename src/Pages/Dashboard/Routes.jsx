@@ -7,6 +7,7 @@ import Users from './Users'
 import Profile from './Profile'
 import Analytics from './Analytics'
 import Messages from './Messages'
+import Stories from './Stories'
 import ProtectedRoute from '@/components/Misc/ProtectedRoute'
 
 const Index = () => {
@@ -15,6 +16,7 @@ const Index = () => {
             <Route path="/" element={<Home />} />
             <Route path="/analytics" element={<ProtectedRoute Component={Analytics} allowedRoles={["superAdmin"]} />} />
             <Route path="/products/*" element={<ProtectedRoute Component={Products} allowedRoles={["superAdmin"]} />} />
+            <Route path="/stories/*" element={<ProtectedRoute Component={Stories} allowedRoles={["superAdmin"]} />} />
             <Route path="/orders/*" element={<ProtectedRoute Component={Orders} allowedRoles={["superAdmin", "customer"]} />} />
             <Route path="/users/*" element={<ProtectedRoute Component={Users} allowedRoles={["superAdmin"]} />} />
             <Route path="/messages/*" element={<ProtectedRoute Component={Messages} allowedRoles={["superAdmin", "customer"]} />} />

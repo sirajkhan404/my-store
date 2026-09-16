@@ -1,8 +1,9 @@
-﻿import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import ContactSection from "./ContactSection";
 import ServiceSection from "./ServiceSection";
+import StoriesBar from "../../../components/Stories/StoriesBar";
 import { useCart } from "../../../context/CartContext";
 
 /* ── Theme tokens ───────────────────────────────────── */
@@ -229,7 +230,7 @@ const Home = () => {
                   <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#10b981", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: 16, flexShrink: 0 }}>✓</div>
                   <div>
                     <div style={{ fontWeight: 700, color: "#fff", fontSize: 13 }}>Order Delivered</div>
-                    <div style={{ color: "rgba(255,255,255,0.55)", fontSize: 10 }}>Just now · Karachi</div>
+                    <div style={{ color: "rgba(255,255,255,0.55)", fontSize: 10 }}>Just now · Pakistan</div>
                   </div>
                 </div>
                 <div style={{ position: "absolute", top: -20, right: -36, borderRadius: 14, padding: "12px 16px", display: "flex", alignItems: "center", gap: 10, background: "rgba(255,255,255,0.1)", backdropFilter: "blur(14px)", border: "1px solid rgba(255,255,255,0.15)", transform: "rotate(3deg)" }}>
@@ -251,6 +252,9 @@ const Home = () => {
           </svg>
         </div>
       </section>
+
+      {/* ══ STORIES BAR ════════════════════════════════ */}
+      <StoriesBar />
 
       {/* ══ TRUST STRIP ════════════════════════════════ */}
       <section style={{ background: "#fff", borderBottom: "1px solid #e5e7eb", padding: "28px 0" }}>
