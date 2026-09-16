@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { useAuth } from "../../../context/Auth"
 import axios from "axios"
@@ -8,11 +8,13 @@ import {
     EyeOutlined,
     EyeInvisibleOutlined,
     ArrowLeftOutlined,
-    SafetyCertificateOutlined,
+    SafetyCertificateFilled,
     CheckCircleFilled,
     ThunderboltFilled,
-    ShoppingOutlined,
-    StarFilled
+    ShoppingFilled,
+    StarFilled,
+    CrownFilled,
+    GlobalOutlined
 } from "@ant-design/icons"
 
 const initialState = { email: "", password: "" }
@@ -26,7 +28,6 @@ const Login = () => {
     const [showPassword, setShowPassword] = useState(false)
     const [rememberMe, setRememberMe] = useState(true)
 
-    // Load saved email if remember me was used
     useEffect(() => {
         const savedEmail = localStorage.getItem("mystore_remember_email")
         if (savedEmail) {
@@ -62,7 +63,7 @@ const Login = () => {
                     window.toastify("Welcome back! Login successful 🎉", "success")
                     navigate("/dashboard")
                 } else {
-                    window.toastify(data?.message || "Login failed", "error")
+                    window.toastify(data?.message || "Invalid credentials", "error")
                 }
             })
             .catch(error => {
@@ -78,53 +79,52 @@ const Login = () => {
         <main
             style={{
                 minHeight: "100vh",
-                background: "linear-gradient(135deg, #f0fdf4 0%, #f8fafc 50%, #e6fffa 100%)",
+                background: "#021212",
+                backgroundImage: `
+                    radial-gradient(circle at 15% 20%, rgba(13, 148, 136, 0.28) 0%, transparent 40%),
+                    radial-gradient(circle at 85% 75%, rgba(16, 185, 129, 0.22) 0%, transparent 40%),
+                    radial-gradient(circle at 50% 50%, rgba(6, 78, 59, 0.3) 0%, transparent 60%),
+                    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px)
+                `,
+                backgroundSize: "100% 100%, 100% 100%, 100% 100%, 32px 32px, 32px 32px",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
-                padding: "24px 16px",
+                padding: "32px 16px",
                 position: "relative",
-                overflow: "hidden"
+                overflow: "hidden",
+                color: "#ffffff",
+                fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
             }}
         >
-            {/* Ambient Background Glows */}
+            {/* Top Glow Highlights */}
             <div
                 style={{
                     position: "absolute",
-                    width: "500px",
-                    height: "500px",
+                    top: "-150px",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    width: "800px",
+                    height: "300px",
                     borderRadius: "50%",
-                    background: "radial-gradient(circle, rgba(13, 148, 136, 0.15) 0%, rgba(20, 184, 166, 0) 70%)",
-                    top: "-100px",
-                    left: "-100px",
+                    background: "radial-gradient(ellipse, rgba(45, 212, 191, 0.2) 0%, transparent 70%)",
                     pointerEvents: "none",
-                    zIndex: 0
-                }}
-            />
-            <div
-                style={{
-                    position: "absolute",
-                    width: "450px",
-                    height: "450px",
-                    borderRadius: "50%",
-                    background: "radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, rgba(5, 150, 105, 0) 70%)",
-                    bottom: "-80px",
-                    right: "-80px",
-                    pointerEvents: "none",
+                    filter: "blur(50px)",
                     zIndex: 0
                 }}
             />
 
-            {/* Top Navigation Bar */}
+            {/* Top Navigation */}
             <div
                 style={{
                     width: "100%",
-                    maxWidth: "1060px",
+                    maxWidth: "1120px",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
-                    marginBottom: "20px",
+                    marginBottom: "24px",
                     zIndex: 2
                 }}
             >
@@ -134,58 +134,65 @@ const Login = () => {
                         display: "inline-flex",
                         alignItems: "center",
                         gap: "8px",
-                        color: "#0f766e",
+                        color: "#a7f3d0",
                         textDecoration: "none",
-                        fontSize: "14px",
+                        fontSize: "13px",
                         fontWeight: 700,
-                        padding: "8px 16px",
-                        borderRadius: "12px",
-                        background: "rgba(255, 255, 255, 0.8)",
-                        backdropFilter: "blur(10px)",
-                        border: "1px solid rgba(13, 148, 136, 0.18)",
-                        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.04)",
+                        padding: "9px 18px",
+                        borderRadius: "14px",
+                        background: "rgba(255, 255, 255, 0.05)",
+                        backdropFilter: "blur(16px)",
+                        border: "1px solid rgba(255, 255, 255, 0.12)",
+                        boxShadow: "0 4px 15px rgba(0, 0, 0, 0.25)",
                         transition: "all 0.2s ease"
                     }}
                     onMouseEnter={(e) => {
+                        e.currentTarget.style.background = "rgba(255, 255, 255, 0.1)"
+                        e.currentTarget.style.borderColor = "#5eead4"
                         e.currentTarget.style.transform = "translateX(-3px)"
-                        e.currentTarget.style.background = "#ffffff"
                     }}
                     onMouseLeave={(e) => {
+                        e.currentTarget.style.background = "rgba(255, 255, 255, 0.05)"
+                        e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.12)"
                         e.currentTarget.style.transform = "translateX(0)"
-                        e.currentTarget.style.background = "rgba(255, 255, 255, 0.8)"
                     }}
                 >
                     <ArrowLeftOutlined /> Back to Store
                 </Link>
 
-                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                    <span
+                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <div
                         style={{
                             display: "inline-flex",
                             alignItems: "center",
-                            gap: "5px",
+                            gap: "6px",
                             fontSize: "12px",
                             fontWeight: 700,
-                            color: "#0f766e",
-                            background: "rgba(204, 251, 241, 0.6)",
-                            padding: "6px 12px",
-                            borderRadius: "20px",
-                            border: "1px solid #99f6e4"
+                            color: "#5eead4",
+                            background: "rgba(13, 148, 136, 0.2)",
+                            border: "1px solid rgba(94, 234, 212, 0.3)",
+                            padding: "6px 14px",
+                            borderRadius: "30px",
+                            backdropFilter: "blur(10px)"
                         }}
                     >
-                        <SafetyCertificateOutlined /> 256-Bit SSL Secure
-                    </span>
+                        <SafetyCertificateFilled style={{ color: "#34d399", fontSize: "14px" }} />
+                        <span>256-Bit SSL Encrypted</span>
+                    </div>
                 </div>
             </div>
 
-            {/* Main Auth Container */}
+            {/* Main Luxury Glass Card */}
             <div
                 style={{
                     width: "100%",
-                    maxWidth: "1060px",
-                    background: "#ffffff",
-                    borderRadius: "28px",
-                    boxShadow: "0 25px 60px -15px rgba(4, 47, 46, 0.12), 0 0 0 1px rgba(13, 148, 136, 0.08)",
+                    maxWidth: "1120px",
+                    background: "rgba(4, 28, 27, 0.72)",
+                    backdropFilter: "blur(24px)",
+                    WebkitBackdropFilter: "blur(24px)",
+                    borderRadius: "32px",
+                    border: "1px solid rgba(255, 255, 255, 0.12)",
+                    boxShadow: "0 30px 90px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(94, 234, 212, 0.15)",
                     overflow: "hidden",
                     display: "flex",
                     flexWrap: "wrap",
@@ -193,165 +200,185 @@ const Login = () => {
                     zIndex: 1
                 }}
             >
-                {/* ══ LEFT HERO / SHOWCASE PANEL (Desktop & Tablet) ══ */}
+                {/* ══ LEFT SHOWCASE HERO (Desktop & Large Screens) ══ */}
                 <div
-                    className="col-12 col-lg-5 d-none d-lg-flex flex-column justify-content-between text-white p-4 p-xl-5"
+                    className="col-12 col-lg-5 d-none d-lg-flex flex-column justify-content-between p-4 p-xl-5"
                     style={{
-                        background: "linear-gradient(150deg, #042f2e 0%, #064e3b 45%, #022c22 100%)",
+                        background: "linear-gradient(160deg, rgba(6, 78, 59, 0.6) 0%, rgba(4, 47, 46, 0.8) 50%, rgba(2, 26, 25, 0.95) 100%)",
+                        borderRight: "1px solid rgba(255, 255, 255, 0.1)",
                         position: "relative",
                         overflow: "hidden",
-                        minHeight: "580px"
+                        minHeight: "600px"
                     }}
                 >
-                    {/* Glowing background circles in hero */}
+                    {/* Glowing decorative circles */}
                     <div
                         style={{
                             position: "absolute",
+                            top: "-60px",
+                            right: "-60px",
                             width: "300px",
                             height: "300px",
                             borderRadius: "50%",
-                            background: "radial-gradient(circle, rgba(94, 234, 212, 0.2) 0%, rgba(94, 234, 212, 0) 70%)",
-                            top: "-50px",
-                            right: "-50px"
-                        }}
-                    />
-                    <div
-                        style={{
-                            position: "absolute",
-                            width: "250px",
-                            height: "250px",
-                            borderRadius: "50%",
-                            background: "radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0) 70%)",
-                            bottom: "-50px",
-                            left: "-50px"
+                            background: "radial-gradient(circle, rgba(94, 234, 212, 0.25) 0%, transparent 70%)",
+                            filter: "blur(40px)",
+                            pointerEvents: "none"
                         }}
                     />
 
-                    {/* Top Brand & Badge */}
+                    {/* Top Branding Section */}
                     <div style={{ position: "relative", zIndex: 2 }}>
+                        {/* Status Chip */}
                         <div
                             style={{
                                 display: "inline-flex",
                                 alignItems: "center",
                                 gap: "8px",
-                                background: "rgba(255, 255, 255, 0.1)",
-                                border: "1px solid rgba(255, 255, 255, 0.15)",
+                                background: "rgba(16, 185, 129, 0.15)",
+                                border: "1px solid rgba(52, 211, 153, 0.3)",
                                 padding: "6px 14px",
                                 borderRadius: "30px",
                                 fontSize: "12px",
                                 fontWeight: 700,
-                                color: "#5eead4",
-                                marginBottom: "28px",
-                                backdropFilter: "blur(8px)"
+                                color: "#6ee7b7",
+                                marginBottom: "28px"
                             }}
                         >
-                            <ThunderboltFilled /> Official Member Portal
+                            <span
+                                style={{
+                                    width: "8px",
+                                    height: "8px",
+                                    borderRadius: "50%",
+                                    background: "#10b981",
+                                    boxShadow: "0 0 10px #10b981"
+                                }}
+                            />
+                            Premium Shopping Experience
                         </div>
 
-                        <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "20px" }}>
+                        {/* Brand Logo */}
+                        <div style={{ display: "flex", alignItems: "center", gap: "14px", marginBottom: "24px" }}>
                             <div
                                 style={{
-                                    width: "48px",
-                                    height: "48px",
-                                    borderRadius: "14px",
-                                    background: "linear-gradient(135deg, #14b8a6, #0d9488)",
+                                    width: "52px",
+                                    height: "52px",
+                                    borderRadius: "16px",
+                                    background: "linear-gradient(135deg, #10b981 0%, #0d9488 100%)",
                                     display: "flex",
                                     alignItems: "center",
                                     justifyContent: "center",
-                                    boxShadow: "0 8px 20px rgba(13, 148, 136, 0.4)",
-                                    fontSize: "22px",
+                                    boxShadow: "0 10px 25px rgba(13, 148, 136, 0.5)",
+                                    fontSize: "24px",
                                     color: "#ffffff"
                                 }}
                             >
-                                <ShoppingOutlined />
+                                <ShoppingFilled />
                             </div>
                             <div>
-                                <h3 style={{ margin: 0, fontSize: "22px", fontWeight: 800, letterSpacing: "-0.5px" }}>
-                                    MyStore<span style={{ color: "#5eead4" }}>.</span>
+                                <h3 style={{ margin: 0, fontSize: "24px", fontWeight: 800, letterSpacing: "-0.5px", color: "#ffffff" }}>
+                                    MyStore<span style={{ color: "#34d399" }}>.</span>
                                 </h3>
-                                <p style={{ margin: 0, fontSize: "12px", color: "rgba(255, 255, 255, 0.7)" }}>
-                                    Next-Gen E-Commerce
+                                <p style={{ margin: 0, fontSize: "12px", color: "rgba(255, 255, 255, 0.65)" }}>
+                                    Luxury & Curated Goods
                                 </p>
                             </div>
                         </div>
 
-                        <h2 style={{ fontSize: "28px", fontWeight: 800, lineHeight: 1.25, marginBottom: "16px", color: "#ffffff" }}>
-                            Welcome back to your favorite shopping hub.
+                        <h2 style={{ fontSize: "28px", fontWeight: 800, lineHeight: 1.3, marginBottom: "16px", color: "#ffffff" }}>
+                            Elevate your shopping with next-level ease.
                         </h2>
-                        <p style={{ fontSize: "14px", color: "rgba(255, 255, 255, 0.8)", lineHeight: 1.6, marginBottom: "32px" }}>
-                            Sign in to track orders, manage your wishlist, view exclusive stories and unlock member discounts.
+                        <p style={{ fontSize: "14px", color: "rgba(255, 255, 255, 0.75)", lineHeight: 1.6, marginBottom: "32px" }}>
+                            Access your personalized dashboard, watch live product stories, monitor active orders, and enjoy exclusive member perks.
                         </p>
 
-                        {/* Feature Badges */}
-                        <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+                        {/* Interactive Feature Cards */}
+                        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                             {[
-                                { title: "Instant Express Delivery", desc: "Fast and reliable doorstep dispatch", icon: "⚡" },
-                                { title: "Exclusive Stories & Deals", desc: "Discover viral products first", icon: "🎬" },
-                                { title: "Encrypted & Safe Payments", desc: "100% money back guarantee", icon: "🛡️" }
-                            ].map((item, idx) => (
+                                { title: "Lightning Express Shipping", desc: "Doorstep delivery in 24-48 hours", icon: <ThunderboltFilled style={{ color: "#34d399" }} /> },
+                                { title: "Exclusive Product Stories", desc: "Watch video demos and grab flash discounts", icon: <StarFilled style={{ color: "#fbbf24" }} /> },
+                                { title: "VIP Buyer Protection", desc: "Guaranteed refunds & seamless returns", icon: <SafetyCertificateFilled style={{ color: "#38bdf8" }} /> }
+                            ].map((feat, i) => (
                                 <div
-                                    key={idx}
+                                    key={i}
                                     style={{
                                         display: "flex",
                                         alignItems: "center",
-                                        gap: "12px",
-                                        background: "rgba(255, 255, 255, 0.06)",
+                                        gap: "14px",
+                                        background: "rgba(255, 255, 255, 0.04)",
                                         border: "1px solid rgba(255, 255, 255, 0.08)",
-                                        padding: "10px 14px",
-                                        borderRadius: "14px",
-                                        backdropFilter: "blur(6px)"
+                                        padding: "12px 16px",
+                                        borderRadius: "16px",
+                                        backdropFilter: "blur(10px)"
                                     }}
                                 >
-                                    <span style={{ fontSize: "18px" }}>{item.icon}</span>
+                                    <div
+                                        style={{
+                                            width: "36px",
+                                            height: "36px",
+                                            borderRadius: "10px",
+                                            background: "rgba(255, 255, 255, 0.06)",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            fontSize: "18px"
+                                        }}
+                                    >
+                                        {feat.icon}
+                                    </div>
                                     <div>
-                                        <div style={{ fontSize: "13px", fontWeight: 700, color: "#ffffff" }}>{item.title}</div>
-                                        <div style={{ fontSize: "11px", color: "rgba(255, 255, 255, 0.65)" }}>{item.desc}</div>
+                                        <div style={{ fontSize: "13px", fontWeight: 700, color: "#ffffff" }}>{feat.title}</div>
+                                        <div style={{ fontSize: "11px", color: "rgba(255, 255, 255, 0.6)" }}>{feat.desc}</div>
                                     </div>
                                 </div>
                             ))}
                         </div>
                     </div>
 
-                    {/* Bottom Social Proof Pill */}
+                    {/* Bottom Testimonial Banner */}
                     <div
                         style={{
-                            marginTop: "30px",
-                            padding: "12px 16px",
-                            background: "rgba(0, 0, 0, 0.25)",
-                            border: "1px solid rgba(255, 255, 255, 0.1)",
-                            borderRadius: "16px",
+                            marginTop: "28px",
+                            padding: "14px 18px",
+                            background: "rgba(0, 0, 0, 0.35)",
+                            border: "1px solid rgba(255, 255, 255, 0.08)",
+                            borderRadius: "18px",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "space-between",
                             zIndex: 2
                         }}
                     >
-                        <div style={{ display: "flex", alignItems: "center", gap: "4px", color: "#fbbf24", fontSize: "13px" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "5px", color: "#fbbf24", fontSize: "13px" }}>
                             <StarFilled />
                             <StarFilled />
                             <StarFilled />
                             <StarFilled />
                             <StarFilled />
-                            <span style={{ color: "#ffffff", fontWeight: 700, fontSize: "12px", marginLeft: "4px" }}>4.9/5</span>
+                            <span style={{ color: "#ffffff", fontWeight: 700, fontSize: "12px", marginLeft: "6px" }}>4.9/5.0</span>
                         </div>
-                        <span style={{ fontSize: "11px", color: "#5eead4", fontWeight: 600 }}>10,000+ Happy Customers</span>
+                        <span style={{ fontSize: "12px", color: "#34d399", fontWeight: 700 }}>15,000+ Happy Customers</span>
                     </div>
                 </div>
 
-                {/* ══ RIGHT FORM AREA ══ */}
+                {/* ══ RIGHT FORM CARD (Dark Luxury Glass) ══ */}
                 <div
                     className="col-12 col-lg-7 p-4 p-sm-5 d-flex flex-column justify-content-center"
-                    style={{ background: "#ffffff", minHeight: "580px" }}
+                    style={{
+                        background: "rgba(3, 20, 19, 0.65)",
+                        minHeight: "600px",
+                        position: "relative"
+                    }}
                 >
                     <div style={{ maxWidth: "440px", width: "100%", margin: "0 auto" }}>
 
-                        {/* Top Tab Switcher */}
+                        {/* Switcher Pill */}
                         <div
                             style={{
                                 display: "flex",
-                                background: "#f1f5f9",
+                                background: "rgba(0, 0, 0, 0.4)",
+                                border: "1px solid rgba(255, 255, 255, 0.08)",
                                 padding: "4px",
-                                borderRadius: "14px",
+                                borderRadius: "16px",
                                 marginBottom: "28px"
                             }}
                         >
@@ -363,11 +390,12 @@ const Login = () => {
                                     padding: "10px 0",
                                     fontSize: "14px",
                                     fontWeight: 700,
-                                    borderRadius: "11px",
+                                    borderRadius: "12px",
                                     textDecoration: "none",
-                                    color: "#0f766e",
-                                    background: "#ffffff",
-                                    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.06)",
+                                    color: "#ffffff",
+                                    background: "linear-gradient(135deg, rgba(16, 185, 129, 0.3) 0%, rgba(13, 148, 136, 0.4) 100%)",
+                                    border: "1px solid rgba(52, 211, 153, 0.35)",
+                                    boxShadow: "0 4px 15px rgba(0, 0, 0, 0.3)",
                                     transition: "all 0.2s ease"
                                 }}
                             >
@@ -381,30 +409,32 @@ const Login = () => {
                                     padding: "10px 0",
                                     fontSize: "14px",
                                     fontWeight: 600,
-                                    borderRadius: "11px",
+                                    borderRadius: "12px",
                                     textDecoration: "none",
-                                    color: "#64748b",
+                                    color: "rgba(255, 255, 255, 0.6)",
                                     background: "transparent",
                                     transition: "all 0.2s ease"
                                 }}
+                                onMouseEnter={(e) => { e.currentTarget.style.color = "#ffffff" }}
+                                onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255, 255, 255, 0.6)" }}
                             >
-                                Register
+                                Create Account
                             </Link>
                         </div>
 
-                        {/* Header Text */}
+                        {/* Title Header */}
                         <div style={{ marginBottom: "26px" }}>
-                            <h1 style={{ fontSize: "26px", fontWeight: 800, color: "#0f172a", marginBottom: "6px", letterSpacing: "-0.5px" }}>
+                            <h1 style={{ fontSize: "28px", fontWeight: 800, color: "#ffffff", marginBottom: "8px", letterSpacing: "-0.5px" }}>
                                 Welcome Back 👋
                             </h1>
-                            <p style={{ fontSize: "14px", color: "#64748b", margin: 0 }}>
+                            <p style={{ fontSize: "14px", color: "rgba(255, 255, 255, 0.65)", margin: 0 }}>
                                 Enter your credentials to access your account.
                             </p>
                         </div>
 
-                        {/* Login Form */}
+                        {/* Form */}
                         <form onSubmit={handleLogin}>
-                            {/* Email Field */}
+                            {/* Email */}
                             <div style={{ marginBottom: "20px" }}>
                                 <label
                                     htmlFor="login-email"
@@ -412,7 +442,7 @@ const Login = () => {
                                         display: "block",
                                         fontSize: "13px",
                                         fontWeight: 700,
-                                        color: "#334155",
+                                        color: "rgba(255, 255, 255, 0.9)",
                                         marginBottom: "8px"
                                     }}
                                 >
@@ -425,7 +455,7 @@ const Login = () => {
                                             left: "16px",
                                             top: "50%",
                                             transform: "translateY(-50%)",
-                                            color: "#94a3b8",
+                                            color: "#5eead4",
                                             fontSize: "16px",
                                             pointerEvents: "none"
                                         }}
@@ -436,39 +466,39 @@ const Login = () => {
                                         id="login-email"
                                         type="email"
                                         name="email"
-                                        placeholder="name@example.com"
+                                        placeholder="you@domain.com"
                                         value={state.email}
                                         onChange={handleChange}
                                         required
                                         autoComplete="email"
                                         style={{
                                             width: "100%",
-                                            height: "48px",
+                                            height: "50px",
                                             padding: "0 16px 0 46px",
                                             fontSize: "14px",
-                                            color: "#0f172a",
-                                            background: "#f8fafc",
-                                            border: "1.5px solid #e2e8f0",
-                                            borderRadius: "12px",
+                                            color: "#ffffff",
+                                            background: "rgba(255, 255, 255, 0.05)",
+                                            border: "1px solid rgba(255, 255, 255, 0.12)",
+                                            borderRadius: "14px",
                                             outline: "none",
-                                            transition: "all 0.2s ease",
+                                            transition: "all 0.25s ease",
                                             boxSizing: "border-box"
                                         }}
                                         onFocus={(e) => {
-                                            e.target.style.borderColor = "#0d9488"
-                                            e.target.style.background = "#ffffff"
-                                            e.target.style.boxShadow = "0 0 0 4px rgba(13, 148, 136, 0.12)"
+                                            e.target.style.borderColor = "#34d399"
+                                            e.target.style.background = "rgba(255, 255, 255, 0.08)"
+                                            e.target.style.boxShadow = "0 0 0 4px rgba(52, 211, 153, 0.15)"
                                         }}
                                         onBlur={(e) => {
-                                            e.target.style.borderColor = "#e2e8f0"
-                                            e.target.style.background = "#f8fafc"
+                                            e.target.style.borderColor = "rgba(255, 255, 255, 0.12)"
+                                            e.target.style.background = "rgba(255, 255, 255, 0.05)"
                                             e.target.style.boxShadow = "none"
                                         }}
                                     />
                                 </div>
                             </div>
 
-                            {/* Password Field */}
+                            {/* Password */}
                             <div style={{ marginBottom: "20px" }}>
                                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
                                     <label
@@ -476,7 +506,7 @@ const Login = () => {
                                         style={{
                                             fontSize: "13px",
                                             fontWeight: 700,
-                                            color: "#334155",
+                                            color: "rgba(255, 255, 255, 0.9)",
                                             margin: 0
                                         }}
                                     >
@@ -487,7 +517,7 @@ const Login = () => {
                                         style={{
                                             fontSize: "12px",
                                             fontWeight: 700,
-                                            color: "#0d9488",
+                                            color: "#34d399",
                                             textDecoration: "none"
                                         }}
                                     >
@@ -501,7 +531,7 @@ const Login = () => {
                                             left: "16px",
                                             top: "50%",
                                             transform: "translateY(-50%)",
-                                            color: "#94a3b8",
+                                            color: "#5eead4",
                                             fontSize: "16px",
                                             pointerEvents: "none"
                                         }}
@@ -519,25 +549,25 @@ const Login = () => {
                                         autoComplete="current-password"
                                         style={{
                                             width: "100%",
-                                            height: "48px",
+                                            height: "50px",
                                             padding: "0 46px 0 46px",
                                             fontSize: "14px",
-                                            color: "#0f172a",
-                                            background: "#f8fafc",
-                                            border: "1.5px solid #e2e8f0",
-                                            borderRadius: "12px",
+                                            color: "#ffffff",
+                                            background: "rgba(255, 255, 255, 0.05)",
+                                            border: "1px solid rgba(255, 255, 255, 0.12)",
+                                            borderRadius: "14px",
                                             outline: "none",
-                                            transition: "all 0.2s ease",
+                                            transition: "all 0.25s ease",
                                             boxSizing: "border-box"
                                         }}
                                         onFocus={(e) => {
-                                            e.target.style.borderColor = "#0d9488"
-                                            e.target.style.background = "#ffffff"
-                                            e.target.style.boxShadow = "0 0 0 4px rgba(13, 148, 136, 0.12)"
+                                            e.target.style.borderColor = "#34d399"
+                                            e.target.style.background = "rgba(255, 255, 255, 0.08)"
+                                            e.target.style.boxShadow = "0 0 0 4px rgba(52, 211, 153, 0.15)"
                                         }}
                                         onBlur={(e) => {
-                                            e.target.style.borderColor = "#e2e8f0"
-                                            e.target.style.background = "#f8fafc"
+                                            e.target.style.borderColor = "rgba(255, 255, 255, 0.12)"
+                                            e.target.style.background = "rgba(255, 255, 255, 0.05)"
                                             e.target.style.boxShadow = "none"
                                         }}
                                     />
@@ -552,7 +582,7 @@ const Login = () => {
                                             transform: "translateY(-50%)",
                                             background: "none",
                                             border: "none",
-                                            color: "#64748b",
+                                            color: "rgba(255, 255, 255, 0.6)",
                                             cursor: "pointer",
                                             padding: "6px",
                                             fontSize: "16px",
@@ -565,9 +595,9 @@ const Login = () => {
                                 </div>
                             </div>
 
-                            {/* Remember Me Checkbox */}
-                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "24px" }}>
-                                <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "13px", color: "#475569", userSelect: "none" }}>
+                            {/* Remember me */}
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "26px" }}>
+                                <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "13px", color: "rgba(255, 255, 255, 0.75)", userSelect: "none" }}>
                                     <input
                                         type="checkbox"
                                         checked={rememberMe}
@@ -575,7 +605,7 @@ const Login = () => {
                                         style={{
                                             width: "16px",
                                             height: "16px",
-                                            accentColor: "#0d9488",
+                                            accentColor: "#10b981",
                                             cursor: "pointer",
                                             borderRadius: "4px"
                                         }}
@@ -584,24 +614,25 @@ const Login = () => {
                                 </label>
                             </div>
 
-                            {/* Submit CTA Button */}
+                            {/* Submit Button */}
                             <button
                                 type="submit"
                                 disabled={isProcessing}
                                 style={{
                                     width: "100%",
-                                    height: "50px",
-                                    borderRadius: "14px",
+                                    height: "52px",
+                                    borderRadius: "16px",
                                     border: "none",
                                     background: isProcessing
-                                        ? "#94a3b8"
-                                        : "linear-gradient(135deg, #0d9488 0%, #042f2e 100%)",
+                                        ? "rgba(255, 255, 255, 0.2)"
+                                        : "linear-gradient(135deg, #10b981 0%, #0d9488 60%, #065f46 100%)",
                                     color: "#ffffff",
                                     fontSize: "15px",
-                                    fontWeight: 700,
+                                    fontWeight: 800,
+                                    letterSpacing: "0.2px",
                                     cursor: isProcessing ? "not-allowed" : "pointer",
-                                    boxShadow: isProcessing ? "none" : "0 10px 25px -5px rgba(13, 148, 136, 0.45)",
-                                    transition: "all 0.25s ease",
+                                    boxShadow: isProcessing ? "none" : "0 12px 30px rgba(16, 185, 129, 0.45)",
+                                    transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
                                     display: "flex",
                                     alignItems: "center",
                                     justifyContent: "center",
@@ -610,13 +641,13 @@ const Login = () => {
                                 onMouseEnter={(e) => {
                                     if (!isProcessing) {
                                         e.currentTarget.style.transform = "translateY(-2px)"
-                                        e.currentTarget.style.boxShadow = "0 14px 30px -5px rgba(13, 148, 136, 0.55)"
+                                        e.currentTarget.style.boxShadow = "0 16px 36px rgba(16, 185, 129, 0.55)"
                                     }
                                 }}
                                 onMouseLeave={(e) => {
                                     if (!isProcessing) {
                                         e.currentTarget.style.transform = "translateY(0)"
-                                        e.currentTarget.style.boxShadow = "0 10px 25px -5px rgba(13, 148, 136, 0.45)"
+                                        e.currentTarget.style.boxShadow = "0 12px 30px rgba(16, 185, 129, 0.45)"
                                     }
                                 }}
                             >
@@ -627,23 +658,23 @@ const Login = () => {
                                             role="status"
                                             style={{ width: "18px", height: "18px", borderWidth: "2px" }}
                                         />
-                                        <span>Signing In...</span>
+                                        <span>Signing in securely...</span>
                                     </>
                                 ) : (
                                     <>
-                                        <span>Sign In to MyStore</span>
+                                        <span>Sign In to Account</span>
                                         <span style={{ fontSize: "16px" }}>→</span>
                                     </>
                                 )}
                             </button>
 
-                            {/* Bottom Register Prompt */}
-                            <div style={{ marginTop: "24px", textAlign: "center", fontSize: "13px", color: "#64748b" }}>
+                            {/* Bottom Prompt */}
+                            <div style={{ marginTop: "24px", textAlign: "center", fontSize: "13px", color: "rgba(255, 255, 255, 0.6)" }}>
                                 Don't have an account yet?{" "}
                                 <Link
                                     to="/auth/register"
                                     style={{
-                                        color: "#0d9488",
+                                        color: "#34d399",
                                         fontWeight: 800,
                                         textDecoration: "none",
                                         marginLeft: "4px"
@@ -652,15 +683,14 @@ const Login = () => {
                                     Create Free Account
                                 </Link>
                             </div>
-
                         </form>
                     </div>
                 </div>
             </div>
 
-            {/* Footer Note */}
-            <div style={{ marginTop: "20px", textAlign: "center", fontSize: "12px", color: "#64748b", zIndex: 1 }}>
-                Protected by MyStore Security • All Rights Reserved © {new Date().getFullYear()}
+            {/* Bottom Security Assurance */}
+            <div style={{ marginTop: "24px", textAlign: "center", fontSize: "12px", color: "rgba(255, 255, 255, 0.45)", zIndex: 1 }}>
+                Protected by Cloudflare & SSL 256-Bit Encryption • MyStore © {new Date().getFullYear()}
             </div>
         </main>
     )
