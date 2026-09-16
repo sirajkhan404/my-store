@@ -73,7 +73,7 @@ const Dashboard = () => {
     }
 
     return (
-        <div style={{ display: "flex", minHeight: "100vh", background: "#f8fafc", width: "100%", position: "relative", overflowX: "hidden" }}>
+        <div style={{ display: "flex", height: "100vh", width: "100%", background: "#f8fafc", position: "relative", overflow: "hidden" }}>
 
             {/* ── Mobile Overlay Backdrop ── */}
             {sidebarOpen && (
@@ -122,11 +122,8 @@ const Dashboard = () => {
             <div
                 style={{
                     width: "280px",
-                    minHeight: "100vh",
-                    flexShrink: 0,
-                    position: "sticky",
-                    top: 0,
                     height: "100vh",
+                    flexShrink: 0,
                     background: "linear-gradient(180deg, #042f2e 0%, #032221 60%, #021a19 100%)",
                     borderRight: "1px solid rgba(255, 255, 255, 0.08)",
                     zIndex: 900
@@ -144,7 +141,7 @@ const Dashboard = () => {
             </div>
 
             {/* ── Main Area ── */}
-            <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", background: "#f8fafc" }}>
+            <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", height: "100vh", overflowY: "auto", background: "#f8fafc" }}>
 
                 {/* ── Top Navbar ── */}
                 <header
@@ -278,7 +275,7 @@ const Dashboard = () => {
                 </header>
 
                 {/* ── Page Content ── */}
-                <main style={{ flex: 1, padding: "24px 20px" }}>
+                <main style={{ flex: 1, display: "flex", flexDirection: "column" }}>
                     <Routes />
                 </main>
 
