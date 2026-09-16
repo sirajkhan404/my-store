@@ -47,8 +47,17 @@ const Navbar = () => {
 
     // Lock body scroll when sidebar open
     useEffect(() => {
-        document.body.style.overflow = sidebarOpen ? 'hidden' : '';
-        return () => { document.body.style.overflow = ''; };
+        if (sidebarOpen) {
+            document.body.style.overflow = 'hidden';
+            document.body.style.touchAction = 'none';
+        } else {
+            document.body.style.overflow = '';
+            document.body.style.touchAction = '';
+        }
+        return () => {
+            document.body.style.overflow = '';
+            document.body.style.touchAction = '';
+        };
     }, [sidebarOpen]);
 
     const isActive = (path) => location.pathname === path;
@@ -62,43 +71,52 @@ const Navbar = () => {
 
     return (
         <>
-            <header className="fixed-top w-100" style={{ zIndex: 1100, transition: 'all 0.35s cubic-bezier(0.4, 0, 0.2, 1)' }}>
-                {/* ── Top Announcement Banner ── */}
+            {/* ── Fixed Header Wrapper ── */}
+            <header className="fixed-top w-100" style={{ zIndex: 1040, transition: 'all 0.35s cubic-bezier(0.4, 0, 0.2, 1)' }}>
+                {/* ── Top Announcement Banner (Responsive) ── */}
                 {showTopBar && (
                     <div
-                        className="py-1 px-3 d-flex align-items-center justify-content-between text-white position-relative"
+                        className="py-1 px-2 px-sm-3 d-flex align-items-center justify-content-between text-white position-relative"
                         style={{
                             background: 'linear-gradient(90deg, #042f2e 0%, #0d9488 50%, #042f2e 100%)',
-                            fontSize: '12px',
+                            fontSize: '11.5px',
                             borderBottom: '1px solid rgba(94,234,212,0.15)',
-                            letterSpacing: '0.3px',
+                            letterSpacing: '0.2px',
                         }}
                     >
-                        <div className="container d-flex align-items-center justify-content-center justify-content-md-between text-center">
-                            <div className="d-flex align-items-center gap-2 mx-auto mx-md-0">
-                                <span className="badge rounded-pill bg-warning text-dark fw-bold px-2 py-0.5" style={{ fontSize: '10px' }}>
-                                    LIMITED OFFER
+                        <div className="container-fluid container-lg d-flex align-items-center justify-content-between text-center px-2">
+                            <div className="d-flex align-items-center gap-1.5 gap-sm-2 mx-auto mx-md-0 text-truncate">
+                                <span className="badge rounded-pill bg-warning text-dark fw-bold px-1.5 py-0.5 d-none d-sm-inline-block" style={{ fontSize: '9.5px' }}>
+                                    OFFER
                                 </span>
                                 <span className="fw-medium text-truncate">
-                                    ⚡ Free Shipping on orders over <strong className="text-warning">$50</strong> | Use Code: <span className="badge bg-white bg-opacity-20 text-white font-monospace px-1">STORE20</span>
+                                    ⚡ Free Delivery over <strong className="text-warning">$50</strong> | Code: <span className="badge bg-white bg-opacity-20 text-white font-monospace px-1">STORE20</span>
                                 </span>
                             </div>
                             <div className="d-none d-md-flex align-items-center gap-3">
                                 <span className="text-white-50">✨ 24/7 Dedicated Support</span>
                                 <button
                                     onClick={() => setShowTopBar(false)}
-                                    className="btn btn-link p-0 text-white text-opacity-75 hover-text-white text-decoration-none"
-                                    style={{ fontSize: '14px', lineHeight: 1 }}
+                                    className="btn btn-link p-0 text-white text-opacity-75 hover-text-white text-decoration-none border-0 shadow-none"
+                                    style={{ fontSize: '13px', lineHeight: 1 }}
                                     title="Close banner"
                                 >
                                     ✕
                                 </button>
                             </div>
+                            <button
+                                onClick={() => setShowTopBar(false)}
+                                className="btn btn-link p-0 text-white text-opacity-75 hover-text-white text-decoration-none border-0 shadow-none d-md-none ms-1"
+                                style={{ fontSize: '13px', lineHeight: 1 }}
+                                title="Close banner"
+                            >
+                                ✕
+                            </button>
                         </div>
                     </div>
                 )}
 
-                {/* ── Main Glassmorphic Navigation Bar ── */}
+                {/* ── Main Responsive Navbar ── */}
                 <nav
                     className="transition-all"
                     style={{
@@ -111,27 +129,27 @@ const Navbar = () => {
                             ? '1px solid rgba(94, 234, 212, 0.2)'
                             : '1px solid rgba(13, 148, 136, 0.12)',
                         boxShadow: scrolled
-                            ? '0 12px 36px -10px rgba(0, 0, 0, 0.35)'
+                            ? '0 10px 30px -10px rgba(0, 0, 0, 0.35)'
                             : '0 4px 20px -2px rgba(13, 148, 136, 0.08)',
-                        padding: scrolled ? '10px 0' : '14px 0',
+                        padding: scrolled ? '8px 0' : '12px 0',
                         transition: 'all 0.35s ease',
                     }}
                 >
-                    <div className="container d-flex align-items-center justify-content-between">
+                    <div className="container-fluid container-lg px-3 px-sm-4 d-flex align-items-center justify-content-between">
                         {/* ── Brand Logo ── */}
                         <Link
                             to="/"
-                            className="d-flex align-items-center gap-2 text-decoration-none"
+                            className="d-flex align-items-center gap-2 text-decoration-none flex-shrink-0"
                             style={{ transition: 'transform 0.2s ease' }}
                         >
                             <div
                                 className="rounded-3 d-flex align-items-center justify-content-center shadow-sm"
                                 style={{
-                                    width: '40px',
-                                    height: '40px',
+                                    width: '38px',
+                                    height: '38px',
                                     background: 'linear-gradient(135deg, #0d9488 0%, #042f2e 100%)',
                                     border: '1.5px solid rgba(94, 234, 212, 0.4)',
-                                    fontSize: '20px',
+                                    fontSize: '18px',
                                 }}
                             >
                                 🛍️
@@ -149,8 +167,8 @@ const Navbar = () => {
                                 </span>
                                 <span
                                     style={{
-                                        fontSize: '9.5px',
-                                        letterSpacing: '1.5px',
+                                        fontSize: '9px',
+                                        letterSpacing: '1.2px',
                                         textTransform: 'uppercase',
                                         fontWeight: 700,
                                         color: scrolled ? '#5eead4' : '#0f766e',
@@ -162,7 +180,7 @@ const Navbar = () => {
                             </div>
                         </Link>
 
-                        {/* ── Desktop Center Navigation Links (Floating Pill Style) ── */}
+                        {/* ── Desktop Center Nav Links (Hidden on mobile/tablet < 992px) ── */}
                         <div
                             className="d-none d-lg-flex align-items-center gap-1 p-1 rounded-pill"
                             style={{
@@ -182,7 +200,7 @@ const Navbar = () => {
                                         to={l.to}
                                         className="position-relative px-3 py-1.5 rounded-pill text-decoration-none d-flex align-items-center gap-1.5 transition-all"
                                         style={{
-                                            fontSize: '14.5px',
+                                            fontSize: '14px',
                                             fontWeight: active ? 700 : 500,
                                             color: active
                                                 ? (scrolled ? '#ffffff' : '#042f2e')
@@ -220,16 +238,16 @@ const Navbar = () => {
                             })}
                         </div>
 
-                        {/* ── Desktop Right Actions (Cart + Account / Auth CTA) ── */}
+                        {/* ── Desktop Right Actions (Hidden on mobile/tablet < 992px) ── */}
                         <div className="d-none d-lg-flex align-items-center gap-2.5">
-                            {/* 🛒 Cart Button with Animated Counter Badge */}
+                            {/* 🛒 Cart Button */}
                             <button
                                 onClick={() => setCartOpen(true)}
-                                className="btn position-relative rounded-pill d-flex align-items-center gap-2 fw-semibold"
+                                className="btn position-relative rounded-pill d-flex align-items-center gap-2 fw-semibold border-0"
                                 style={{
                                     background: scrolled
-                                        ? 'rgba(13, 148, 136, 0.25)'
-                                        : 'rgba(13, 148, 136, 0.08)',
+                                        ? 'rgba(13, 148, 136, 0.3)'
+                                        : 'rgba(13, 148, 136, 0.09)',
                                     color: scrolled ? '#5eead4' : '#0d9488',
                                     border: scrolled
                                         ? '1px solid rgba(94, 234, 212, 0.35)'
@@ -259,7 +277,7 @@ const Navbar = () => {
                                 )}
                             </button>
 
-                            {/* ── User Profile Dropdown or Login / Sign Up ── */}
+                            {/* ── User Profile Dropdown or Auth ── */}
                             {isAuth ? (
                                 <div className="position-relative" ref={dropdownRef}>
                                     <button
@@ -323,7 +341,6 @@ const Navbar = () => {
                                                 animation: 'navFadeDown 0.18s cubic-bezier(0.16, 1, 0.3, 1)',
                                             }}
                                         >
-                                            {/* User Header */}
                                             <div className="px-3 py-2.5 mb-1" style={{ background: 'linear-gradient(135deg, #f0fdfa, #e6fffa)', borderBottom: '1px solid #ccfbf1' }}>
                                                 <div className="fw-bold text-dark text-truncate" style={{ fontSize: '14px' }}>
                                                     {user?.fullName || 'User'}
@@ -346,7 +363,6 @@ const Navbar = () => {
                                                 </div>
                                             </div>
 
-                                            {/* Menu items */}
                                             <div className="px-1 py-1">
                                                 <Link
                                                     to="/dashboard"
@@ -357,7 +373,6 @@ const Navbar = () => {
                                                     <span style={{ fontSize: '16px' }}>📊</span>
                                                     <span>Dashboard</span>
                                                 </Link>
-
                                                 <Link
                                                     to="/dashboard/profile"
                                                     className="d-flex align-items-center gap-2.5 px-3 py-2 rounded-3 text-decoration-none text-dark fw-semibold transition-all hover-nav-item"
@@ -367,7 +382,6 @@ const Navbar = () => {
                                                     <span style={{ fontSize: '16px' }}>👤</span>
                                                     <span>My Profile</span>
                                                 </Link>
-
                                                 <Link
                                                     to="/dashboard/orders"
                                                     className="d-flex align-items-center gap-2.5 px-3 py-2 rounded-3 text-decoration-none text-dark fw-semibold transition-all hover-nav-item"
@@ -377,7 +391,6 @@ const Navbar = () => {
                                                     <span style={{ fontSize: '16px' }}>📋</span>
                                                     <span>My Orders</span>
                                                 </Link>
-
                                                 {user?.role === 'superAdmin' && (
                                                     <Link
                                                         to="/dashboard/messages"
@@ -393,7 +406,6 @@ const Navbar = () => {
 
                                             <div className="border-top my-1" style={{ borderColor: '#f1f5f9' }} />
 
-                                            {/* Logout Button */}
                                             <div className="px-1">
                                                 <button
                                                     type="button"
@@ -441,12 +453,12 @@ const Navbar = () => {
                             )}
                         </div>
 
-                        {/* ── Mobile Action Buttons (Cart + Hamburger) ── */}
+                        {/* ── Mobile / Tablet Actions (Visible on < 992px) ── */}
                         <div className="d-flex d-lg-none align-items-center gap-2">
                             {/* Mobile Cart Button */}
                             <button
                                 onClick={() => setCartOpen(true)}
-                                className="btn position-relative rounded-pill d-flex align-items-center justify-content-center p-2"
+                                className="btn position-relative rounded-pill d-flex align-items-center justify-content-center p-0 border-0"
                                 style={{
                                     background: scrolled ? 'rgba(13, 148, 136, 0.3)' : 'rgba(13, 148, 136, 0.1)',
                                     color: scrolled ? '#5eead4' : '#0d9488',
@@ -454,21 +466,22 @@ const Navbar = () => {
                                     width: '38px',
                                     height: '38px',
                                 }}
+                                aria-label="Open Cart"
                             >
-                                <span style={{ fontSize: '17px' }}>🛒</span>
+                                <span style={{ fontSize: '18px' }}>🛒</span>
                                 {totalItems > 0 && (
                                     <span
                                         className="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle"
-                                        style={{ fontSize: '9px', padding: '2px 5px' }}
+                                        style={{ fontSize: '9.5px', padding: '2px 5.5px' }}
                                     >
                                         {totalItems}
                                     </span>
                                 )}
                             </button>
 
-                            {/* Animated Hamburger Button */}
+                            {/* Mobile Animated Hamburger Button */}
                             <button
-                                className="btn p-2 rounded-3 border-0 d-flex flex-column justify-content-center align-items-center gap-1.5"
+                                className="btn p-0 rounded-3 border-0 d-flex flex-column justify-content-center align-items-center gap-1"
                                 style={{
                                     width: '38px',
                                     height: '38px',
@@ -476,21 +489,21 @@ const Navbar = () => {
                                     border: scrolled ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid rgba(13, 148, 136, 0.15)',
                                 }}
                                 onClick={() => setSidebarOpen(o => !o)}
-                                aria-label="Toggle navigation"
+                                aria-label="Toggle navigation menu"
                             >
                                 <span
                                     style={{
-                                        width: '20px',
+                                        width: '18px',
                                         height: '2px',
                                         background: scrolled ? '#5eead4' : '#042f2e',
                                         borderRadius: '2px',
                                         transition: 'all 0.3s ease',
-                                        transform: sidebarOpen ? 'rotate(45deg) translate(3px, 5px)' : 'none',
+                                        transform: sidebarOpen ? 'rotate(45deg) translate(2.5px, 4px)' : 'none',
                                     }}
                                 />
                                 <span
                                     style={{
-                                        width: '20px',
+                                        width: '18px',
                                         height: '2px',
                                         background: scrolled ? '#5eead4' : '#042f2e',
                                         borderRadius: '2px',
@@ -500,12 +513,12 @@ const Navbar = () => {
                                 />
                                 <span
                                     style={{
-                                        width: '20px',
+                                        width: '18px',
                                         height: '2px',
                                         background: scrolled ? '#5eead4' : '#042f2e',
                                         borderRadius: '2px',
                                         transition: 'all 0.3s ease',
-                                        transform: sidebarOpen ? 'rotate(-45deg) translate(3px, -5px)' : 'none',
+                                        transform: sidebarOpen ? 'rotate(-45deg) translate(2.5px, -4px)' : 'none',
                                     }}
                                 />
                             </button>
@@ -514,41 +527,42 @@ const Navbar = () => {
                 </nav>
             </header>
 
-            {/* Spacer so page content never goes underneath navbar */}
+            {/* Responsive Spacer so page content never goes underneath navbar */}
             <div
                 style={{
-                    height: showTopBar ? (scrolled ? '68px' : '82px') : (scrolled ? '50px' : '64px'),
+                    height: showTopBar ? (scrolled ? '66px' : '78px') : (scrolled ? '48px' : '60px'),
                     transition: 'height 0.35s ease',
                 }}
             />
 
-            {/* ── Mobile Sidebar Drawer Overlay ── */}
+            {/* ── Mobile Sidebar Drawer Overlay (High z-index) ── */}
             <div
                 className={`position-fixed top-0 start-0 w-100 h-100 transition-all ${sidebarOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
                 style={{
-                    zIndex: 1250,
-                    background: 'rgba(4, 47, 46, 0.65)',
-                    backdropFilter: 'blur(6px)',
-                    WebkitBackdropFilter: 'blur(6px)',
-                    transition: 'all 0.3s ease',
+                    zIndex: 9998,
+                    background: 'rgba(4, 47, 46, 0.7)',
+                    backdropFilter: 'blur(8px)',
+                    WebkitBackdropFilter: 'blur(8px)',
+                    transition: 'opacity 0.3s ease, visibility 0.3s ease',
                 }}
                 onClick={() => setSidebarOpen(false)}
             />
 
-            {/* ── Mobile Sidebar Drawer Content ── */}
+            {/* ── Mobile Sidebar Drawer (High z-index) ── */}
             <div
                 className="position-fixed top-0 h-100 bg-white shadow-2xl d-flex flex-column"
                 style={{
-                    width: '310px',
+                    width: '300px',
                     maxWidth: '85vw',
                     left: sidebarOpen ? '0' : '-100%',
-                    zIndex: 1300,
-                    transition: 'left 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
+                    zIndex: 9999,
+                    transition: 'left 0.32s cubic-bezier(0.16, 1, 0.3, 1)',
+                    boxShadow: sidebarOpen ? '0 0 50px rgba(0, 0, 0, 0.4)' : 'none',
                 }}
             >
                 {/* Header in Drawer */}
                 <div
-                    className="p-4 text-white d-flex align-items-center justify-content-between"
+                    className="p-3.5 px-4 text-white d-flex align-items-center justify-content-between"
                     style={{
                         background: 'linear-gradient(135deg, #042f2e 0%, #0d9488 100%)',
                         borderBottom: '1px solid rgba(94, 234, 212, 0.2)',
@@ -558,8 +572,8 @@ const Navbar = () => {
                         <div
                             className="rounded-3 d-flex align-items-center justify-content-center shadow-sm"
                             style={{
-                                width: '38px',
-                                height: '38px',
+                                width: '36px',
+                                height: '36px',
                                 background: 'rgba(255, 255, 255, 0.15)',
                                 border: '1px solid rgba(94, 234, 212, 0.4)',
                                 fontSize: '18px',
@@ -567,14 +581,15 @@ const Navbar = () => {
                         >
                             🛍️
                         </div>
-                        <span className="fw-black fs-4 text-white tracking-tight">
+                        <span className="fw-bold fs-4 text-white tracking-tight">
                             My<span style={{ color: '#5eead4' }}>Store</span>
                         </span>
                     </Link>
                     <button
-                        className="btn btn-sm text-white rounded-circle p-1 d-flex align-items-center justify-content-center"
+                        className="btn btn-sm text-white rounded-circle p-0 d-flex align-items-center justify-content-center border-0 shadow-none"
                         style={{ width: '32px', height: '32px', background: 'rgba(255, 255, 255, 0.15)' }}
                         onClick={() => setSidebarOpen(false)}
+                        aria-label="Close menu"
                     >
                         ✕
                     </button>
@@ -586,7 +601,7 @@ const Navbar = () => {
                         <div className="d-flex align-items-center gap-2.5">
                             <div
                                 className="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold overflow-hidden shadow-sm flex-shrink-0"
-                                style={{ width: '42px', height: '42px', background: 'linear-gradient(135deg, #0d9488, #042f2e)' }}
+                                style={{ width: '40px', height: '40px', background: 'linear-gradient(135deg, #0d9488, #042f2e)' }}
                             >
                                 {user?.profilePicture ? (
                                     <img src={user.profilePicture} alt="DP" className="w-100 h-100 object-fit-cover" />
@@ -595,13 +610,13 @@ const Navbar = () => {
                                 )}
                             </div>
                             <div className="min-width-0">
-                                <div className="fw-bold text-dark text-truncate" style={{ fontSize: '14px' }}>
+                                <div className="fw-bold text-dark text-truncate" style={{ fontSize: '13.5px' }}>
                                     {user?.fullName || 'User'}
                                 </div>
                                 <div className="text-muted text-truncate" style={{ fontSize: '11px' }}>
                                     {user?.email}
                                 </div>
-                                <span className="badge rounded-pill mt-1" style={{ fontSize: '9.5px', background: user?.role === 'superAdmin' ? '#f59e0b' : '#0d9488', color: '#ffffff' }}>
+                                <span className="badge rounded-pill mt-1" style={{ fontSize: '9px', background: user?.role === 'superAdmin' ? '#f59e0b' : '#0d9488', color: '#ffffff' }}>
                                     {user?.role === 'superAdmin' ? '👑 Super Admin' : '🛍 Member'}
                                 </span>
                             </div>
@@ -609,9 +624,9 @@ const Navbar = () => {
                     </div>
                 )}
 
-                {/* Nav Links */}
+                {/* Nav Links List */}
                 <div className="flex-grow-1 py-3 px-3 overflow-auto">
-                    <div className="text-muted fw-bold text-uppercase px-2 mb-2" style={{ fontSize: '11px', letterSpacing: '1px' }}>
+                    <div className="text-muted fw-bold text-uppercase px-2 mb-2" style={{ fontSize: '10.5px', letterSpacing: '1px' }}>
                         Navigation
                     </div>
                     <div className="d-flex flex-column gap-1">
@@ -623,18 +638,18 @@ const Navbar = () => {
                                     to={l.to}
                                     className="d-flex align-items-center justify-content-between px-3 py-2.5 rounded-3 text-decoration-none fw-semibold transition-all"
                                     style={{
-                                        fontSize: '15px',
+                                        fontSize: '14.5px',
                                         background: active ? 'linear-gradient(135deg, #0d9488, #0f766e)' : 'transparent',
                                         color: active ? '#ffffff' : '#374151',
                                     }}
                                     onClick={() => setSidebarOpen(false)}
                                 >
                                     <div className="d-flex align-items-center gap-3">
-                                        <span style={{ fontSize: '18px' }}>{l.icon}</span>
+                                        <span style={{ fontSize: '17px' }}>{l.icon}</span>
                                         <span>{l.label}</span>
                                     </div>
                                     {l.badge && (
-                                        <span className="badge bg-warning text-dark rounded-pill fw-bold" style={{ fontSize: '10px' }}>
+                                        <span className="badge bg-warning text-dark rounded-pill fw-bold" style={{ fontSize: '9.5px' }}>
                                             {l.badge}
                                         </span>
                                     )}
@@ -645,14 +660,14 @@ const Navbar = () => {
 
                     {isAuth && (
                         <>
-                            <div className="text-muted fw-bold text-uppercase px-2 mt-4 mb-2" style={{ fontSize: '11px', letterSpacing: '1px' }}>
+                            <div className="text-muted fw-bold text-uppercase px-2 mt-4 mb-2" style={{ fontSize: '10.5px', letterSpacing: '1px' }}>
                                 My Account
                             </div>
                             <div className="d-flex flex-column gap-1">
                                 <Link
                                     to="/dashboard"
-                                    className="d-flex align-items-center gap-3 px-3 py-2.5 rounded-3 text-decoration-none text-dark fw-semibold"
-                                    style={{ fontSize: '14.5px' }}
+                                    className="d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none text-dark fw-semibold"
+                                    style={{ fontSize: '14px' }}
                                     onClick={() => setSidebarOpen(false)}
                                 >
                                     <span>📊</span>
@@ -660,8 +675,8 @@ const Navbar = () => {
                                 </Link>
                                 <Link
                                     to="/dashboard/profile"
-                                    className="d-flex align-items-center gap-3 px-3 py-2.5 rounded-3 text-decoration-none text-dark fw-semibold"
-                                    style={{ fontSize: '14.5px' }}
+                                    className="d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none text-dark fw-semibold"
+                                    style={{ fontSize: '14px' }}
                                     onClick={() => setSidebarOpen(false)}
                                 >
                                     <span>👤</span>
@@ -669,8 +684,8 @@ const Navbar = () => {
                                 </Link>
                                 <Link
                                     to="/dashboard/orders"
-                                    className="d-flex align-items-center gap-3 px-3 py-2.5 rounded-3 text-decoration-none text-dark fw-semibold"
-                                    style={{ fontSize: '14.5px' }}
+                                    className="d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none text-dark fw-semibold"
+                                    style={{ fontSize: '14px' }}
                                     onClick={() => setSidebarOpen(false)}
                                 >
                                     <span>📋</span>
@@ -679,8 +694,8 @@ const Navbar = () => {
                                 {user?.role === 'superAdmin' && (
                                     <Link
                                         to="/dashboard/messages"
-                                        className="d-flex align-items-center gap-3 px-3 py-2.5 rounded-3 text-decoration-none text-dark fw-semibold"
-                                        style={{ fontSize: '14.5px' }}
+                                        className="d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none text-dark fw-semibold"
+                                        style={{ fontSize: '14px' }}
                                         onClick={() => setSidebarOpen(false)}
                                     >
                                         <span>💬</span>
@@ -696,12 +711,12 @@ const Navbar = () => {
                 <div className="p-3 border-top bg-light">
                     {/* Cart Trigger */}
                     <button
-                        className="btn w-100 rounded-pill py-2.5 fw-bold mb-2.5 d-flex align-items-center justify-content-center gap-2"
+                        className="btn w-100 rounded-pill py-2.5 fw-bold mb-2.5 d-flex align-items-center justify-content-center gap-2 border-0"
                         style={{
                             background: 'linear-gradient(135deg, #0d9488, #0f766e)',
                             color: '#ffffff',
-                            border: 'none',
                             boxShadow: '0 4px 12px rgba(13, 148, 136, 0.3)',
+                            fontSize: '14px',
                         }}
                         onClick={() => {
                             setSidebarOpen(false);
@@ -710,7 +725,7 @@ const Navbar = () => {
                     >
                         <span>🛒 View Cart</span>
                         {totalItems > 0 && (
-                            <span className="badge rounded-pill bg-warning text-dark px-2 py-1" style={{ fontSize: '11px' }}>
+                            <span className="badge rounded-pill bg-warning text-dark px-2 py-0.5" style={{ fontSize: '10.5px' }}>
                                 {totalItems} items
                             </span>
                         )}
@@ -719,6 +734,7 @@ const Navbar = () => {
                     {isAuth ? (
                         <button
                             className="btn btn-outline-danger w-100 rounded-pill py-2 fw-semibold d-flex align-items-center justify-content-center gap-2"
+                            style={{ fontSize: '14px' }}
                             onClick={() => {
                                 handleLogout();
                                 setSidebarOpen(false);
@@ -731,14 +747,15 @@ const Navbar = () => {
                             <Link
                                 to="/auth/login"
                                 className="btn btn-outline-secondary w-100 rounded-pill py-2 fw-semibold"
+                                style={{ fontSize: '14px' }}
                                 onClick={() => setSidebarOpen(false)}
                             >
                                 Log In
                             </Link>
                             <Link
                                 to="/auth/register"
-                                className="btn w-100 rounded-pill py-2 fw-semibold text-white shadow-sm"
-                                style={{ background: 'linear-gradient(135deg, #042f2e, #0d9488)', border: 'none' }}
+                                className="btn w-100 rounded-pill py-2 fw-semibold text-white shadow-sm border-0"
+                                style={{ background: 'linear-gradient(135deg, #042f2e, #0d9488)', fontSize: '14px' }}
                                 onClick={() => setSidebarOpen(false)}
                             >
                                 Create Free Account →
@@ -751,7 +768,7 @@ const Navbar = () => {
             {/* ── Cart Drawer (Global) ── */}
             <CartSidebar isOpen={cartOpen} onClose={() => setCartOpen(false)} />
 
-            {/* Custom Embedded CSS for Hover & Animations */}
+            {/* Custom Scoped CSS */}
             <style>{`
                 @keyframes navFadeDown {
                     from {
