@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { 
     CloseOutlined, 
     LeftOutlined, 
@@ -9,15 +10,34 @@ import {
     SoundOutlined,
     MutedOutlined,
     PauseOutlined,
-    CaretRightOutlined
+    CaretRightOutlined,
+    HeartFilled,
+    HeartOutlined
 } from '@ant-design/icons';
+import { useAuth } from '@/context/Auth';
+
+const getVisitorId = () => {
+    let vid = localStorage.getItem('mystore_visitor_id');
+    if (!vid) {
+        vid = 'v_' + Math.random().toString(36).substring(2, 11) + Date.now().toString(36);
+        localStorage.setItem('mystore_visitor_id', vid);
+    }
+    return vid;
+};
 
 const StoryViewer = ({ stories = [], initialIndex = 0, onClose }) => {
     const navigate = useNavigate();
+    const { user } = useAuth();
     const [currentIndex, setCurrentIndex] = useState(initialIndex);
     const [progress, setProgress] = useState(0); // 0 to 100
     const [isPaused, setIsPaused] = useState(false);
     const [isMuted, setIsMuted] = useState(true);
+
+    // Likes tracking
+    const [likesState, setLikesState] = useState({}); // { [storyId]: { isLiked: boolean, count: number } }
+    const [showHeartBurst, setShowHeartBurst] = useState(false);
+
+    const visitorId = user?.uid || getVisitorId();
 
     const activeStories = stories.filter(s => s.isActive !== false);
     const currentStory = activeStories[currentIndex] || activeStories[0];
@@ -28,6 +48,73 @@ const StoryViewer = ({ stories = [], initialIndex = 0, onClose }) => {
 
     const progressTimerRef = useRef(null);
     const videoRef = useRef(null);
+    const lastTapRef = useRef(0);
+
+    // Initialize likes for current story
+    useEffect(() => {
+        if (!currentStory) return;
+        const sId = currentStory.id;
+        const initialLikes = Array.isArray(currentStory.likes) ? currentStory.likes : [];
+        const isUserLiked = initialLikes.includes(visitorId);
+        const count = currentStory.likesCount !== undefined ? currentStory.likesCount : initialLikes.length;
+
+        setLikesState(prev => ({
+            ...prev,
+            [sId]: prev[sId] || { isLiked: isUserLiked, count: count }
+        }));
+    }, [currentStory, visitorId]);
+
+    // Handle Like Toggle
+    const handleToggleLike = async (e) => {
+        if (e) e.stopPropagation();
+        if (!currentStory) return;
+
+        const sId = currentStory.id;
+        const currentState = likesState[sId] || {
+            isLiked: Array.isArray(currentStory.likes) && currentStory.likes.includes(visitorId),
+            count: currentStory.likesCount || 0
+        };
+
+        const newIsLiked = !currentState.isLiked;
+        const newCount = newIsLiked ? currentState.count + 1 : Math.max(0, currentState.count - 1);
+
+        // Optimistic UI update
+        setLikesState(prev => ({
+            ...prev,
+            [sId]: { isLiked: newIsLiked, count: newCount }
+        }));
+
+        if (newIsLiked) {
+            setShowHeartBurst(true);
+            setTimeout(() => setShowHeartBurst(false), 900);
+        }
+
+        try {
+            const jwt = localStorage.getItem('jwt');
+            const headers = jwt ? { Authorization: `Bearer ${jwt}` } : {};
+            const res = await axios.post(`${window.api}/api/stories/like/${sId}`, { userId: visitorId }, { headers });
+            if (res.data) {
+                setLikesState(prev => ({
+                    ...prev,
+                    [sId]: { isLiked: res.data.isLiked, count: res.data.likesCount }
+                }));
+            }
+        } catch (err) {
+            console.error('Like error:', err);
+        }
+    };
+
+    // Double tap handler for instant like
+    const handleDoubleTap = (e) => {
+        const now = Date.now();
+        const DOUBLE_TAP_DELAY = 300;
+        if (now - lastTapRef.current < DOUBLE_TAP_DELAY) {
+            handleToggleLike(e);
+            lastTapRef.current = 0;
+        } else {
+            lastTapRef.current = now;
+        }
+    };
 
     // Go to next story
     const handleNext = () => {
@@ -95,6 +182,7 @@ const StoryViewer = ({ stories = [], initialIndex = 0, onClose }) => {
             if (e.key === 'Escape') onClose();
             if (e.key === 'ArrowRight') handleNext();
             if (e.key === 'ArrowLeft') handlePrev();
+            if (e.key === 'l' || e.key === 'L') handleToggleLike();
             if (e.key === ' ') {
                 e.preventDefault();
                 setIsPaused(p => !p);
@@ -102,11 +190,15 @@ const StoryViewer = ({ stories = [], initialIndex = 0, onClose }) => {
         };
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [currentIndex, isPaused]);
+    }, [currentIndex, isPaused, likesState]);
 
     if (!currentStory) return null;
 
     const isVideo = currentStory.mediaType === 'video' || currentStory.mediaURL?.endsWith('.mp4');
+    const currentLikeInfo = likesState[currentStory.id] || {
+        isLiked: Array.isArray(currentStory.likes) && currentStory.likes.includes(visitorId),
+        count: currentStory.likesCount || 0
+    };
 
     const handleProductClick = (e) => {
         e.stopPropagation();
@@ -195,8 +287,32 @@ const StoryViewer = ({ stories = [], initialIndex = 0, onClose }) => {
                             from { transform: scale(1); }
                             to { transform: scale(1.05); }
                         }
+                        @keyframes heartPop {
+                            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+                            50% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
+                            80% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.9; }
+                            100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+                        }
                     `}</style>
                 </div>
+
+                {/* ══ Big Heart Burst Animation on Double Tap / Like ══ */}
+                {showHeartBurst && (
+                    <div style={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        zIndex: 15,
+                        pointerEvents: 'none',
+                        animation: 'heartPop 0.8s ease-out forwards',
+                        color: '#ff2b56',
+                        fontSize: '92px',
+                        filter: 'drop-shadow(0 10px 30px rgba(255, 43, 86, 0.7))'
+                    }}>
+                        <HeartFilled />
+                    </div>
+                )}
 
                 {/* ══ Top Gradient Shade & Progress Bars ══ */}
                 <div style={{
@@ -355,8 +471,11 @@ const StoryViewer = ({ stories = [], initialIndex = 0, onClose }) => {
                     </div>
                 </div>
 
-                {/* ══ Tap Left / Right Areas ══ */}
-                <div style={{ position: 'absolute', inset: 0, zIndex: 5, display: 'flex' }}>
+                {/* ══ Tap Left / Right Areas (with Double Tap detection) ══ */}
+                <div 
+                    style={{ position: 'absolute', inset: 0, zIndex: 5, display: 'flex' }}
+                    onClick={handleDoubleTap}
+                >
                     <div
                         onClick={(e) => { e.stopPropagation(); handlePrev(); }}
                         style={{ width: '35%', height: '100%', cursor: 'pointer' }}
@@ -367,7 +486,7 @@ const StoryViewer = ({ stories = [], initialIndex = 0, onClose }) => {
                     />
                 </div>
 
-                {/* ══ Bottom Info & Interactive Product Pill ══ */}
+                {/* ══ Bottom Info, Interactive Product Pill & Like Button ══ */}
                 <div style={{
                     position: 'relative',
                     zIndex: 10,
@@ -403,7 +522,8 @@ const StoryViewer = ({ stories = [], initialIndex = 0, onClose }) => {
                                 justifyContent: 'space-between',
                                 cursor: 'pointer',
                                 transition: 'all 0.2s ease',
-                                boxShadow: '0 10px 25px rgba(0,0,0,0.4)'
+                                boxShadow: '0 10px 25px rgba(0,0,0,0.4)',
+                                marginBottom: '14px'
                             }}
                             onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.25)'}
                             onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.15)'}
@@ -479,12 +599,57 @@ const StoryViewer = ({ stories = [], initialIndex = 0, onClose }) => {
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                gap: '8px'
+                                gap: '8px',
+                                marginBottom: '14px'
                             }}
                         >
                             <ShoppingOutlined style={{ color: '#5eead4' }} /> Explore All Products →
                         </div>
                     )}
+
+                    {/* ══ Interactive Like Bar (Heart Button & Likes Count) ══ */}
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: '4px 8px'
+                    }}>
+                        <div style={{ color: 'rgba(255, 255, 255, 0.65)', fontSize: '12px', fontStyle: 'italic' }}>
+                            Double-tap or tap ❤️ to like
+                        </div>
+
+                        <button
+                            onClick={handleToggleLike}
+                            style={{
+                                background: currentLikeInfo.isLiked 
+                                    ? 'linear-gradient(135deg, rgba(239, 68, 68, 0.35), rgba(244, 63, 94, 0.25))' 
+                                    : 'rgba(255, 255, 255, 0.15)',
+                                backdropFilter: 'blur(12px)',
+                                border: currentLikeInfo.isLiked ? '1px solid rgba(239, 68, 68, 0.6)' : '1px solid rgba(255, 255, 255, 0.25)',
+                                color: currentLikeInfo.isLiked ? '#ff3b5c' : '#ffffff',
+                                padding: '8px 16px',
+                                borderRadius: '30px',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                fontSize: '14px',
+                                fontWeight: 700,
+                                transition: 'all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                                transform: currentLikeInfo.isLiked ? 'scale(1.05)' : 'scale(1)',
+                                boxShadow: currentLikeInfo.isLiked ? '0 4px 16px rgba(255, 59, 92, 0.4)' : 'none'
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+                            onMouseLeave={(e) => e.currentTarget.style.transform = currentLikeInfo.isLiked ? 'scale(1.05)' : 'scale(1)'}
+                        >
+                            {currentLikeInfo.isLiked ? (
+                                <HeartFilled style={{ fontSize: '18px', color: '#ff2b56' }} />
+                            ) : (
+                                <HeartOutlined style={{ fontSize: '18px' }} />
+                            )}
+                            <span>{currentLikeInfo.count > 0 ? currentLikeInfo.count : 'Like'}</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 

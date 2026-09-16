@@ -11,7 +11,8 @@ import {
     ClockCircleOutlined,
     CloudUploadOutlined,
     LinkOutlined,
-    ThunderboltOutlined
+    ThunderboltOutlined,
+    HeartFilled
 } from '@ant-design/icons';
 import { Modal, Tooltip, Switch, Popconfirm } from 'antd';
 import StoryViewer from '@/components/Stories/StoryViewer';
@@ -223,6 +224,21 @@ const StoriesManagement = () => {
                             fontWeight: 700 
                         }}>
                             {stories.filter(s => s.isActive).length} Active Stories
+                        </span>
+                        <span style={{ 
+                            background: 'rgba(239, 68, 68, 0.25)', 
+                            border: '1px solid rgba(239, 68, 68, 0.4)',
+                            color: '#fecaca',
+                            padding: '4px 10px', 
+                            borderRadius: '12px', 
+                            fontSize: '12px', 
+                            fontWeight: 700,
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '4px'
+                        }}>
+                            <HeartFilled style={{ color: '#ef4444' }} />
+                            {stories.reduce((acc, s) => acc + (s.likesCount || s.likes?.length || 0), 0)} Total Likes
                         </span>
                     </div>
                     <h1 style={{ margin: 0, fontSize: '28px', fontWeight: 800, letterSpacing: '-0.5px' }}>
@@ -474,9 +490,25 @@ const StoriesManagement = () => {
                                         }}>
                                             {story.title || 'Untitled Story'}
                                         </h4>
-                                        <div style={{ fontSize: '12px', color: '#64748b', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                            <ClockCircleOutlined />
-                                            {new Date(story.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                                        <div style={{ fontSize: '12px', color: '#64748b', display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '4px' }}>
+                                            <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                                <ClockCircleOutlined />
+                                                {new Date(story.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                                            </span>
+                                            <span style={{ 
+                                                display: 'flex', 
+                                                alignItems: 'center', 
+                                                gap: '4px', 
+                                                color: '#ef4444', 
+                                                fontWeight: 700,
+                                                background: '#fef2f2',
+                                                padding: '2px 8px',
+                                                borderRadius: '10px',
+                                                fontSize: '11px'
+                                            }}>
+                                                <HeartFilled />
+                                                {story.likesCount || (Array.isArray(story.likes) ? story.likes.length : 0)}
+                                            </span>
                                         </div>
                                     </div>
 
