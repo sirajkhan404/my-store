@@ -31,13 +31,13 @@ const navSections = [
         title: "STORE MANAGEMENT",
         items: [
             { key: "products", label: "Products", icon: <ShoppingOutlined />, path: "/dashboard/products", roles: ["superAdmin"] },
-            { 
-                key: "stories", 
-                label: "Product Stories", 
-                icon: <PlayCircleOutlined />, 
-                path: "/dashboard/stories", 
+            {
+                key: "stories",
+                label: "Product Stories",
+                icon: <PlayCircleOutlined />,
+                path: "/dashboard/stories",
                 roles: ["superAdmin"],
-                badge: "NEW" 
+                badge: "NEW"
             },
             { key: "orders", label: "Orders", icon: <FileTextOutlined />, path: "/dashboard/orders", roles: null },
         ]
@@ -138,7 +138,7 @@ const Dashboard = () => {
                     navSections={navSections}
                     isActive={isActive}
                     handleLogout={handleLogout}
-                    onClose={() => {}}
+                    onClose={() => { }}
                     isMobile={false}
                 />
             </div>
@@ -295,7 +295,7 @@ const Dashboard = () => {
 const SidebarContent = ({ user, navSections, isActive, handleLogout, onClose, isMobile }) => {
     return (
         <div style={{ display: "flex", flexDirection: "column", height: "100%", position: "relative", color: "#ffffff" }}>
-            
+
             {/* ══ Brand / Logo Section ══ */}
             <div style={{
                 padding: "24px 20px 20px 20px",
@@ -502,8 +502,8 @@ const SidebarContent = ({ user, navSections, isActive, handleLogout, onClose, is
                                                 fontSize: "13.5px",
                                                 fontWeight: active ? 700 : 600,
                                                 color: active ? "#5eead4" : "rgba(255, 255, 255, 0.7)",
-                                                background: active 
-                                                    ? "linear-gradient(90deg, rgba(13, 148, 136, 0.35) 0%, rgba(13, 148, 136, 0.12) 100%)" 
+                                                background: active
+                                                    ? "linear-gradient(90deg, rgba(13, 148, 136, 0.35) 0%, rgba(13, 148, 136, 0.12) 100%)"
                                                     : "transparent",
                                                 border: active ? "1px solid rgba(94, 234, 212, 0.3)" : "1px solid transparent",
                                                 boxShadow: active ? "0 4px 14px rgba(0, 0, 0, 0.2)" : "none",
