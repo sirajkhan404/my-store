@@ -150,16 +150,16 @@ const All = () => {
                 @keyframes pr-in   { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
                 @keyframes pr-spin { to{transform:rotate(360deg)} }
                 .pr-row  { transition: background 0.15s, box-shadow 0.15s; }
-                .pr-row:hover { background: #f8f7ff !important; box-shadow: 0 2px 12px rgba(99,102,241,0.07) !important; }
+                .pr-row:hover { background: #f0fdfa !important; box-shadow: 0 2px 12px rgba(13,148,136,0.07) !important; }
                 .pr-btn  { border:none; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; border-radius:9px; transition:all 0.2s; }
                 .pr-btn:hover:not(:disabled) { transform:translateY(-2px); }
                 .pr-btn:disabled { opacity:.45; cursor:not-allowed; }
-                .pr-search:focus { outline:none; border-color:#6366f1 !important; box-shadow:0 0 0 3px rgba(99,102,241,0.15) !important; }
-                .pr-sel:focus { outline:none; border-color:#6366f1 !important; box-shadow:0 0 0 3px rgba(99,102,241,0.15) !important; }
-                .pr-input:focus { outline:none; border-color:#6366f1 !important; box-shadow:0 0 0 3px rgba(99,102,241,0.15) !important; }
-                .pr-add:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(99,102,241,.35) !important; }
+                .pr-search:focus { outline:none; border-color:#0d9488 !important; box-shadow:0 0 0 3px rgba(13,148,136,0.15) !important; }
+                .pr-sel:focus { outline:none; border-color:#0d9488 !important; box-shadow:0 0 0 3px rgba(13,148,136,0.15) !important; }
+                .pr-input:focus { outline:none; border-color:#0d9488 !important; box-shadow:0 0 0 3px rgba(13,148,136,0.15) !important; }
+                .pr-add:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(13,148,136,.35) !important; }
                 .pr-add { transition:all 0.2s; }
-                .pr-save:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 8px 24px rgba(99,102,241,.35) !important; }
+                .pr-save:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 8px 24px rgba(13,148,136,.35) !important; }
                 .pr-save { transition:all 0.2s; }
 
                 /* Scrollbar for smooth horizontal table scroll */
@@ -183,7 +183,7 @@ const All = () => {
                     <p style={{ margin:'4px 0 0', fontSize:13, color:'#94a3b8' }}>{documents.length} products in your store</p>
                 </div>
                 <button className="pr-add pr-header-btn" onClick={() => navigate('/dashboard/products/add')}
-                    style={{ padding:'10px 22px', borderRadius:12, border:'none', background:'linear-gradient(135deg,#6366f1,#8b5cf6)', color:'#fff', fontSize:14, fontWeight:700, cursor:'pointer', display:'flex', alignItems:'center', gap:8, boxShadow:'0 4px 14px rgba(99,102,241,0.3)' }}>
+                    style={{ padding:'10px 22px', borderRadius:12, border:'none', background:'linear-gradient(135deg,#0d9488,#042f2e)', color:'#fff', fontSize:14, fontWeight:700, cursor:'pointer', display:'flex', alignItems:'center', gap:8, boxShadow:'0 4px 14px rgba(13,148,136,0.3)' }}>
                     ➕ Add Product
                 </button>
             </div>
@@ -191,7 +191,7 @@ const All = () => {
             {/* ── Stat Cards ── */}
             <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(140px,1fr))', gap:14, marginBottom:24, animation:'pr-in 0.4s ease 0.05s both' }}>
                 {[
-                    { label:'Total Products', value:stats.total,      icon:'📦', color:'#6366f1', bg:'#ede9fe' },
+                    { label:'Total Products', value:stats.total,      icon:'📦', color:'#0d9488', bg:'#ccfbf1' },
                     { label:'In Stock',       value:stats.inStock,    icon:'✅', color:'#16a34a', bg:'#dcfce7' },
                     { label:'Low Stock ≤5',   value:stats.lowStock,   icon:'⚠️', color:'#d97706', bg:'#fffbeb' },
                     { label:'Out of Stock',   value:stats.outOfStock, icon:'❌', color:'#dc2626', bg:'#fef2f2' },
@@ -231,16 +231,16 @@ const All = () => {
                 <div className="pr-table-scroll" style={{ width: '100%', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
                     <div style={{ minWidth: '880px' }}>
                         {/* Header */}
-                        <div style={{ display:'grid', gridTemplateColumns:'40px 60px 2.2fr 1.2fr 1.3fr 1.4fr 2fr 80px', gap:10, background:'#1e293b', padding:'14px 20px', alignItems:'center' }}>
+                        <div style={{ display:'grid', gridTemplateColumns:'40px 60px 2.2fr 1.2fr 1.3fr 1.4fr 2fr 80px', gap:10, background:'#042f2e', padding:'14px 20px', alignItems:'center' }}>
                             {['#','','Name','Price','Stock','Category','Description','Actions'].map((h,i) => (
-                                <div key={i} style={{ fontSize:11, fontWeight:700, color:'#94a3b8', textTransform:'uppercase', letterSpacing:0.8 }}>{h}</div>
+                                <div key={i} style={{ fontSize:11, fontWeight:700, color:'#5eead4', textTransform:'uppercase', letterSpacing:0.8 }}>{h}</div>
                             ))}
                         </div>
 
                         {/* Loading */}
                         {loading && (
                             <div style={{ padding:56, textAlign:'center' }}>
-                                <div style={{ width:36, height:36, border:'3px solid #e2e8f0', borderTop:'3px solid #6366f1', borderRadius:'50%', animation:'pr-spin 0.8s linear infinite', margin:'0 auto 14px' }} />
+                                <div style={{ width:36, height:36, border:'3px solid #e2e8f0', borderTop:'3px solid #0d9488', borderRadius:'50%', animation:'pr-spin 0.8s linear infinite', margin:'0 auto 14px' }} />
                                 <p style={{ color:'#94a3b8', fontSize:13, margin:0 }}>Loading products…</p>
                             </div>
                         )}
@@ -281,7 +281,7 @@ const All = () => {
                                     </div>
 
                                     {/* Price */}
-                                    <div style={{ fontSize:14, fontWeight:800, color:'#6366f1' }}>
+                                    <div style={{ fontSize:14, fontWeight:800, color:'#0d9488' }}>
                                         Rs. {Number(product.price).toLocaleString()}
                                     </div>
 
@@ -307,7 +307,7 @@ const All = () => {
                                     {/* Actions */}
                                     <div style={{ display:'flex', gap:6 }}>
                                         <button className="pr-btn" onClick={() => handleEdit(product)}
-                                            style={{ width:32, height:32, background:'#ede9fe', color:'#7c3aed', fontSize:13 }} title="Edit">✏️</button>
+                                            style={{ width:32, height:32, background:'#ccfbf1', color:'#0d9488', fontSize:13 }} title="Edit">✏️</button>
                                         <button className="pr-btn" onClick={() => setConfirmDelete(product)}
                                             disabled={deletingId === product.id}
                                             style={{ width:32, height:32, background:'#fef2f2', color:'#dc2626', fontSize:13 }} title="Delete">
@@ -329,13 +329,13 @@ const All = () => {
 
             {/* ── Edit Modal ── */}
             {isModalOpen && productToEdit && (
-                <div style={{ position:'fixed', inset:0, background:'rgba(15,12,41,0.6)', zIndex:1000, display:'flex', alignItems:'center', justifyContent:'center', padding:16, backdropFilter:'blur(4px)' }}
+                <div style={{ position:'fixed', inset:0, background:'rgba(4,47,46,0.6)', zIndex:1000, display:'flex', alignItems:'center', justifyContent:'center', padding:16, backdropFilter:'blur(4px)' }}
                     onClick={e => { if (e.target === e.currentTarget) resetModal() }}>
                     <div style={{ background:'#fff', borderRadius:24, padding:0, width:'100%', maxWidth:600, maxHeight:'90vh', overflowY:'auto', boxShadow:'0 24px 64px rgba(0,0,0,0.18)', animation:'pr-in 0.3s ease' }}>
 
                         {/* Modal Header */}
                         <div style={{ padding:'20px 24px 16px', borderBottom:'1px solid #f1f5f9', display:'flex', alignItems:'center', gap:14, position:'sticky', top:0, background:'#fff', zIndex:1, borderRadius:'24px 24px 0 0' }}>
-                            <div style={{ width:42, height:42, borderRadius:12, background:'#ede9fe', display:'flex', alignItems:'center', justifyContent:'center', fontSize:20, flexShrink:0 }}>✏️</div>
+                            <div style={{ width:42, height:42, borderRadius:12, background:'#ccfbf1', display:'flex', alignItems:'center', justifyContent:'center', fontSize:20, flexShrink:0 }}>✏️</div>
                             <div style={{ flex:1 }}>
                                 <div style={{ fontSize:16, fontWeight:800, color:'#0f172a' }}>Edit Product</div>
                                 <div style={{ fontSize:12, color:'#94a3b8', marginTop:2 }}>{productToEdit.name}</div>
@@ -427,7 +427,7 @@ const All = () => {
                                 Cancel
                             </button>
                             <button className="pr-save" onClick={handleUpdate} disabled={isProcessing}
-                                style={{ flex:2, padding:'12px', borderRadius:12, border:'none', background: isProcessing ? '#c7d2fe' : 'linear-gradient(135deg,#6366f1,#8b5cf6)', color:'#fff', fontSize:14, fontWeight:700, cursor: isProcessing ? 'not-allowed' : 'pointer', display:'flex', alignItems:'center', justifyContent:'center', gap:8, boxShadow:'0 4px 14px rgba(99,102,241,0.3)' }}>
+                                style={{ flex:2, padding:'12px', borderRadius:12, border:'none', background: isProcessing ? '#99f6e4' : 'linear-gradient(135deg,#0d9488,#042f2e)', color:'#fff', fontSize:14, fontWeight:700, cursor: isProcessing ? 'not-allowed' : 'pointer', display:'flex', alignItems:'center', justifyContent:'center', gap:8, boxShadow:'0 4px 14px rgba(13,148,136,0.3)' }}>
                                 {isProcessing
                                     ? <><span style={{ width:16, height:16, border:'2px solid rgba(255,255,255,0.4)', borderTop:'2px solid #fff', borderRadius:'50%', animation:'pr-spin 0.8s linear infinite', display:'inline-block' }} />Updating...</>
                                     : '✅ Update Product'

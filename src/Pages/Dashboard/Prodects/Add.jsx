@@ -105,8 +105,8 @@ const Add = () => {
                 }
                 .form-control-custom:focus, .form-select-custom:focus {
                     background: white;
-                    border-color: #3b82f6;
-                    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+                    border-color: #0d9488;
+                    box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
                 }
                 .upload-box {
                     border: 2px dashed #cbd5e1;
@@ -118,8 +118,8 @@ const Add = () => {
                     transition: all 0.3s;
                 }
                 .upload-box:hover {
-                    border-color: #3b82f6;
-                    background: #eff6ff;
+                    border-color: #0d9488;
+                    background: #f0fdfa;
                 }
                 .upload-icon {
                     font-size: 40px;
@@ -127,7 +127,7 @@ const Add = () => {
                     margin-bottom: 12px;
                 }
                 .upload-box:hover .upload-icon {
-                    color: #3b82f6;
+                    color: #0d9488;
                 }
                 .image-preview-container {
                     position: relative;
@@ -165,18 +165,20 @@ const Add = () => {
                     background: #ef4444;
                 }
                 .submit-btn {
-                    background: #3b82f6;
+                    background: linear-gradient(135deg, #0d9488, #042f2e);
                     border: none;
                     border-radius: 12px;
                     padding: 14px;
                     font-weight: 700;
                     font-size: 16px;
+                    color: #ffffff;
                     transition: all 0.3s;
                 }
                 .submit-btn:hover {
-                    background: #2563eb;
+                    background: linear-gradient(135deg, #0f766e, #032221);
                     transform: translateY(-2px);
-                    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+                    box-shadow: 0 8px 20px rgba(13, 148, 136, 0.35);
+                    color: #ffffff;
                 }
             `}</style>
 

@@ -95,10 +95,10 @@ const Home = () => {
                     top: 0; left: 0; right: 0;
                     height: 4px;
                 }
-                .stat-card.primary::before { background: linear-gradient(90deg, #4f46e5, #818cf8); }
+                .stat-card.primary::before { background: linear-gradient(90deg, #0d9488, #5eead4); }
                 .stat-card.warning::before { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
                 .stat-card.success::before { background: linear-gradient(90deg, #10b981, #34d399); }
-                .stat-card.dark::before { background: linear-gradient(90deg, #0f172a, #475569); }
+                .stat-card.dark::before { background: linear-gradient(90deg, #042f2e, #115e59); }
                 .stat-card.info::before { background: linear-gradient(90deg, #06b6d4, #38bdf8); }
                 
                 .stat-icon-wrapper {
@@ -110,25 +110,25 @@ const Home = () => {
                     justify-content: center;
                     font-size: 24px;
                 }
-                .stat-card.primary .stat-icon-wrapper { background: #e0e7ff; color: #4f46e5; }
+                .stat-card.primary .stat-icon-wrapper { background: #f0fdfa; color: #0d9488; }
                 .stat-card.warning .stat-icon-wrapper { background: #fef3c7; color: #f59e0b; }
                 .stat-card.success .stat-icon-wrapper { background: #d1fae5; color: #10b981; }
-                .stat-card.dark .stat-icon-wrapper { background: #f1f5f9; color: #0f172a; }
+                .stat-card.dark .stat-icon-wrapper { background: #f0fdfa; color: #042f2e; }
                 .stat-card.info .stat-icon-wrapper { background: #cffafe; color: #06b6d4; }
             `}</style>
 
             {/* ── Welcome Header ────────────────────────────────────── */}
-            <div className="mb-5 bg-white p-4 rounded-4 shadow-sm border" style={{ borderColor: '#e2e8f0' }}>
+            <div className="mb-5 bg-white p-4 rounded-4 shadow-sm border" style={{ borderColor: '#e2e8f0', borderLeft: '6px solid #0d9488' }}>
                 <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
                     <div>
                         <h3 className="fw-bold mb-1 text-dark">
                             Dashboard Overview ✨
                         </h3>
-                        <p className="text-muted mb-0">Welcome back, <span className="fw-semibold text-primary">{user?.fullName || 'Admin'}</span>! Here's what's happening in your store today.</p>
+                        <p className="text-muted mb-0">Welcome back, <span className="fw-bold" style={{ color: '#0d9488' }}>{user?.fullName || 'Admin'}</span>! Here's what's happening in your store today.</p>
                     </div>
                     <div className="text-end d-none d-md-block">
                         <div className="text-muted small fw-semibold text-uppercase letter-spacing-1">Today's Date</div>
-                        <div className="fw-bold text-dark fs-5">{new Date().toLocaleDateString('en-PK', { weekday: 'long', month: 'short', day: 'numeric' })}</div>
+                        <div className="fw-bold fs-5" style={{ color: '#042f2e' }}>{new Date().toLocaleDateString('en-PK', { weekday: 'long', month: 'short', day: 'numeric' })}</div>
                     </div>
                 </div>
             </div>
@@ -136,7 +136,7 @@ const Home = () => {
             {/* ── Stats Cards ───────────────────────────────────────── */}
             {loading ? (
                 <div className="text-center py-5">
-                    <div className="spinner-border text-primary" role="status" />
+                    <div className="spinner-border" style={{ color: '#0d9488' }} role="status" />
                     <p className="mt-3 text-muted fw-semibold">Fetching the latest data...</p>
                 </div>
             ) : (

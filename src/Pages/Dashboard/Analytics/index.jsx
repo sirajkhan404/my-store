@@ -19,7 +19,7 @@ function useCountUp(target, duration = 1200) {
 }
 
 /* ─── sparkline SVG ─── */
-function Sparkline({ data = [], color = '#6366f1', height = 40 }) {
+function Sparkline({ data = [], color = '#0d9488', height = 40 }) {
     if (!data.length) return null
     const max = Math.max(...data, 1)
     const w = 120, h = height
@@ -70,7 +70,7 @@ function Donut({ slices = [], size = 130 }) {
 }
 
 /* ─── bar chart ─── */
-function BarChart({ bars = [], color = '#6366f1' }) {
+function BarChart({ bars = [], color = '#0d9488' }) {
     const max = Math.max(...bars.map(b => b.value), 1)
     return (
         <div style={{ display: 'flex', alignItems: 'flex-end', gap: 6, height: 80, padding: '0 4px' }}>
@@ -98,40 +98,37 @@ function PulseDot({ color }) {
             <span style={{
                 position: 'absolute', inset: 0, borderRadius: '50%',
                 background: color, opacity: 0.4,
-                animation: 'an-pulse-ring 1.4s ease-out infinite'
+                animation: 'an-pulse-ring 1.8s cubic-bezier(0.24,0,0.38,1) infinite',
             }} />
-            <span style={{ width: 10, height: 10, borderRadius: '50%', background: color, flexShrink: 0 }} />
+            <span style={{ width: 10, height: 10, borderRadius: '50%', background: color, display: 'inline-block' }} />
         </span>
     )
 }
 
 /* ═══════════════════════════════════════════════════════ */
-const Analytics = () => {
-    const [products, setProducts] = useState([])
+function Analytics() {
     const [orders, setOrders] = useState([])
+    const [products, setProducts] = useState([])
     const [users, setUsers] = useState([])
     const [loading, setLoading] = useState(true)
     const [lastUpdated, setLastUpdated] = useState(null)
 
-    const token = localStorage.getItem('jwt')
-    const headers = { Authorization: `Bearer ${token}` }
-
     const fetchAll = async () => {
-        try {
-            const [prodRes, orderRes, userRes] = await Promise.allSettled([
-                axios.get(`${window.api}/api/products/all`, { headers }),
-                axios.get(`${window.api}/api/orders/all`, { headers }),
-                axios.get(`${window.api}/api/auth/users`, { headers }),
-            ])
-            if (prodRes.status === 'fulfilled') setProducts(prodRes.value.data.products || [])
-            if (orderRes.status === 'fulfilled') setOrders(orderRes.value.data.orders || [])
-            if (userRes.status === 'fulfilled') setUsers(userRes.value.data.users || [])
-            setLastUpdated(new Date())
-        } catch (e) {
-            console.error(e)
-        } finally {
-            setLoading(false)
-        }
+        setLoading(true)
+        const jwt = localStorage.getItem('jwt')
+        const headers = jwt ? { Authorization: `Bearer ${jwt}` } : {}
+
+        const [rOrders, rProds, rUsers] = await Promise.allSettled([
+            axios.get(`${window.api}/api/orders/all`, { headers }),
+            axios.get(`${window.api}/api/products/public-all`),
+            axios.get(`${window.api}/api/auth/all`, { headers }),
+        ])
+
+        if (rOrders.status === 'fulfilled') setOrders(rOrders.value.data?.orders || [])
+        if (rProds.status === 'fulfilled') setProducts(rProds.value.data?.products || [])
+        if (rUsers.status === 'fulfilled') setUsers(rUsers.value.data?.users || [])
+        setLastUpdated(new Date())
+        setLoading(false)
     }
 
     useEffect(() => {
@@ -141,11 +138,11 @@ const Analytics = () => {
     }, [])
 
     /* ── computed ── */
-    const totalRevenue = orders.reduce((s, o) => s + (o.totalPrice || o.totalAmount || 0), 0)
-    const pending = orders.filter(o => (o.status || o.orderStatus) === 'pending').length
+    const totalRevenue = orders.filter(o => o.status !== 'cancelled').reduce((sum, o) => sum + (Number(o.totalAmount) || o.totalPrice || 0), 0)
     const delivered = orders.filter(o => (o.status || o.orderStatus) === 'delivered').length
-    const cancelled = orders.filter(o => (o.status || o.orderStatus) === 'cancelled').length
+    const pending = orders.filter(o => (o.status || o.orderStatus) === 'pending').length
     const processing = orders.filter(o => ['processing', 'shipped'].includes(o.status || o.orderStatus)).length
+    const cancelled = orders.filter(o => (o.status || o.orderStatus) === 'cancelled').length
 
     const cRevenue = useCountUp(totalRevenue)
     const cOrders = useCountUp(orders.length)
@@ -153,32 +150,27 @@ const Analytics = () => {
     const cUsers = useCountUp(users.length)
 
     const catMap = {}
-    products.forEach(p => { catMap[p.category] = (catMap[p.category] || 0) + 1 })
-    const categories = Object.entries(catMap).map(([k, v]) => ({ label: k || 'Other', value: v }))
+    products.forEach(p => { 
+        const c = p.category || 'Other'
+        catMap[c] = (catMap[c] || 0) + 1 
+    })
+    const categories = Object.entries(catMap).map(([label, value]) => ({ label, value })).sort((a, b) => b.value - a.value)
 
-    const dayBars = (() => {
-        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-        const counts = Array(7).fill(0)
-        orders.forEach(o => {
-            const d = new Date(o.createdAt)
-            if (!isNaN(d)) counts[d.getDay()]++
-        })
-        return days.map((label, i) => ({ label, value: counts[i] }))
-    })()
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+    const dayCounts = Array(7).fill(0)
+    orders.forEach(o => {
+        if (o.createdAt) {
+            const d = new Date(o.createdAt).getDay()
+            if (!isNaN(d)) dayCounts[d]++
+        }
+    })
+    const dayBars = days.map((label, i) => ({ label, value: dayCounts[i] }))
 
-    const revSpark = (() => {
-        const buckets = Array(7).fill(0)
-        orders.forEach(o => {
-            const d = new Date(o.createdAt)
-            const diff = Math.floor((Date.now() - d) / 86400000)
-            if (diff >= 0 && diff < 7) buckets[6 - diff] += (o.totalPrice || o.totalAmount || 0)
-        })
-        return buckets
-    })()
+    const revSpark = orders.slice(-7).map(o => Number(o.totalAmount) || o.totalPrice || 0)
 
     const donutSlices = [
         { label: 'Pending', value: pending, color: '#f59e0b' },
-        { label: 'Processing', value: processing, color: '#6366f1' },
+        { label: 'Processing', value: processing, color: '#0d9488' },
         { label: 'Delivered', value: delivered, color: '#10b981' },
         { label: 'Cancelled', value: cancelled, color: '#ef4444' },
     ].filter(s => s.value > 0)
@@ -190,8 +182,8 @@ const Analytics = () => {
     if (loading) return (
         <div style={{ minHeight: '70vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 16 }}>
             <style>{`@keyframes an-spin { to { transform: rotate(360deg) } }`}</style>
-            <div style={{ width: 52, height: 52, borderRadius: '50%', border: '4px solid #e2e8f0', borderTop: '4px solid #6366f1', animation: 'an-spin 0.9s linear infinite' }} />
-            <p style={{ color: '#94a3b8', fontWeight: 600 }}>Loading Analytics…</p>
+            <div style={{ width: 52, height: 52, borderRadius: '50%', border: '4px solid #ccfbf1', borderTop: '4px solid #0d9488', animation: 'an-spin 0.9s linear infinite' }} />
+            <p style={{ color: '#64748b', fontWeight: 600 }}>Loading Analytics…</p>
         </div>
     )
 
@@ -217,35 +209,35 @@ const Analytics = () => {
             {/* ── Header ── */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28, flexWrap: 'wrap', gap: 12 }}>
                 <div>
-                    <h1 style={{ margin: 0, fontSize: 26, fontWeight: 800, color: '#0f172a', letterSpacing: -0.5 }}>📊 Analytics</h1>
-                    <p style={{ margin: '4px 0 0', fontSize: 13, color: '#94a3b8' }}>Live store performance overview</p>
+                    <h1 style={{ margin: 0, fontSize: 26, fontWeight: 800, color: '#042f2e', letterSpacing: -0.5 }}>📊 Analytics</h1>
+                    <p style={{ margin: '4px 0 0', fontSize: 13, color: '#64748b' }}>Live store performance overview</p>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 999, padding: '5px 12px', fontSize: 12, color: '#16a34a', fontWeight: 600 }}>
-                        <PulseDot color="#22c55e" />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: '#f0fdfa', border: '1px solid #99f6e4', borderRadius: 999, padding: '5px 12px', fontSize: 12, color: '#0d9488', fontWeight: 600 }}>
+                        <PulseDot color="#10b981" />
                         Live
                     </div>
-                    {lastUpdated && <span style={{ fontSize: 11, color: '#cbd5e1' }}>Updated {lastUpdated.toLocaleTimeString()}</span>}
-                    <span className="an-refresh" title="Refresh" onClick={fetchAll} style={{ fontSize: 20, color: '#94a3b8' }}>↻</span>
+                    {lastUpdated && <span style={{ fontSize: 11, color: '#94a3b8' }}>Updated {lastUpdated.toLocaleTimeString()}</span>}
+                    <span className="an-refresh" title="Refresh" onClick={fetchAll} style={{ fontSize: 20, color: '#0d9488' }}>↻</span>
                 </div>
             </div>
 
             {/* ── Stat Cards ── */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 18, marginBottom: 28 }}>
                 {[
-                    { label: 'Total Revenue', value: `Rs. ${cRevenue.toLocaleString()}`, sub: `Avg Rs. ${orders.length ? Math.round(totalRevenue / orders.length).toLocaleString() : 0}/order`, color: '#6366f1', bg: 'linear-gradient(135deg,#6366f1,#8b5cf6)', spark: revSpark, icon: '💰' },
+                    { label: 'Total Revenue', value: `Rs. ${cRevenue.toLocaleString()}`, sub: `Avg Rs. ${orders.length ? Math.round(totalRevenue / orders.length).toLocaleString() : 0}/order`, color: '#0d9488', bg: 'linear-gradient(135deg,#0d9488,#5eead4)', spark: revSpark, icon: '💰' },
                     { label: 'Total Orders', value: cOrders, sub: `${delivered} delivered · ${pending} pending`, color: '#10b981', bg: 'linear-gradient(135deg,#10b981,#059669)', spark: dayBars.map(b => b.value), icon: '🛒' },
                     { label: 'Products', value: cProducts, sub: `${categories.length} categories`, color: '#f59e0b', bg: 'linear-gradient(135deg,#f59e0b,#d97706)', spark: Array(7).fill(0).map((_, i) => i < products.length ? products[i]?.stock || 0 : 0), icon: '📦' },
-                    { label: 'Users', value: cUsers, sub: `${users.filter(u => u.role === 'superAdmin').length} admins · ${users.filter(u => u.role === 'customer').length} customers`, color: '#ec4899', bg: 'linear-gradient(135deg,#ec4899,#db2777)', spark: Array(7).fill(0).map(() => Math.floor(Math.random() * (users.length + 1))), icon: '👥' },
+                    { label: 'Users', value: cUsers, sub: `${users.filter(u => u.role === 'superAdmin').length} admins · ${users.filter(u => u.role === 'customer').length} customers`, color: '#042f2e', bg: 'linear-gradient(135deg,#042f2e,#115e59)', spark: Array(7).fill(0).map(() => Math.floor(Math.random() * (users.length + 1))), icon: '👥' },
                 ].map((card, i) => (
                     <div key={i} className="an-card an-stat" style={{ borderRadius: 20, overflow: 'hidden', boxShadow: '0 4px 20px rgba(0,0,0,0.08)', background: '#fff', position: 'relative' }}>
                         <div style={{ height: 5, background: card.bg }} />
                         <div style={{ padding: '18px 20px 14px' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                                 <div>
-                                    <div style={{ fontSize: 11, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 }}>{card.label}</div>
-                                    <div style={{ fontSize: 28, fontWeight: 800, color: '#0f172a', letterSpacing: -1, lineHeight: 1 }}>{card.value}</div>
-                                    <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 5 }}>{card.sub}</div>
+                                    <div style={{ fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 }}>{card.label}</div>
+                                    <div style={{ fontSize: 28, fontWeight: 800, color: '#042f2e', letterSpacing: -1, lineHeight: 1 }}>{card.value}</div>
+                                    <div style={{ fontSize: 11, color: '#64748b', marginTop: 5 }}>{card.sub}</div>
                                 </div>
                                 <div style={{ fontSize: 32, lineHeight: 1, opacity: 0.85 }}>{card.icon}</div>
                             </div>
@@ -262,20 +254,20 @@ const Analytics = () => {
 
                 {/* Order Status Donut */}
                 <div className="an-card" style={{ background: '#fff', borderRadius: 20, padding: 24, boxShadow: '0 4px 20px rgba(0,0,0,0.07)', animationDelay: '.3s' }}>
-                    <div style={{ fontSize: 14, fontWeight: 700, color: '#0f172a', marginBottom: 20 }}>Order Status</div>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: '#042f2e', marginBottom: 20 }}>Order Status</div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap' }}>
                         <Donut slices={donutSlices} size={130} />
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 10, flex: 1, minWidth: 120 }}>
                             {[
                                 { label: 'Pending', value: pending, color: '#f59e0b' },
-                                { label: 'Processing', value: processing, color: '#6366f1' },
+                                { label: 'Processing', value: processing, color: '#0d9488' },
                                 { label: 'Delivered', value: delivered, color: '#10b981' },
                                 { label: 'Cancelled', value: cancelled, color: '#ef4444' },
                             ].map((s, i) => (
                                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                                     <span style={{ width: 10, height: 10, borderRadius: '50%', background: s.color, flexShrink: 0 }} />
                                     <span style={{ fontSize: 12, color: '#64748b', flex: 1 }}>{s.label}</span>
-                                    <span style={{ fontSize: 13, fontWeight: 700, color: '#0f172a' }}>{s.value}</span>
+                                    <span style={{ fontSize: 13, fontWeight: 700, color: '#042f2e' }}>{s.value}</span>
                                 </div>
                             ))}
                         </div>
@@ -285,10 +277,10 @@ const Analytics = () => {
                 {/* Orders by Day */}
                 <div className="an-card" style={{ background: '#fff', borderRadius: 20, padding: 24, boxShadow: '0 4px 20px rgba(0,0,0,0.07)', animationDelay: '.38s' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-                        <div style={{ fontSize: 14, fontWeight: 700, color: '#0f172a' }}>Orders by Day</div>
-                        <span style={{ fontSize: 11, color: '#94a3b8' }}>This week</span>
+                        <div style={{ fontSize: 14, fontWeight: 700, color: '#042f2e' }}>Orders by Day</div>
+                        <span style={{ fontSize: 11, color: '#64748b' }}>This week</span>
                     </div>
-                    <BarChart bars={dayBars} color="#6366f1" />
+                    <BarChart bars={dayBars} color="#0d9488" />
                 </div>
 
                 {/* Product Categories */}

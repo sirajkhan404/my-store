@@ -94,11 +94,11 @@ const Users = () => {
                 .usr-row:hover { background: #f1f5f9 !important; }
                 .usr-icon-btn { transition: all 0.2s; border:none; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; border-radius:10px; }
                 .usr-icon-btn:hover { transform:translateY(-2px); }
-                .usr-search:focus { outline:none; border-color:#6366f1 !important; box-shadow:0 0 0 3px rgba(99,102,241,0.15) !important; }
-                .usr-select:focus { outline:none; border-color:#6366f1 !important; box-shadow:0 0 0 3px rgba(99,102,241,0.15) !important; }
-                .usr-modal-input:focus { outline:none; border-color:#6366f1 !important; box-shadow:0 0 0 3px rgba(99,102,241,0.15) !important; }
-                .usr-modal-select:focus { outline:none; border-color:#6366f1 !important; box-shadow:0 0 0 3px rgba(99,102,241,0.15) !important; }
-                .usr-save-btn:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 8px 24px rgba(99,102,241,0.35) !important; }
+                .usr-search:focus { outline:none; border-color:#0d9488 !important; box-shadow:0 0 0 3px rgba(13,148,136,0.15) !important; }
+                .usr-select:focus { outline:none; border-color:#0d9488 !important; box-shadow:0 0 0 3px rgba(13,148,136,0.15) !important; }
+                .usr-modal-input:focus { outline:none; border-color:#0d9488 !important; box-shadow:0 0 0 3px rgba(13,148,136,0.15) !important; }
+                .usr-modal-select:focus { outline:none; border-color:#0d9488 !important; box-shadow:0 0 0 3px rgba(13,148,136,0.15) !important; }
+                .usr-save-btn:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 8px 24px rgba(13,148,136,0.35) !important; }
                 .usr-save-btn { transition:all 0.2s; }
 
                 /* Smooth Horizontal Scrollbar for Users Table */
@@ -119,7 +119,7 @@ const Users = () => {
                     <h1 style={{ margin:0, fontSize:'clamp(20px, 4vw, 26px)', fontWeight:800, color:'#0f172a', letterSpacing:-0.5 }}>👥 Users Management</h1>
                     <p style={{ margin:'4px 0 0', fontSize:13, color:'#94a3b8' }}>Manage all registered users and their roles</p>
                 </div>
-                <div style={{ fontSize:13, color:'#64748b', background:'#fff', border:'1px solid #e2e8f0', borderRadius:10, padding:'7px 14px', fontWeight:500 }}>
+                <div style={{ fontSize:13, color:'#0d9488', background:'#ccfbf1', border:'1px solid #99f6e4', borderRadius:10, padding:'7px 14px', fontWeight:600 }}>
                     {documents.length} total users
                 </div>
             </div>
@@ -127,12 +127,12 @@ const Users = () => {
             {/* ── Stat Cards ── */}
             <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(140px,1fr))', gap:14, marginBottom:24, animation:'usr-in 0.4s ease 0.05s both' }}>
                 {[
-                    { label:'Total Users',  value:documents.length, icon:'👥', color:'#6366f1', bg:'#ede9fe' },
+                    { label:'Total Users',  value:documents.length, icon:'👥', color:'#0d9488', bg:'#ccfbf1' },
                     { label:'Super Admins', value:admins,            icon:'👑', color:'#d97706', bg:'#fef3c7' },
-                    { label:'Customers',    value:customers,         icon:'🛍', color:'#1d4ed8', bg:'#dbeafe' },
+                    { label:'Customers',    value:customers,         icon:'🛍', color:'#0284c7', bg:'#e0f2fe' },
                     { label:'Active',       value:active,            icon:'🟢', color:'#16a34a', bg:'#dcfce7' },
                 ].map((s,i) => (
-                    <div key={i} style={{ background:'#fff', borderRadius:16, padding:'14px 16px', boxShadow:'0 2px 10px rgba(0,0,0,0.05)', display:'flex', alignItems:'center', gap:12 }}>
+                    <div key={i} style={{ background:'#fff', borderRadius:16, padding:'14px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.05)', display:'flex', alignItems:'center', gap:12 }}>
                         <div style={{ width:40, height:40, borderRadius:12, background:s.bg, display:'flex', alignItems:'center', justifyContent:'center', fontSize:18, flexShrink:0 }}>
                             {s.icon}
                         </div>
@@ -181,16 +181,16 @@ const Users = () => {
                     <div style={{ minWidth: '850px' }}>
 
                         {/* Table Header */}
-                        <div style={{ display:'grid', gridTemplateColumns:'2fr 2fr 3fr 1.5fr 1.5fr 90px', gap:10, background:'#1e293b', padding:'14px 20px' }}>
+                        <div style={{ display:'grid', gridTemplateColumns:'2fr 2fr 3fr 1.5fr 1.5fr 90px', gap:10, background:'#042f2e', padding:'14px 20px' }}>
                             {['Name','UID','Email','Role','Status','Actions'].map((h,i) => (
-                                <div key={i} style={{ fontSize:11, fontWeight:700, color:'#94a3b8', textTransform:'uppercase', letterSpacing:1 }}>{h}</div>
+                                <div key={i} style={{ fontSize:11, fontWeight:700, color:'#5eead4', textTransform:'uppercase', letterSpacing:1 }}>{h}</div>
                             ))}
                         </div>
 
                         {/* Loading */}
                         {isLoading && (
                             <div style={{ padding:48, textAlign:'center' }}>
-                                <div style={{ width:36, height:36, border:'3px solid #e2e8f0', borderTop:'3px solid #6366f1', borderRadius:'50%', animation:'usr-spin 0.8s linear infinite', margin:'0 auto 12px' }} />
+                                <div style={{ width:36, height:36, border:'3px solid #e2e8f0', borderTop:'3px solid #0d9488', borderRadius:'50%', animation:'usr-spin 0.8s linear infinite', margin:'0 auto 12px' }} />
                                 <p style={{ color:'#94a3b8', fontSize:13 }}>Loading users…</p>
                             </div>
                         )}
@@ -274,7 +274,7 @@ const Users = () => {
                                     {/* Actions */}
                                     <div style={{ display:'flex', gap:6 }}>
                                         <button className="usr-icon-btn" onClick={() => handleEdit(user)}
-                                            style={{ width:32, height:32, background:'#ede9fe', color:'#7c3aed', fontSize:13 }}
+                                            style={{ width:32, height:32, background:'#ccfbf1', color:'#0d9488', fontSize:13 }}
                                             title="Edit user">
                                             ✏️
                                         </button>
@@ -293,11 +293,11 @@ const Users = () => {
 
             {/* ── Edit Modal ── */}
             {modalOpen && userToEdit && (
-                <div style={{ position:'fixed', inset:0, background:'rgba(15,12,41,0.6)', zIndex:1000, display:'flex', alignItems:'center', justifyContent:'center', padding:16, backdropFilter:'blur(4px)' }}
+                <div style={{ position:'fixed', inset:0, background:'rgba(4,47,46,0.6)', zIndex:1000, display:'flex', alignItems:'center', justifyContent:'center', padding:16, backdropFilter:'blur(4px)' }}
                     onClick={e => { if (e.target === e.currentTarget) setModalOpen(false) }}>
                     <div style={{ background:'#fff', borderRadius:24, padding:24, width:'100%', maxWidth:440, boxShadow:'0 24px 64px rgba(0,0,0,0.18)', animation:'usr-in 0.3s ease' }}>
                         <div style={{ display:'flex', alignItems:'center', gap:14, marginBottom:20 }}>
-                            <div style={{ width:44, height:44, borderRadius:14, background:'#ede9fe', display:'flex', alignItems:'center', justifyContent:'center', fontSize:20, flexShrink:0 }}>✏️</div>
+                            <div style={{ width:44, height:44, borderRadius:14, background:'#ccfbf1', display:'flex', alignItems:'center', justifyContent:'center', fontSize:20, flexShrink:0 }}>✏️</div>
                             <div style={{ flex:1, minWidth:0 }}>
                                 <div style={{ fontSize:16, fontWeight:800, color:'#0f172a' }}>Edit User</div>
                                 <div style={{ fontSize:12, color:'#94a3b8', marginTop:2, whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{userToEdit.email}</div>
@@ -346,7 +346,7 @@ const Users = () => {
                                 Cancel
                             </button>
                             <button className="usr-save-btn" onClick={handleUpdate} disabled={isProcessing}
-                                style={{ flex:2, padding:'12px', borderRadius:12, border:'none', background: isProcessing ? '#c7d2fe' : 'linear-gradient(135deg,#6366f1,#8b5cf6)', color:'#fff', fontSize:14, fontWeight:700, cursor: isProcessing ? 'not-allowed' : 'pointer', display:'flex', alignItems:'center', justifyContent:'center', gap:8, boxShadow:'0 4px 14px rgba(99,102,241,0.3)' }}>
+                                style={{ flex:2, padding:'12px', borderRadius:12, border:'none', background: isProcessing ? '#99f6e4' : 'linear-gradient(135deg,#0d9488,#042f2e)', color:'#fff', fontSize:14, fontWeight:700, cursor: isProcessing ? 'not-allowed' : 'pointer', display:'flex', alignItems:'center', justifyContent:'center', gap:8, boxShadow:'0 4px 14px rgba(13,148,136,0.3)' }}>
                                 {isProcessing
                                     ? <><span style={{ width:16, height:16, border:'2px solid rgba(255,255,255,0.4)', borderTop:'2px solid #fff', borderRadius:'50%', animation:'usr-spin 0.8s linear infinite', display:'inline-block' }} />Saving...</>
                                     : '💾 Save Changes'

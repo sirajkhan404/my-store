@@ -40,23 +40,23 @@ const Profile = () => {
     const isAdmin = user?.role === 'superAdmin';
 
     return (
-        <div style={{ minHeight: '100%', background: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)', padding: '36px 24px', fontFamily: "'Inter', sans-serif" }}>
+        <div style={{ minHeight: '100%', background: 'linear-gradient(135deg, #042f2e 0%, #032221 50%, #021a19 100%)', padding: '36px 24px', fontFamily: "'Inter', sans-serif" }}>
 
             <style>{`
                 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-                @keyframes glow-pulse { 0%,100%{box-shadow:0 0 20px rgba(139,92,246,0.4)} 50%{box-shadow:0 0 40px rgba(139,92,246,0.8)} }
+                @keyframes glow-pulse { 0%,100%{box-shadow:0 0 20px rgba(13,148,136,0.4)} 50%{box-shadow:0 0 40px rgba(94,234,212,0.8)} }
                 @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
                 @keyframes pf2-spin { to{transform:rotate(360deg)} }
                 @keyframes pf2-in { from{opacity:0;transform:scale(0.95)} to{opacity:1;transform:scale(1)} }
                 @keyframes shimmer-move { 0%{transform:translateX(-100%)} 100%{transform:translateX(100%)} }
                 .glass { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
                 .tab-btn { transition: all 0.25s; cursor:pointer; border:none; }
-                .tab-btn.active { background: rgba(139,92,246,0.3) !important; color:#c4b5fd !important; border-color: rgba(139,92,246,0.5) !important; }
+                .tab-btn.active { background: rgba(13,148,136,0.3) !important; color:#5eead4 !important; border-color: rgba(94,234,212,0.5) !important; }
                 .tab-btn:hover:not(.active) { background: rgba(255,255,255,0.08) !important; }
                 .pf2-input { transition: all 0.2s; }
-                .pf2-input:focus { outline:none; border-color: rgba(139,92,246,0.8) !important; box-shadow: 0 0 0 3px rgba(139,92,246,0.2) !important; }
+                .pf2-input:focus { outline:none; border-color: rgba(94,234,212,0.8) !important; box-shadow: 0 0 0 3px rgba(13,148,136,0.25) !important; }
                 .pf2-input::placeholder { color: rgba(255,255,255,0.25); }
-                .pf2-save:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(139,92,246,0.5) !important; }
+                .pf2-save:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(13,148,136,0.5) !important; }
                 .pf2-save:active:not(:disabled) { transform:translateY(0); }
                 .pf2-save { transition: all 0.25s; }
                 .avatar-glow { animation: glow-pulse 2.5s ease-in-out infinite; }
@@ -64,20 +64,20 @@ const Profile = () => {
             `}</style>
 
             {/* ── BG blobs ── */}
-            <div style={{ position: 'fixed', top: 80, right: 80, width: 300, height: 300, borderRadius: '50%', background: 'rgba(139,92,246,0.12)', filter: 'blur(60px)', pointerEvents: 'none' }} />
-            <div style={{ position: 'fixed', bottom: 80, left: 60, width: 250, height: 250, borderRadius: '50%', background: 'rgba(236,72,153,0.1)', filter: 'blur(60px)', pointerEvents: 'none' }} />
+            <div style={{ position: 'fixed', top: 80, right: 80, width: 300, height: 300, borderRadius: '50%', background: 'rgba(13,148,136,0.15)', filter: 'blur(60px)', pointerEvents: 'none' }} />
+            <div style={{ position: 'fixed', bottom: 80, left: 60, width: 250, height: 250, borderRadius: '50%', background: 'rgba(245,158,11,0.08)', filter: 'blur(60px)', pointerEvents: 'none' }} />
 
             <div style={{ maxWidth: 720, margin: '0 auto', position: 'relative' }}>
 
                 {/* ── Top Hero Section ── */}
                 <div className="pf2-card glass" style={{
-                    background: 'rgba(255,255,255,0.05)',
-                    border: '1px solid rgba(255,255,255,0.12)',
+                    background: 'rgba(255,255,255,0.04)',
+                    border: '1px solid rgba(255,255,255,0.1)',
                     borderRadius: 28, marginBottom: 20, overflow: 'hidden',
                     animationDelay: '0s'
                 }}>
                     {/* shimmer top bar */}
-                    <div style={{ height: 3, background: 'linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899, #8b5cf6, #6366f1)', backgroundSize: '200%', animation: 'shimmer-move 3s linear infinite' }} />
+                    <div style={{ height: 3, background: 'linear-gradient(90deg, #0d9488, #5eead4, #f59e0b, #5eead4, #0d9488)', backgroundSize: '200%', animation: 'shimmer-move 3s linear infinite' }} />
 
                     <div style={{ padding: '36px 36px 32px', display: 'flex', alignItems: 'center', gap: 28, flexWrap: 'wrap' }}>
 
@@ -85,8 +85,8 @@ const Profile = () => {
                         <div style={{ position: 'relative', flexShrink: 0 }} onClick={() => fileInputRef.current?.click()}>
                             <div className="avatar-glow" style={{
                                 width: 100, height: 100, borderRadius: '50%', cursor: 'pointer',
-                                border: '3px solid rgba(139,92,246,0.6)', overflow: 'hidden',
-                                background: imagePreview ? '#000' : 'linear-gradient(135deg, #6366f1, #ec4899)',
+                                border: '3px solid rgba(94,234,212,0.6)', overflow: 'hidden',
+                                background: imagePreview ? '#000' : 'linear-gradient(135deg, #0d9488, #042f2e)',
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                             }}>
                                 {imagePreview
@@ -98,10 +98,10 @@ const Profile = () => {
                             <div style={{
                                 position: 'absolute', bottom: 2, right: 2,
                                 width: 28, height: 28, borderRadius: '50%', cursor: 'pointer',
-                                background: 'linear-gradient(135deg,#6366f1,#8b5cf6)',
+                                background: 'linear-gradient(135deg,#0d9488,#042f2e)',
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                fontSize: 13, border: '2px solid #1e1a3d',
-                                boxShadow: '0 2px 8px rgba(99,102,241,0.5)'
+                                fontSize: 13, border: '2px solid #032221',
+                                boxShadow: '0 2px 8px rgba(13,148,136,0.5)'
                             }}>📷</div>
                             <input type="file" ref={fileInputRef} onChange={handleImageChange} accept="image/*" style={{ display: 'none' }} />
                         </div>
@@ -114,9 +114,9 @@ const Profile = () => {
                                 </h2>
                                 <span style={{
                                     fontSize: 11, fontWeight: 700, padding: '3px 10px', borderRadius: 999,
-                                    background: isAdmin ? 'rgba(167,139,250,0.2)' : 'rgba(96,165,250,0.2)',
-                                    color: isAdmin ? '#c4b5fd' : '#93c5fd',
-                                    border: `1px solid ${isAdmin ? 'rgba(167,139,250,0.4)' : 'rgba(96,165,250,0.4)'}`,
+                                    background: isAdmin ? 'rgba(245,158,11,0.2)' : 'rgba(13,148,136,0.2)',
+                                    color: isAdmin ? '#fbbf24' : '#5eead4',
+                                    border: `1px solid ${isAdmin ? 'rgba(245,158,11,0.4)' : 'rgba(94,234,212,0.4)'}`,
                                     textTransform: 'capitalize'
                                 }}>
                                     {isAdmin ? '👑 Super Admin' : '🛍 Customer'}
@@ -129,7 +129,7 @@ const Profile = () => {
                                 {[
                                     { label: 'Status', value: user?.status || 'active', color: '#4ade80' },
                                     { label: 'Member since', value: user?.createdAt ? new Date(user.createdAt).getFullYear() : '2024', color: '#fb923c' },
-                                    { label: 'Account', value: 'Verified', color: '#60a5fa' },
+                                    { label: 'Account', value: 'Verified', color: '#5eead4' },
                                 ].map((s, i) => (
                                     <div key={i}>
                                         <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: 0.8, fontWeight: 600 }}>{s.label}</div>
@@ -219,9 +219,9 @@ const Profile = () => {
                                 <div
                                     onClick={() => fileInputRef.current?.click()}
                                     style={{
-                                        border: `2px dashed ${imageFile ? 'rgba(139,92,246,0.7)' : 'rgba(255,255,255,0.12)'}`,
+                                        border: `2px dashed ${imageFile ? 'rgba(94,234,212,0.7)' : 'rgba(255,255,255,0.12)'}`,
                                         borderRadius: 14, padding: '20px 22px', cursor: 'pointer',
-                                        background: imageFile ? 'rgba(139,92,246,0.1)' : 'rgba(255,255,255,0.03)',
+                                        background: imageFile ? 'rgba(13,148,136,0.15)' : 'rgba(255,255,255,0.03)',
                                         display: 'flex', alignItems: 'center', gap: 16,
                                         transition: 'all 0.2s'
                                     }}
@@ -237,7 +237,7 @@ const Profile = () => {
                                         }
                                     </div>
                                     <div>
-                                        <div style={{ fontSize: 13, fontWeight: 600, color: imageFile ? '#c4b5fd' : 'rgba(255,255,255,0.6)' }}>
+                                        <div style={{ fontSize: 13, fontWeight: 600, color: imageFile ? '#5eead4' : 'rgba(255,255,255,0.6)' }}>
                                             {imageFile ? `✓ ${imageFile.name}` : 'Click to upload a new photo'}
                                         </div>
                                         <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', marginTop: 3 }}>PNG, JPG or GIF · Max 5MB</div>
@@ -252,10 +252,10 @@ const Profile = () => {
                                 disabled={loading}
                                 style={{
                                     width: '100%', padding: '14px', borderRadius: 14, border: 'none',
-                                    background: loading ? 'rgba(99,102,241,0.4)' : 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%)',
+                                    background: loading ? 'rgba(13,148,136,0.4)' : 'linear-gradient(135deg, #0d9488 0%, #0f766e 50%, #042f2e 100%)',
                                     color: '#fff', fontSize: 15, fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer',
                                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                                    boxShadow: '0 4px 20px rgba(99,102,241,0.35)', letterSpacing: 0.3
+                                    boxShadow: '0 4px 20px rgba(13,148,136,0.35)', letterSpacing: 0.3
                                 }}
                             >
                                 {loading ? (

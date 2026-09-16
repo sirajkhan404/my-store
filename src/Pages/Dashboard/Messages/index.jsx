@@ -173,8 +173,8 @@ const Messages = () => {
                     <div className="d-flex align-items-center gap-2">
                         {!isSuperAdmin && (
                             <button
-                                className="btn btn-primary rounded-pill px-4 py-2 fw-semibold shadow-sm d-flex align-items-center gap-2 border-0"
-                                style={{ background: 'linear-gradient(135deg, #4f46e5, #3b82f6)' }}
+                                className="btn rounded-pill px-4 py-2 fw-semibold shadow-sm d-flex align-items-center gap-2 border-0 text-white"
+                                style={{ background: 'linear-gradient(135deg, #0d9488, #042f2e)' }}
                                 onClick={() => setNewInquiryModalOpen(true)}
                             >
                                 ➕ New Inquiry
@@ -195,8 +195,8 @@ const Messages = () => {
             <div className="row g-3 mb-4">
                 <div className="col-12 col-sm-4">
                     <div className="card bg-white border border-light-subtle rounded-4 p-3 px-4 shadow-sm d-flex flex-row align-items-center gap-3 h-100">
-                        <div className="d-flex align-items-center justify-content-center rounded-3 text-primary fw-bold flex-shrink-0"
-                            style={{ width: '44px', height: '44px', background: '#e0e7ff', fontSize: '20px' }}>
+                        <div className="d-flex align-items-center justify-content-center rounded-3 fw-bold flex-shrink-0"
+                            style={{ width: '44px', height: '44px', background: '#f0fdfa', color: '#0d9488', fontSize: '20px' }}>
                             📩
                         </div>
                         <div>
@@ -220,43 +220,37 @@ const Messages = () => {
                 <div className="col-12 col-sm-4">
                     <div className="card bg-white border border-light-subtle rounded-4 p-3 px-4 shadow-sm d-flex flex-row align-items-center gap-3 h-100">
                         <div className="d-flex align-items-center justify-content-center rounded-3 text-success fw-bold flex-shrink-0"
-                            style={{ width: '44px', height: '44px', background: '#d1fae5', fontSize: '20px' }}>
+                            style={{ width: '44px', height: '44px', background: '#dcfce7', fontSize: '20px' }}>
                             ✅
                         </div>
                         <div>
                             <div className="fw-bold fs-4 text-dark lh-1">{repliedCount}</div>
-                            <div className="text-muted small fw-semibold mt-1">Replied Inquiries</div>
+                            <div className="text-muted small fw-semibold mt-1">Replied / Solved</div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* ── Split Inbox Main Layout ────────────────────────────────── */}
-            <div className="row g-4" style={{ minHeight: '680px' }}>
+            {/* ── Main Split View Card ────────────────────────────────────── */}
+            <div className="card bg-white border border-light-subtle rounded-4 shadow-sm overflow-hidden" style={{ minHeight: '600px' }}>
+                <div className="row g-0 h-100">
 
-                {/* ── Left Column: Message List ── */}
-                <div className={`col-12 col-lg-4 ${selectedMessage && 'd-none d-lg-block'}`}>
-                    <div className="card bg-white border border-light-subtle rounded-4 shadow-sm overflow-hidden h-100 d-flex flex-column">
-
-                        {/* Search & Tabs Header */}
-                        <div className="p-3 border-bottom bg-white">
-                            <div className="position-relative mb-3">
+                    {/* ── Left Sidebar (List of Messages) ────────────────────── */}
+                    <div className="col-12 col-lg-5 border-end d-flex flex-column" style={{ maxHeight: '720px' }}>
+                        {/* Search & Tabs */}
+                        <div className="p-3 border-bottom bg-light bg-opacity-50">
+                            <div className="position-relative mb-2">
                                 <input
                                     type="text"
-                                    className="form-control bg-light border-light-subtle rounded-3 py-2 px-3 pe-5 shadow-sm"
-                                    placeholder="Search by name, subject, message..."
+                                    className="form-control rounded-pill ps-5 bg-white border-light-subtle shadow-none small"
+                                    placeholder="Search by name, subject, email..."
                                     value={searchTerm}
-                                    onChange={e => setSearchTerm(e.target.value)}
-                                    style={{ fontSize: '13px' }}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    style={{ fontSize: '13px', padding: '9px 16px 9px 38px' }}
                                 />
-                                {searchTerm && (
-                                    <button
-                                        className="btn btn-link position-absolute end-0 top-50 translate-middle-y text-muted pe-3 text-decoration-none shadow-none"
-                                        onClick={() => setSearchTerm('')}
-                                    >
-                                        ✕
-                                    </button>
-                                )}
+                                <span className="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted" style={{ fontSize: '14px' }}>
+                                    🔍
+                                </span>
                             </div>
 
                             {/* Filter Tabs */}
@@ -268,9 +262,9 @@ const Messages = () => {
                                 ].map(tab => (
                                     <button
                                         key={tab.id}
-                                        className={`btn btn-sm rounded-pill px-3 py-1 fw-semibold text-nowrap ${filterTab === tab.id ? 'btn-primary shadow-sm' : 'btn-outline-secondary bg-white text-secondary border-light-subtle'}`}
+                                        className={`btn btn-sm rounded-pill px-3 py-1 fw-semibold text-nowrap ${filterTab === tab.id ? 'shadow-sm text-white' : 'btn-outline-secondary bg-white text-secondary border-light-subtle'}`}
                                         onClick={() => setFilterTab(tab.id)}
-                                        style={{ fontSize: '12.5px', background: filterTab === tab.id ? 'linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%)' : '', border: filterTab === tab.id ? 'none' : undefined }}
+                                        style={{ fontSize: '12.5px', background: filterTab === tab.id ? 'linear-gradient(135deg, #0d9488 0%, #042f2e 100%)' : '', border: filterTab === tab.id ? 'none' : undefined }}
                                     >
                                         {tab.label}
                                     </button>
@@ -282,7 +276,7 @@ const Messages = () => {
                         <div className="flex-grow-1 overflow-auto">
                             {loading ? (
                                 <div className="text-center py-5">
-                                    <div className="spinner-border text-primary spinner-border-sm" role="status" />
+                                    <div className="spinner-border spinner-border-sm" style={{ color: '#0d9488' }} role="status" />
                                     <p className="mt-2 text-muted small fw-medium">Loading inbox...</p>
                                 </div>
                             ) : filteredMessages.length === 0 ? (
@@ -297,12 +291,12 @@ const Messages = () => {
                                 filteredMessages.map(msg => (
                                     <div
                                         key={msg.id}
-                                        className={`p-3 border-bottom cursor-pointer transition-all ${selectedMessage?.id === msg.id ? 'bg-indigo-subtle border-start border-4 border-primary' : 'bg-white'}`}
+                                        className={`p-3 border-bottom cursor-pointer transition-all ${selectedMessage?.id === msg.id ? 'border-start border-4' : 'bg-white'}`}
                                         onClick={() => setSelectedMessage(msg)}
                                         style={{
                                             cursor: 'pointer',
-                                            background: selectedMessage?.id === msg.id ? '#eef2ff' : '#ffffff',
-                                            borderLeft: selectedMessage?.id === msg.id ? '4px solid #4f46e5' : '1px solid #f1f5f9'
+                                            background: selectedMessage?.id === msg.id ? '#f0fdfa' : '#ffffff',
+                                            borderLeft: selectedMessage?.id === msg.id ? '4px solid #0d9488' : '1px solid #f1f5f9'
                                         }}
                                     >
                                         <div className="d-flex justify-content-between align-items-start mb-1">
@@ -316,7 +310,7 @@ const Messages = () => {
                                             </span>
                                         </div>
 
-                                        <div className="fw-semibold text-primary mb-1 text-truncate" style={{ fontSize: '13px' }}>
+                                        <div className="fw-semibold mb-1 text-truncate" style={{ fontSize: '13px', color: '#0d9488' }}>
                                             {isSuperAdmin ? msg.subject : `Email: ${msg.email}`}
                                         </div>
 
@@ -428,7 +422,7 @@ const Messages = () => {
                                         <div className="mt-4 ms-md-4">
                                             <div className="d-flex align-items-center justify-content-between mb-2 me-1">
                                                 <div className="d-flex align-items-center gap-2">
-                                                    <span className="fw-bold small" style={{ color: '#4f46e5' }}>👑 SuperAdmin Response</span>
+                                                    <span className="fw-bold small" style={{ color: '#0d9488' }}>👑 SuperAdmin Response</span>
                                                     <span className="badge bg-success-subtle text-success border border-success-subtle px-2 py-0.5 rounded-pill small">
                                                         ✓ Sent to User Dashboard
                                                     </span>
@@ -440,7 +434,7 @@ const Messages = () => {
                                                 )}
                                             </div>
                                             <div className="p-4 rounded-4 text-white shadow-sm fs-6 lh-base"
-                                                style={{ background: 'linear-gradient(135deg, #1e293b 0%, #4f46e5 100%)', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+                                                style={{ background: 'linear-gradient(135deg, #042f2e 0%, #0d9488 100%)', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
                                                 {selectedMessage.replyText}
                                             </div>
                                         </div>
@@ -492,8 +486,8 @@ const Messages = () => {
                                             <div className="d-flex justify-content-end">
                                                 <button
                                                     type="submit"
-                                                    className="btn btn-primary rounded-pill px-4 py-2 fw-bold shadow-sm d-flex align-items-center gap-2 border-0"
-                                                    style={{ background: 'linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%)' }}
+                                                    className="btn rounded-pill px-4 py-2 fw-bold shadow-sm d-flex align-items-center gap-2 border-0 text-white"
+                                                    style={{ background: 'linear-gradient(135deg, #0d9488 0%, #042f2e 100%)' }}
                                                     disabled={isSendingReply}
                                                 >
                                                     {isSendingReply ? (
@@ -524,7 +518,7 @@ const Messages = () => {
                                 <div className="fs-1 mb-3">💬</div>
                                 <h5 className="fw-bold text-dark mb-1">Select a Message</h5>
                                 <p className="small mb-0 opacity-75">
-                                    Choose a message from the left panel to view conversation thread and details.
+                                    Click on any conversation from the left to view details and reply.
                                 </p>
                             </div>
                         )}
@@ -545,7 +539,7 @@ const Messages = () => {
                         <div className="modal-content rounded-4 border-0 shadow-lg overflow-hidden">
                             <div
                                 className="modal-header text-white p-4"
-                                style={{ background: 'linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%)' }}
+                                style={{ background: 'linear-gradient(135deg, #0d9488 0%, #042f2e 100%)' }}
                             >
                                 <div className="d-flex align-items-center gap-2">
                                     <span className="fs-4">➕</span>
@@ -599,8 +593,8 @@ const Messages = () => {
                                     </button>
                                     <button
                                         type="submit"
-                                        className="btn btn-primary px-4 py-2 rounded-3 fw-semibold d-flex align-items-center gap-2 border-0 shadow-sm"
-                                        style={{ background: 'linear-gradient(135deg, #4f46e5, #3b82f6)' }}
+                                        className="btn px-4 py-2 rounded-3 fw-semibold d-flex align-items-center gap-2 border-0 shadow-sm text-white"
+                                        style={{ background: 'linear-gradient(135deg, #0d9488, #042f2e)' }}
                                         disabled={isSendingInquiry}
                                     >
                                         {isSendingInquiry ? (

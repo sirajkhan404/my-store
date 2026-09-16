@@ -128,10 +128,10 @@ const Orders = () => {
                 .ord-btn  { border:none; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; border-radius:9px; transition:all 0.2s; }
                 .ord-btn:hover:not(:disabled) { transform:translateY(-2px); }
                 .ord-btn:disabled { opacity:.5; cursor:not-allowed; }
-                .ord-search:focus { outline:none; border-color:#6366f1 !important; box-shadow:0 0 0 3px rgba(99,102,241,0.15) !important; }
-                .ord-sel:focus { outline:none; border-color:#6366f1 !important; box-shadow:0 0 0 3px rgba(99,102,241,0.15) !important; }
-                .ord-modal-sel:focus { outline:none; border-color:#6366f1 !important; box-shadow:0 0 0 3px rgba(99,102,241,0.15) !important; }
-                .ord-save:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 8px 24px rgba(99,102,241,.35) !important; }
+                .ord-search:focus { outline:none; border-color:#0d9488 !important; box-shadow:0 0 0 3px rgba(13,148,136,0.15) !important; }
+                .ord-sel:focus { outline:none; border-color:#0d9488 !important; box-shadow:0 0 0 3px rgba(13,148,136,0.15) !important; }
+                .ord-modal-sel:focus { outline:none; border-color:#0d9488 !important; box-shadow:0 0 0 3px rgba(13,148,136,0.15) !important; }
+                .ord-save:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 8px 24px rgba(13,148,136,.35) !important; }
                 .ord-save { transition:all 0.2s; }
 
                 /* Smooth Horizontal Scrollbar for Orders Table */
@@ -154,7 +154,7 @@ const Orders = () => {
                     <h1 style={{ margin: 0, fontSize: 'clamp(20px, 4vw, 26px)', fontWeight: 800, color: '#0f172a', letterSpacing: -0.5 }}>🛒 Orders Management</h1>
                     <p style={{ margin: '4px 0 0', fontSize: 13, color: '#94a3b8' }}>Track and manage all customer orders</p>
                 </div>
-                <button className="ord-header-btn" onClick={getDocuments} style={{ padding: '9px 18px', borderRadius: 10, border: '1.5px solid #e2e8f0', background: '#fff', color: '#6366f1', fontSize: 13, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 7 }}>
+                <button className="ord-header-btn" onClick={getDocuments} style={{ padding: '9px 18px', borderRadius: 10, border: '1.5px solid #ccfbf1', background: '#fff', color: '#0d9488', fontSize: 13, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 7, boxShadow: '0 2px 8px rgba(13,148,136,0.08)' }}>
                     🔄 Refresh
                 </button>
             </div>
@@ -162,12 +162,12 @@ const Orders = () => {
             {/* ── Stat Cards ── */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(130px,1fr))', gap: 14, marginBottom: 24, animation: 'ord-in 0.4s ease 0.05s both' }}>
                 {[
-                    { label: 'Total Orders', value: stats.total,     icon: '📦', color: '#6366f1', bg: '#ede9fe' },
+                    { label: 'Total Orders', value: stats.total,     icon: '📦', color: '#0d9488', bg: '#ccfbf1' },
                     { label: 'Processing',   value: stats.processing, icon: '⏳', color: '#d97706', bg: '#fffbeb' },
-                    { label: 'Shipped',      value: stats.shipped,    icon: '🚚', color: '#1d4ed8', bg: '#dbeafe' },
+                    { label: 'Shipped',      value: stats.shipped,    icon: '🚚', color: '#0284c7', bg: '#e0f2fe' },
                     { label: 'Delivered',    value: stats.delivered,  icon: '✅', color: '#16a34a', bg: '#dcfce7' },
                     { label: 'Cancelled',    value: stats.cancelled,  icon: '❌', color: '#dc2626', bg: '#fef2f2' },
-                    { label: 'Revenue',      value: `Rs. ${stats.revenue.toLocaleString()}`, icon: '💰', color: '#0369a1', bg: '#e0f2fe' },
+                    { label: 'Revenue',      value: `Rs. ${stats.revenue.toLocaleString()}`, icon: '💰', color: '#0d9488', bg: '#f0fdfa' },
                 ].map((s, i) => (
                     <div key={i} style={{ background: '#fff', borderRadius: 16, padding: '14px 16px', boxShadow: '0 2px 10px rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', gap: 12 }}>
                         <div style={{ width: 40, height: 40, borderRadius: 12, background: s.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0 }}>{s.icon}</div>
@@ -208,16 +208,16 @@ const Orders = () => {
                     <div style={{ minWidth: '880px' }}>
 
                         {/* Table Header */}
-                        <div style={{ display: 'grid', gridTemplateColumns: '36px 1.4fr 2.2fr 1.2fr 1.3fr 1fr 90px', gap: 10, background: '#1e293b', padding: '14px 20px', alignItems: 'center' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: '36px 1.4fr 2.2fr 1.2fr 1.3fr 1fr 90px', gap: 10, background: '#042f2e', padding: '14px 20px', alignItems: 'center' }}>
                             {['#', 'Order ID', 'Customer', 'Total', 'Order Status', 'Payment', 'Actions'].map((h, i) => (
-                                <div key={i} style={{ fontSize: 11, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: 0.8 }}>{h}</div>
+                                <div key={i} style={{ fontSize: 11, fontWeight: 700, color: '#5eead4', textTransform: 'uppercase', letterSpacing: 0.8 }}>{h}</div>
                             ))}
                         </div>
 
                         {/* Loading */}
                         {loading && (
                             <div style={{ padding: 56, textAlign: 'center' }}>
-                                <div style={{ width: 36, height: 36, border: '3px solid #e2e8f0', borderTop: '3px solid #6366f1', borderRadius: '50%', animation: 'ord-spin 0.8s linear infinite', margin: '0 auto 14px' }} />
+                                <div style={{ width: 36, height: 36, border: '3px solid #e2e8f0', borderTop: '3px solid #0d9488', borderRadius: '50%', animation: 'ord-spin 0.8s linear infinite', margin: '0 auto 14px' }} />
                                 <p style={{ color: '#94a3b8', fontSize: 13, margin: 0 }}>Loading orders…</p>
                             </div>
                         )}
@@ -242,14 +242,14 @@ const Orders = () => {
 
                                     {/* ── Main Row ── */}
                                     <div className="ord-row" onClick={() => setExpandedRow(isExpanded ? null : order.id)}
-                                        style={{ display: 'grid', gridTemplateColumns: '36px 1.4fr 2.2fr 1.2fr 1.3fr 1fr 90px', gap: 10, padding: '14px 20px', alignItems: 'center', background: isExpanded ? '#f8f7ff' : '#fff' }}>
+                                        style={{ display: 'grid', gridTemplateColumns: '36px 1.4fr 2.2fr 1.2fr 1.3fr 1fr 90px', gap: 10, padding: '14px 20px', alignItems: 'center', background: isExpanded ? '#f0fdfa' : '#fff' }}>
 
                                         {/* # */}
                                         <div style={{ fontSize: 12, color: '#cbd5e1', fontWeight: 700 }}>{idx + 1}</div>
 
                                         {/* Order ID */}
                                         <div>
-                                            <div style={{ fontSize: 12, fontFamily: 'monospace', fontWeight: 700, color: '#6366f1', background: '#ede9fe', display: 'inline-block', padding: '2px 8px', borderRadius: 6 }}>
+                                            <div style={{ fontSize: 12, fontFamily: 'monospace', fontWeight: 700, color: '#0d9488', background: '#ccfbf1', display: 'inline-block', padding: '2px 8px', borderRadius: 6 }}>
                                                 #{order.id?.substring(0, 8)}
                                             </div>
                                             <div style={{ fontSize: 10, color: '#94a3b8', marginTop: 3 }}>
@@ -287,12 +287,12 @@ const Orders = () => {
                                         {isSuperAdmin ? (
                                             <div style={{ display: 'flex', gap: 6 }} onClick={e => e.stopPropagation()}>
                                                 <button className="ord-btn" onClick={() => handleEdit(order)}
-                                                    style={{ width: 32, height: 32, background: '#ede9fe', color: '#7c3aed', fontSize: 13 }} title="Update Status">✏️</button>
+                                                    style={{ width: 32, height: 32, background: '#ccfbf1', color: '#0d9488', fontSize: 13 }} title="Update Status">✏️</button>
                                                 <button className="ord-btn" onClick={() => handleMarkShipped(order)}
                                                     disabled={shippingId === order.id || order.orderStatus === 'shipped' || order.orderStatus === 'delivered'}
-                                                    style={{ width: 32, height: 32, background: '#dbeafe', color: '#1d4ed8', fontSize: 13 }} title="Mark as Shipped">
+                                                    style={{ width: 32, height: 32, background: '#e0f2fe', color: '#0284c7', fontSize: 13 }} title="Mark as Shipped">
                                                     {shippingId === order.id
-                                                        ? <span style={{ width: 14, height: 14, border: '2px solid #bfdbfe', borderTop: '2px solid #1d4ed8', borderRadius: '50%', animation: 'ord-spin 0.8s linear infinite', display: 'inline-block' }} />
+                                                        ? <span style={{ width: 14, height: 14, border: '2px solid #bae6fd', borderTop: '2px solid #0284c7', borderRadius: '50%', animation: 'ord-spin 0.8s linear infinite', display: 'inline-block' }} />
                                                         : '🚚'
                                                     }
                                                 </button>
@@ -304,8 +304,8 @@ const Orders = () => {
 
                                     {/* ── Expanded Products ── */}
                                     {isExpanded && (
-                                        <div style={{ padding: '14px 20px 18px', background: '#f8f7ff', borderTop: '1px dashed #cbd5e1' }}>
-                                            <div style={{ fontSize: 11, fontWeight: 700, color: '#6366f1', textTransform: 'uppercase', letterSpacing: 0.8, marginBottom: 10 }}>📦 Products in this order</div>
+                                        <div style={{ padding: '14px 20px 18px', background: '#f0fdfa', borderTop: '1px dashed #99f6e4' }}>
+                                            <div style={{ fontSize: 11, fontWeight: 700, color: '#0d9488', textTransform: 'uppercase', letterSpacing: 0.8, marginBottom: 10 }}>📦 Products in this order</div>
                                             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                                                 {order.products?.map((p, i) => (
                                                     <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', background: '#fff', borderRadius: 10, border: '1px solid #e2e8f0' }}>
@@ -315,14 +315,14 @@ const Orders = () => {
                                                             <div style={{ fontSize: 13, fontWeight: 600, color: '#1e293b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{p.name}</div>
                                                             <div style={{ fontSize: 11, color: '#94a3b8' }}>Qty: {p.quantity} · Rs. {Number(p.price).toLocaleString()} each</div>
                                                         </div>
-                                                        <div style={{ fontSize: 13, fontWeight: 700, color: '#6366f1', flexShrink: 0 }}>
+                                                        <div style={{ fontSize: 13, fontWeight: 700, color: '#0d9488', flexShrink: 0 }}>
                                                             Rs. {(p.price * p.quantity).toLocaleString()}
                                                         </div>
                                                     </div>
                                                 ))}
                                             </div>
                                             {order.shippingAddress?.address && (
-                                                <div style={{ marginTop: 12, padding: '10px 14px', background: '#f0fdf4', borderRadius: 10, border: '1px solid #bbf7d0', fontSize: 12, color: '#16a34a', display: 'flex', alignItems: 'center', gap: 8 }}>
+                                                <div style={{ marginTop: 12, padding: '10px 14px', background: '#fff', borderRadius: 10, border: '1px solid #bbf7d0', fontSize: 12, color: '#16a34a', display: 'flex', alignItems: 'center', gap: 8 }}>
                                                     📍 <span style={{ color: '#475569' }}>{order.shippingAddress.address}, {order.shippingAddress.city}</span>
                                                 </div>
                                             )}
@@ -337,11 +337,11 @@ const Orders = () => {
 
             {/* ── Update Status Modal ── */}
             {isModalOpen && orderToEdit && (
-                <div style={{ position: 'fixed', inset: 0, background: 'rgba(15,12,41,0.6)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16, backdropFilter: 'blur(4px)' }}
+                <div style={{ position: 'fixed', inset: 0, background: 'rgba(4,47,46,0.6)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16, backdropFilter: 'blur(4px)' }}
                     onClick={e => { if (e.target === e.currentTarget) closeModal(); }}>
                     <div style={{ background: '#fff', borderRadius: 24, padding: 24, width: '100%', maxWidth: 440, boxShadow: '0 24px 64px rgba(0,0,0,0.18)', animation: 'ord-in 0.3s ease' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 20 }}>
-                            <div style={{ width: 44, height: 44, borderRadius: 14, background: '#ede9fe', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }}>✏️</div>
+                            <div style={{ width: 44, height: 44, borderRadius: 14, background: '#ccfbf1', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }}>✏️</div>
                             <div style={{ flex: 1, minWidth: 0 }}>
                                 <div style={{ fontSize: 16, fontWeight: 800, color: '#0f172a' }}>Update Order Status</div>
                                 <div style={{ fontSize: 12, color: '#94a3b8', marginTop: 2 }}>#{orderToEdit.id?.substring(0, 12)}</div>
@@ -379,7 +379,7 @@ const Orders = () => {
                         <div style={{ display: 'flex', gap: 10 }}>
                             <button onClick={closeModal} style={{ flex: 1, padding: '12px', borderRadius: 12, border: '1.5px solid #e2e8f0', background: '#f8fafc', color: '#64748b', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>Cancel</button>
                             <button className="ord-save" onClick={handleUpdate} disabled={isProcessing}
-                                style={{ flex: 2, padding: '12px', borderRadius: 12, border: 'none', background: isProcessing ? '#c7d2fe' : 'linear-gradient(135deg,#6366f1,#8b5cf6)', color: '#fff', fontSize: 14, fontWeight: 700, cursor: isProcessing ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxShadow: '0 4px 14px rgba(99,102,241,0.3)' }}>
+                                style={{ flex: 2, padding: '12px', borderRadius: 12, border: 'none', background: isProcessing ? '#99f6e4' : 'linear-gradient(135deg,#0d9488,#042f2e)', color: '#fff', fontSize: 14, fontWeight: 700, cursor: isProcessing ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxShadow: '0 4px 14px rgba(13,148,136,0.3)' }}>
                                 {isProcessing
                                     ? <><span style={{ width: 16, height: 16, border: '2px solid rgba(255,255,255,0.4)', borderTop: '2px solid #fff', borderRadius: '50%', animation: 'ord-spin 0.8s linear infinite', display: 'inline-block' }} />Updating...</>
                                     : '✅ Update Order'
