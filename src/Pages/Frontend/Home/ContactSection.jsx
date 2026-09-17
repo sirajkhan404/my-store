@@ -144,7 +144,7 @@ const ContactSection = () => {
                                         </div>
                                         <div>
                                             <div className="fw-bold text-white small">Location</div>
-                                            <div className="small text-white-50">123 Business Ave, Tech City</div>
+                                            <div className="small text-white-50">CoDev, pakistan</div>
                                         </div>
                                     </div>
 
@@ -157,7 +157,7 @@ const ContactSection = () => {
                                         </div>
                                         <div>
                                             <div className="fw-bold text-white small">Phone Support</div>
-                                            <div className="small text-white-50">+92 300 1234567</div>
+                                            <div className="small text-white-50">+92 3466407536</div>
                                         </div>
                                     </div>
 
@@ -170,7 +170,7 @@ const ContactSection = () => {
                                         </div>
                                         <div>
                                             <div className="fw-bold text-white small">Email Inbox</div>
-                                            <div className="small text-white-50">support@mystore.com</div>
+                                            <div className="small text-white-50">sirajkhank819@gmail.com</div>
                                         </div>
                                     </div>
                                 </div>

@@ -1,6 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '@/context/Auth';
+import {
+    PhoneFilled,
+    MailFilled,
+    EnvironmentFilled,
+    ClockCircleFilled,
+    WhatsAppOutlined,
+    FacebookFilled,
+    InstagramFilled,
+    GlobalOutlined,
+    SendOutlined,
+    MessageFilled,
+    UserOutlined,
+    MailOutlined,
+    FormOutlined,
+    MessageOutlined
+} from '@ant-design/icons';
 
 const Contact = () => {
     const { user } = useAuth();
@@ -39,6 +55,33 @@ const Contact = () => {
         }
     };
 
+    const socialLinks = [
+        {
+            icon: <WhatsAppOutlined style={{ fontSize: '18px' }} />,
+            href: 'https://wa.me/923466407536',
+            label: 'WhatsApp',
+            hoverColor: '#25D366'
+        },
+        {
+            icon: <FacebookFilled style={{ fontSize: '18px' }} />,
+            href: 'https://www.facebook.com/profile.php?id=61587514156324',
+            label: 'Facebook',
+            hoverColor: '#1877F2'
+        },
+        {
+            icon: <InstagramFilled style={{ fontSize: '18px' }} />,
+            href: 'https://www.facebook.com/profile.php?id=61587514156324',
+            label: 'Instagram',
+            hoverColor: '#E4405F'
+        },
+        {
+            icon: <GlobalOutlined style={{ fontSize: '18px' }} />,
+            href: 'https://my-store-eta-ten.vercel.app',
+            label: 'Website',
+            hoverColor: '#0d9488'
+        }
+    ];
+
     return (
         <main className="d-flex flex-column flex-grow-1" style={{ fontFamily: "'Inter', sans-serif", background: '#f0fdfa' }}>
 
@@ -53,9 +96,9 @@ const Contact = () => {
                     style={{ width: '280px', height: '280px', background: 'radial-gradient(circle, rgba(245,158,11,0.18) 0%, transparent 70%)', bottom: '-60px', right: '-40px', zIndex: 0 }}></div>
 
                 <div className="container position-relative py-4" style={{ zIndex: 1 }}>
-                    <span className="badge rounded-pill px-3 py-2 mb-3 fw-bold"
+                    <span className="badge rounded-pill px-3 py-2 mb-3 fw-bold d-inline-flex align-items-center gap-2"
                         style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.2)', backdropFilter: 'blur(4px)', fontSize: '12px' }}>
-                        💬 We're here to help
+                        <MessageFilled style={{ color: '#2dd4bf' }} /> We're here to help
                     </span>
                     <h1 className="fw-extrabold display-5 display-md-4 mb-3" style={{ letterSpacing: '-0.5px' }}>Get in Touch</h1>
                     <p className="opacity-75 mx-auto mb-0 lead fs-6 fs-md-5" style={{ maxWidth: '560px' }}>
@@ -87,40 +130,40 @@ const Contact = () => {
                                 <div className="d-flex align-items-start gap-3">
                                     <div className="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0 border border-light border-opacity-25"
                                         style={{ width: '46px', height: '46px', background: 'rgba(255,255,255,0.15)', fontSize: '20px' }}>
-                                        📞
+                                        <PhoneFilled style={{ color: '#5eead4' }} />
                                     </div>
                                     <div>
                                         <h6 className="fw-bold small opacity-85 mb-1">Phone Number</h6>
-                                        <p className="small opacity-75 mb-0">+92 300 1234567</p>
+                                        <a href="tel:+923466407536" className="small opacity-75 mb-0 text-white text-decoration-none d-block">+92 3466407536</a>
                                     </div>
                                 </div>
 
                                 <div className="d-flex align-items-start gap-3">
                                     <div className="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0 border border-light border-opacity-25"
                                         style={{ width: '46px', height: '46px', background: 'rgba(255,255,255,0.15)', fontSize: '20px' }}>
-                                        ✉️
+                                        <MailFilled style={{ color: '#5eead4' }} />
                                     </div>
                                     <div>
                                         <h6 className="fw-bold small opacity-85 mb-1">Email Address</h6>
-                                        <p className="small opacity-75 mb-0">support@mystore.com</p>
+                                        <a href="mailto:sirajkhank819@gmail.com" className="small opacity-75 mb-0 text-white text-decoration-none d-block">sirajkhank819@gmail.com</a>
                                     </div>
                                 </div>
 
                                 <div className="d-flex align-items-start gap-3">
                                     <div className="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0 border border-light border-opacity-25"
                                         style={{ width: '46px', height: '46px', background: 'rgba(255,255,255,0.15)', fontSize: '20px' }}>
-                                        📍
+                                        <EnvironmentFilled style={{ color: '#5eead4' }} />
                                     </div>
                                     <div>
                                         <h6 className="fw-bold small opacity-85 mb-1">Location</h6>
-                                        <p className="small opacity-75 mb-0 lh-sm">123 Business Avenue,<br />Tech City, Pakistan</p>
+                                        <p className="small opacity-75 mb-0 lh-sm">CoDev, Pakistan</p>
                                     </div>
                                 </div>
 
                                 <div className="d-flex align-items-start gap-3">
                                     <div className="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0 border border-light border-opacity-25"
                                         style={{ width: '46px', height: '46px', background: 'rgba(255,255,255,0.15)', fontSize: '20px' }}>
-                                        🕐
+                                        <ClockCircleFilled style={{ color: '#5eead4' }} />
                                     </div>
                                     <div>
                                         <h6 className="fw-bold small opacity-85 mb-1">Business Hours</h6>
@@ -130,11 +173,32 @@ const Contact = () => {
                             </div>
 
                             <div className="d-flex gap-2 mt-5 pt-4 border-top border-light border-opacity-25 position-relative" style={{ zIndex: 1 }}>
-                                {['📱', '💬', '🌐', '📸'].map((icon, idx) => (
-                                    <a key={idx} href="#link" onClick={(e) => e.preventDefault()}
+                                {socialLinks.map((item, idx) => (
+                                    <a
+                                        key={idx}
+                                        href={item.href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        title={item.label}
                                         className="d-inline-flex align-items-center justify-content-center text-white text-decoration-none rounded-3 border border-light border-opacity-25 transition-all"
-                                        style={{ width: '40px', height: '40px', background: 'rgba(255,255,255,0.12)', fontSize: '18px' }}>
-                                        {icon}
+                                        style={{
+                                            width: '42px',
+                                            height: '42px',
+                                            background: 'rgba(255,255,255,0.12)',
+                                            transition: 'all 0.25s ease'
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            e.currentTarget.style.transform = 'translateY(-3px)';
+                                            e.currentTarget.style.background = item.hoverColor;
+                                            e.currentTarget.style.borderColor = item.hoverColor;
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.currentTarget.style.transform = 'translateY(0)';
+                                            e.currentTarget.style.background = 'rgba(255,255,255,0.12)';
+                                            e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)';
+                                        }}
+                                    >
+                                        {item.icon}
                                     </a>
                                 ))}
                             </div>
@@ -142,13 +206,18 @@ const Contact = () => {
 
                         {/* ── Right: Form Panel ── */}
                         <div className="col-12 col-lg-7 p-4 p-md-5 bg-white">
-                            <h3 className="fw-bold fs-4 text-dark mb-1">Send us a Message</h3>
+                            <div className="d-flex align-items-center gap-2 mb-1">
+                                <MessageFilled className="text-teal" style={{ color: '#0d9488', fontSize: '20px' }} />
+                                <h3 className="fw-bold fs-4 text-dark mb-0">Send us a Message</h3>
+                            </div>
                             <p className="text-muted small mb-4">We typically reply within a few hours.</p>
 
                             <form onSubmit={handleSubmit}>
                                 <div className="row g-3 mb-3">
                                     <div className="col-12 col-md-6">
-                                        <label className="form-label fw-bold text-secondary text-uppercase" style={{ fontSize: '11px', letterSpacing: '0.8px' }}>Your Name</label>
+                                        <label className="form-label fw-bold text-secondary text-uppercase d-flex align-items-center gap-1" style={{ fontSize: '11px', letterSpacing: '0.8px' }}>
+                                            <UserOutlined className="text-muted" /> Your Name
+                                        </label>
                                         <input
                                             className="form-control rounded-3 bg-light border-light-subtle px-3 py-2 shadow-sm"
                                             type="text"
@@ -160,7 +229,9 @@ const Contact = () => {
                                         />
                                     </div>
                                     <div className="col-12 col-md-6">
-                                        <label className="form-label fw-bold text-secondary text-uppercase" style={{ fontSize: '11px', letterSpacing: '0.8px' }}>Email Address</label>
+                                        <label className="form-label fw-bold text-secondary text-uppercase d-flex align-items-center gap-1" style={{ fontSize: '11px', letterSpacing: '0.8px' }}>
+                                            <MailOutlined className="text-muted" /> Email Address
+                                        </label>
                                         <input
                                             className="form-control rounded-3 bg-light border-light-subtle px-3 py-2 shadow-sm"
                                             type="email"
@@ -174,7 +245,9 @@ const Contact = () => {
                                 </div>
 
                                 <div className="mb-3">
-                                    <label className="form-label fw-bold text-secondary text-uppercase" style={{ fontSize: '11px', letterSpacing: '0.8px' }}>Subject</label>
+                                    <label className="form-label fw-bold text-secondary text-uppercase d-flex align-items-center gap-1" style={{ fontSize: '11px', letterSpacing: '0.8px' }}>
+                                        <FormOutlined className="text-muted" /> Subject
+                                    </label>
                                     <input
                                         className="form-control rounded-3 bg-light border-light-subtle px-3 py-2 shadow-sm"
                                         type="text"
@@ -187,7 +260,9 @@ const Contact = () => {
                                 </div>
 
                                 <div className="mb-4">
-                                    <label className="form-label fw-bold text-secondary text-uppercase" style={{ fontSize: '11px', letterSpacing: '0.8px' }}>Message</label>
+                                    <label className="form-label fw-bold text-secondary text-uppercase d-flex align-items-center gap-1" style={{ fontSize: '11px', letterSpacing: '0.8px' }}>
+                                        <MessageOutlined className="text-muted" /> Message
+                                    </label>
                                     <textarea
                                         className="form-control rounded-3 bg-light border-light-subtle px-3 py-2 shadow-sm"
                                         name="message"
@@ -209,7 +284,12 @@ const Contact = () => {
                                             <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
                                             <span>Sending...</span>
                                         </>
-                                    ) : 'Send Message 🚀'}
+                                    ) : (
+                                        <>
+                                            <SendOutlined style={{ fontSize: '16px' }} />
+                                            <span>Send Message</span>
+                                        </>
+                                    )}
                                 </button>
                             </form>
                         </div>

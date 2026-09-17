@@ -143,19 +143,19 @@ const Footer = () => {
                                 {
                                     icon: <FacebookFilled />,
                                     name: 'Facebook',
-                                    href: '#facebook',
+                                    href: 'https://www.facebook.com/profile.php?id=61587514156324',
                                     hoverBg: '#1877F2'
                                 },
                                 {
                                     icon: <InstagramFilled />,
                                     name: 'Instagram',
-                                    href: '#instagram',
+                                    href: 'https://www.facebook.com/profile.php?id=61587514156324',
                                     hoverBg: '#E4405F'
                                 },
                                 {
                                     icon: <GlobalOutlined />,
                                     name: 'Website',
-                                    href: '#website',
+                                    href: 'https://my-store-eta-ten.vercel.app',
                                     hoverBg: '#0d9488'
                                 },
                             ].map((s, idx) => (
