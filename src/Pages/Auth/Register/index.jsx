@@ -29,19 +29,19 @@ const Register = () => {
 
     const handleChange = e => setState(s => ({ ...s, [e.target.name]: e.target.value }))
 
-    // Interactive password strength calculation
+    // Password strength calculation
     const getPasswordStrength = (pass) => {
-        if (!pass) return { level: 0, label: "", color: "rgba(255, 255, 255, 0.1)" }
+        if (!pass) return { level: 0, label: "", color: "#e2e8f0" }
         let score = 0
         if (pass.length >= 6) score++
         if (pass.length >= 8) score++
         if (/[A-Z]/.test(pass) && /[0-9]/.test(pass)) score++
         if (/[^A-Za-z0-9]/.test(pass)) score++
 
-        if (score <= 1) return { level: 1, label: "Weak", color: "#f87171" }
-        if (score <= 2) return { level: 2, label: "Fair", color: "#fbbf24" }
-        if (score === 3) return { level: 3, label: "Good", color: "#60a5fa" }
-        return { level: 4, label: "Strong & Secure", color: "#34d399" }
+        if (score <= 1) return { level: 1, label: "Weak", color: "#ef4444" }
+        if (score <= 2) return { level: 2, label: "Fair", color: "#f59e0b" }
+        if (score === 3) return { level: 3, label: "Good", color: "#3b82f6" }
+        return { level: 4, label: "Strong", color: "#10b981" }
     }
 
     const strength = getPasswordStrength(state.password)
@@ -51,7 +51,7 @@ const Register = () => {
         let { name, email, password, confirmPassword } = state
 
         const fullName = name.trim()
-        if (fullName.length < 3) return window.toastify("Please enter your full name (min 3 chars)", "warning")
+        if (fullName.length < 3) return window.toastify("Please enter your full name (minimum 3 characters)", "warning")
         if (!email || !email.includes("@")) return window.toastify("Please enter a valid email address", "warning")
         if (password.length < 6) return window.toastify("Password must be at least 6 characters", "warning")
         if (confirmPassword !== password) return window.toastify("Passwords do not match. Please re-enter.", "warning")
@@ -81,39 +81,41 @@ const Register = () => {
         <main
             style={{
                 minHeight: "100vh",
-                background: "#021212",
-                backgroundImage: `
-                    radial-gradient(circle at 15% 20%, rgba(13, 148, 136, 0.28) 0%, transparent 40%),
-                    radial-gradient(circle at 85% 75%, rgba(16, 185, 129, 0.22) 0%, transparent 40%),
-                    radial-gradient(circle at 50% 50%, rgba(6, 78, 59, 0.3) 0%, transparent 60%),
-                    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px)
-                `,
-                backgroundSize: "100% 100%, 100% 100%, 100% 100%, 32px 32px, 32px 32px",
+                background: "linear-gradient(135deg, #f0fdf4 0%, #f8fafc 40%, #ecfdf5 100%)",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
-                padding: "32px 16px",
+                padding: "24px 16px",
                 position: "relative",
                 overflow: "hidden",
-                color: "#ffffff",
                 fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
             }}
         >
-            {/* Top Glow Highlights */}
+            {/* Background Ambient Glows */}
             <div
                 style={{
                     position: "absolute",
-                    top: "-150px",
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    width: "800px",
-                    height: "300px",
+                    top: "-100px",
+                    right: "-100px",
+                    width: "480px",
+                    height: "480px",
                     borderRadius: "50%",
-                    background: "radial-gradient(ellipse, rgba(45, 212, 191, 0.2) 0%, transparent 70%)",
+                    background: "radial-gradient(circle, rgba(13, 148, 136, 0.12) 0%, transparent 70%)",
                     pointerEvents: "none",
-                    filter: "blur(50px)",
+                    zIndex: 0
+                }}
+            />
+            <div
+                style={{
+                    position: "absolute",
+                    bottom: "-100px",
+                    left: "-100px",
+                    width: "450px",
+                    height: "450px",
+                    borderRadius: "50%",
+                    background: "radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, transparent 70%)",
+                    pointerEvents: "none",
                     zIndex: 0
                 }}
             />
@@ -122,11 +124,11 @@ const Register = () => {
             <div
                 style={{
                     width: "100%",
-                    maxWidth: "1140px",
+                    maxWidth: "1080px",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
-                    marginBottom: "24px",
+                    marginBottom: "20px",
                     zIndex: 2
                 }}
             >
@@ -136,65 +138,57 @@ const Register = () => {
                         display: "inline-flex",
                         alignItems: "center",
                         gap: "8px",
-                        color: "#a7f3d0",
+                        color: "#0f766e",
                         textDecoration: "none",
-                        fontSize: "13px",
+                        fontSize: "14px",
                         fontWeight: 700,
-                        padding: "9px 18px",
-                        borderRadius: "14px",
-                        background: "rgba(255, 255, 255, 0.05)",
-                        backdropFilter: "blur(16px)",
-                        border: "1px solid rgba(255, 255, 255, 0.12)",
-                        boxShadow: "0 4px 15px rgba(0, 0, 0, 0.25)",
+                        padding: "8px 16px",
+                        borderRadius: "12px",
+                        background: "#ffffff",
+                        border: "1px solid #ccfbf1",
+                        boxShadow: "0 2px 8px rgba(13, 148, 136, 0.06)",
                         transition: "all 0.2s ease"
                     }}
                     onMouseEnter={(e) => {
-                        e.currentTarget.style.background = "rgba(255, 255, 255, 0.1)"
-                        e.currentTarget.style.borderColor = "#5eead4"
                         e.currentTarget.style.transform = "translateX(-3px)"
+                        e.currentTarget.style.boxShadow = "0 4px 12px rgba(13, 148, 136, 0.12)"
                     }}
                     onMouseLeave={(e) => {
-                        e.currentTarget.style.background = "rgba(255, 255, 255, 0.05)"
-                        e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.12)"
                         e.currentTarget.style.transform = "translateX(0)"
+                        e.currentTarget.style.boxShadow = "0 2px 8px rgba(13, 148, 136, 0.06)"
                     }}
                 >
                     <ArrowLeftOutlined /> Back to Store
                 </Link>
 
-                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                    <div
-                        style={{
-                            display: "inline-flex",
-                            alignItems: "center",
-                            gap: "6px",
-                            fontSize: "12px",
-                            fontWeight: 700,
-                            color: "#5eead4",
-                            background: "rgba(13, 148, 136, 0.2)",
-                            border: "1px solid rgba(94, 234, 212, 0.3)",
-                            padding: "6px 14px",
-                            borderRadius: "30px",
-                            backdropFilter: "blur(10px)"
-                        }}
-                    >
-                        <SafetyCertificateFilled style={{ color: "#34d399", fontSize: "14px" }} />
-                        <span>Instant VIP Registration</span>
-                    </div>
+                <div
+                    style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "6px",
+                        fontSize: "12px",
+                        fontWeight: 700,
+                        color: "#0f766e",
+                        background: "#f0fdf4",
+                        border: "1px solid #bbf7d0",
+                        padding: "6px 14px",
+                        borderRadius: "20px"
+                    }}
+                >
+                    <SafetyCertificateFilled style={{ color: "#10b981" }} />
+                    <span>Instant VIP Registration</span>
                 </div>
             </div>
 
-            {/* Main Luxury Glass Card */}
+            {/* Main Auth Container */}
             <div
                 style={{
                     width: "100%",
-                    maxWidth: "1140px",
-                    background: "rgba(4, 28, 27, 0.72)",
-                    backdropFilter: "blur(24px)",
-                    WebkitBackdropFilter: "blur(24px)",
-                    borderRadius: "32px",
-                    border: "1px solid rgba(255, 255, 255, 0.12)",
-                    boxShadow: "0 30px 90px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(94, 234, 212, 0.15)",
+                    maxWidth: "1080px",
+                    background: "#ffffff",
+                    borderRadius: "28px",
+                    boxShadow: "0 20px 60px -15px rgba(15, 23, 42, 0.1), 0 0 1px 1px rgba(13, 148, 136, 0.08)",
+                    border: "1px solid #e2e8f0",
                     overflow: "hidden",
                     display: "flex",
                     flexWrap: "wrap",
@@ -202,33 +196,43 @@ const Register = () => {
                     zIndex: 1
                 }}
             >
-                {/* ══ LEFT SHOWCASE HERO (Desktop) ══ */}
+                {/* ══ LEFT HERO PANEL (Desktop & Tablet) ══ */}
                 <div
-                    className="col-12 col-lg-5 d-none d-lg-flex flex-column justify-content-between p-4 p-xl-5"
+                    className="col-12 col-lg-5 d-none d-lg-flex flex-column justify-content-between p-4 p-xl-5 text-white"
                     style={{
-                        background: "linear-gradient(160deg, rgba(6, 78, 59, 0.6) 0%, rgba(4, 47, 46, 0.8) 50%, rgba(2, 26, 25, 0.95) 100%)",
-                        borderRight: "1px solid rgba(255, 255, 255, 0.1)",
+                        background: "linear-gradient(150deg, #042f2e 0%, #064e3b 50%, #022c22 100%)",
                         position: "relative",
                         overflow: "hidden",
-                        minHeight: "640px"
+                        minHeight: "630px"
                     }}
                 >
-                    {/* Background glow */}
+                    {/* Glowing decorative orbs */}
                     <div
                         style={{
                             position: "absolute",
                             top: "-60px",
                             right: "-60px",
-                            width: "300px",
-                            height: "300px",
+                            width: "280px",
+                            height: "280px",
                             borderRadius: "50%",
                             background: "radial-gradient(circle, rgba(94, 234, 212, 0.25) 0%, transparent 70%)",
-                            filter: "blur(40px)",
+                            pointerEvents: "none"
+                        }}
+                    />
+                    <div
+                        style={{
+                            position: "absolute",
+                            bottom: "-60px",
+                            left: "-60px",
+                            width: "260px",
+                            height: "260px",
+                            borderRadius: "50%",
+                            background: "radial-gradient(circle, rgba(16, 185, 129, 0.2) 0%, transparent 70%)",
                             pointerEvents: "none"
                         }}
                     />
 
-                    {/* Top Branding Section */}
+                    {/* Content Top */}
                     <div style={{ position: "relative", zIndex: 2 }}>
                         {/* Status Chip */}
                         <div
@@ -236,92 +240,93 @@ const Register = () => {
                                 display: "inline-flex",
                                 alignItems: "center",
                                 gap: "8px",
-                                background: "rgba(16, 185, 129, 0.15)",
-                                border: "1px solid rgba(52, 211, 153, 0.3)",
+                                background: "rgba(255, 255, 255, 0.1)",
+                                border: "1px solid rgba(255, 255, 255, 0.15)",
                                 padding: "6px 14px",
                                 borderRadius: "30px",
                                 fontSize: "12px",
                                 fontWeight: 700,
-                                color: "#6ee7b7",
-                                marginBottom: "28px"
+                                color: "#5eead4",
+                                marginBottom: "26px",
+                                backdropFilter: "blur(10px)"
                             }}
                         >
-                            <GiftFilled style={{ color: "#34d399" }} />
+                            <GiftFilled style={{ color: "#5eead4" }} />
                             <span>15% Welcome Discount Included</span>
                         </div>
 
                         {/* Brand Logo */}
-                        <div style={{ display: "flex", alignItems: "center", gap: "14px", marginBottom: "24px" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "22px" }}>
                             <div
                                 style={{
-                                    width: "52px",
-                                    height: "52px",
-                                    borderRadius: "16px",
-                                    background: "linear-gradient(135deg, #10b981 0%, #0d9488 100%)",
+                                    width: "48px",
+                                    height: "48px",
+                                    borderRadius: "14px",
+                                    background: "linear-gradient(135deg, #14b8a6, #0d9488)",
                                     display: "flex",
                                     alignItems: "center",
                                     justifyContent: "center",
-                                    boxShadow: "0 10px 25px rgba(13, 148, 136, 0.5)",
-                                    fontSize: "24px",
+                                    boxShadow: "0 8px 20px rgba(13, 148, 136, 0.4)",
+                                    fontSize: "22px",
                                     color: "#ffffff"
                                 }}
                             >
                                 <ShoppingFilled />
                             </div>
                             <div>
-                                <h3 style={{ margin: 0, fontSize: "24px", fontWeight: 800, letterSpacing: "-0.5px", color: "#ffffff" }}>
-                                    MyStore<span style={{ color: "#34d399" }}>.</span>
+                                <h3 style={{ margin: 0, fontSize: "22px", fontWeight: 800, letterSpacing: "-0.5px", color: "#ffffff" }}>
+                                    MyStore<span style={{ color: "#5eead4" }}>.</span>
                                 </h3>
-                                <p style={{ margin: 0, fontSize: "12px", color: "rgba(255, 255, 255, 0.65)" }}>
-                                    Create Free VIP Account
+                                <p style={{ margin: 0, fontSize: "12px", color: "rgba(255, 255, 255, 0.7)" }}>
+                                    Create Your Free Account
                                 </p>
                             </div>
                         </div>
 
-                        <h2 style={{ fontSize: "28px", fontWeight: 800, lineHeight: 1.3, marginBottom: "16px", color: "#ffffff" }}>
-                            Join a new era of curated shopping.
+                        <h2 style={{ fontSize: "26px", fontWeight: 800, lineHeight: 1.3, marginBottom: "14px", color: "#ffffff" }}>
+                            Unlock the ultimate shopping experience today.
                         </h2>
-                        <p style={{ fontSize: "14px", color: "rgba(255, 255, 255, 0.75)", lineHeight: 1.6, marginBottom: "30px" }}>
-                            Setup your account in seconds to unlock member-only flash drops, interactive stories, lightning-fast re-ordering, and live tracking.
+                        <p style={{ fontSize: "14px", color: "rgba(255, 255, 255, 0.8)", lineHeight: 1.6, marginBottom: "28px" }}>
+                            Create your account in under 60 seconds and enjoy instant member perks, live product stories, and seamless orders.
                         </p>
 
-                        {/* Feature Cards */}
+                        {/* Perks List */}
                         <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                             {[
-                                { title: "Exclusive Stories & Flash Sales", desc: "Access limited deals before anyone else", icon: <ThunderboltFilled style={{ color: "#34d399" }} /> },
-                                { title: "Direct Real-time Admin Chat", desc: "Instant help and fast custom order queries", icon: <StarFilled style={{ color: "#fbbf24" }} /> },
-                                { title: "100% Zero-Risk Buyer Guarantee", desc: "Encrypted checkout & 1-click easy returns", icon: <SafetyCertificateFilled style={{ color: "#38bdf8" }} /> }
-                            ].map((feat, i) => (
+                                { title: "Exclusive Stories & Flash Sales", desc: "Access limited deals before anyone else", icon: <ThunderboltFilled style={{ color: "#5eead4" }} /> },
+                                { title: "One-Click Live Chat Support", desc: "Direct messaging with store admins", icon: <StarFilled style={{ color: "#fbbf24" }} /> },
+                                { title: "Real-time Order Tracking", desc: "Live shipment status and invoice history", icon: <SafetyCertificateFilled style={{ color: "#38bdf8" }} /> }
+                            ].map((item, idx) => (
                                 <div
-                                    key={i}
+                                    key={idx}
                                     style={{
                                         display: "flex",
                                         alignItems: "center",
-                                        gap: "14px",
-                                        background: "rgba(255, 255, 255, 0.04)",
+                                        gap: "12px",
+                                        background: "rgba(255, 255, 255, 0.06)",
                                         border: "1px solid rgba(255, 255, 255, 0.08)",
-                                        padding: "12px 16px",
-                                        borderRadius: "16px",
-                                        backdropFilter: "blur(10px)"
+                                        padding: "10px 14px",
+                                        borderRadius: "14px",
+                                        backdropFilter: "blur(6px)"
                                     }}
                                 >
                                     <div
                                         style={{
-                                            width: "36px",
-                                            height: "36px",
+                                            width: "34px",
+                                            height: "34px",
                                             borderRadius: "10px",
-                                            background: "rgba(255, 255, 255, 0.06)",
+                                            background: "rgba(255, 255, 255, 0.08)",
                                             display: "flex",
                                             alignItems: "center",
                                             justifyContent: "center",
-                                            fontSize: "18px"
+                                            fontSize: "16px"
                                         }}
                                     >
-                                        {feat.icon}
+                                        {item.icon}
                                     </div>
                                     <div>
-                                        <div style={{ fontSize: "13px", fontWeight: 700, color: "#ffffff" }}>{feat.title}</div>
-                                        <div style={{ fontSize: "11px", color: "rgba(255, 255, 255, 0.6)" }}>{feat.desc}</div>
+                                        <div style={{ fontSize: "13px", fontWeight: 700, color: "#ffffff" }}>{item.title}</div>
+                                        <div style={{ fontSize: "11px", color: "rgba(255, 255, 255, 0.65)" }}>{item.desc}</div>
                                     </div>
                                 </div>
                             ))}
@@ -331,18 +336,18 @@ const Register = () => {
                     {/* Bottom Proof */}
                     <div
                         style={{
-                            marginTop: "28px",
-                            padding: "14px 18px",
-                            background: "rgba(0, 0, 0, 0.35)",
-                            border: "1px solid rgba(255, 255, 255, 0.08)",
-                            borderRadius: "18px",
+                            marginTop: "24px",
+                            padding: "12px 16px",
+                            background: "rgba(0, 0, 0, 0.25)",
+                            border: "1px solid rgba(255, 255, 255, 0.1)",
+                            borderRadius: "16px",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "space-between",
                             zIndex: 2
                         }}
                     >
-                        <div style={{ display: "flex", alignItems: "center", gap: "5px", color: "#fbbf24", fontSize: "13px" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "4px", color: "#fbbf24", fontSize: "13px" }}>
                             <StarFilled />
                             <StarFilled />
                             <StarFilled />
@@ -350,29 +355,24 @@ const Register = () => {
                             <StarFilled />
                             <span style={{ color: "#ffffff", fontWeight: 700, fontSize: "12px", marginLeft: "6px" }}>4.9/5.0</span>
                         </div>
-                        <span style={{ fontSize: "12px", color: "#34d399", fontWeight: 700 }}>15,000+ Verified Users</span>
+                        <span style={{ fontSize: "11px", color: "#5eead4", fontWeight: 600 }}>Trusted by 15k+ Shoppers</span>
                     </div>
                 </div>
 
                 {/* ══ RIGHT REGISTRATION FORM ══ */}
                 <div
                     className="col-12 col-lg-7 p-4 p-sm-5 d-flex flex-column justify-content-center"
-                    style={{
-                        background: "rgba(3, 20, 19, 0.65)",
-                        minHeight: "640px",
-                        position: "relative"
-                    }}
+                    style={{ background: "#ffffff", minHeight: "630px" }}
                 >
                     <div style={{ maxWidth: "460px", width: "100%", margin: "0 auto" }}>
 
-                        {/* Switcher Pill */}
+                        {/* Top Segmented Switcher */}
                         <div
                             style={{
                                 display: "flex",
-                                background: "rgba(0, 0, 0, 0.4)",
-                                border: "1px solid rgba(255, 255, 255, 0.08)",
+                                background: "#f1f5f9",
                                 padding: "4px",
-                                borderRadius: "16px",
+                                borderRadius: "14px",
                                 marginBottom: "26px"
                             }}
                         >
@@ -384,14 +384,14 @@ const Register = () => {
                                     padding: "10px 0",
                                     fontSize: "14px",
                                     fontWeight: 600,
-                                    borderRadius: "12px",
+                                    borderRadius: "11px",
                                     textDecoration: "none",
-                                    color: "rgba(255, 255, 255, 0.6)",
+                                    color: "#64748b",
                                     background: "transparent",
                                     transition: "all 0.2s ease"
                                 }}
-                                onMouseEnter={(e) => { e.currentTarget.style.color = "#ffffff" }}
-                                onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255, 255, 255, 0.6)" }}
+                                onMouseEnter={(e) => { e.currentTarget.style.color = "#0f172a" }}
+                                onMouseLeave={(e) => { e.currentTarget.style.color = "#64748b" }}
                             >
                                 Sign In
                             </Link>
@@ -403,30 +403,29 @@ const Register = () => {
                                     padding: "10px 0",
                                     fontSize: "14px",
                                     fontWeight: 700,
-                                    borderRadius: "12px",
+                                    borderRadius: "11px",
                                     textDecoration: "none",
-                                    color: "#ffffff",
-                                    background: "linear-gradient(135deg, rgba(16, 185, 129, 0.3) 0%, rgba(13, 148, 136, 0.4) 100%)",
-                                    border: "1px solid rgba(52, 211, 153, 0.35)",
-                                    boxShadow: "0 4px 15px rgba(0, 0, 0, 0.3)",
+                                    color: "#0f766e",
+                                    background: "#ffffff",
+                                    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.06)",
                                     transition: "all 0.2s ease"
                                 }}
                             >
-                                Create Account
+                                Register
                             </Link>
                         </div>
 
                         {/* Heading */}
                         <div style={{ marginBottom: "22px" }}>
-                            <h1 style={{ fontSize: "28px", fontWeight: 800, color: "#ffffff", marginBottom: "6px", letterSpacing: "-0.5px" }}>
+                            <h1 style={{ fontSize: "26px", fontWeight: 800, color: "#0f172a", marginBottom: "6px", letterSpacing: "-0.5px" }}>
                                 Create Your Account ✨
                             </h1>
-                            <p style={{ fontSize: "14px", color: "rgba(255, 255, 255, 0.65)", margin: 0 }}>
-                                Join in under 60 seconds and start exploring.
+                            <p style={{ fontSize: "14px", color: "#64748b", margin: 0 }}>
+                                Join thousands of happy customers shopping on MyStore.
                             </p>
                         </div>
 
-                        {/* Form */}
+                        {/* Registration Form */}
                         <form onSubmit={handleRegister}>
 
                             {/* Full Name */}
@@ -437,7 +436,7 @@ const Register = () => {
                                         display: "block",
                                         fontSize: "13px",
                                         fontWeight: 700,
-                                        color: "rgba(255, 255, 255, 0.9)",
+                                        color: "#334155",
                                         marginBottom: "6px"
                                     }}
                                 >
@@ -450,7 +449,7 @@ const Register = () => {
                                             left: "16px",
                                             top: "50%",
                                             transform: "translateY(-50%)",
-                                            color: "#5eead4",
+                                            color: "#94a3b8",
                                             fontSize: "16px",
                                             pointerEvents: "none"
                                         }}
@@ -461,32 +460,32 @@ const Register = () => {
                                         id="reg-name"
                                         type="text"
                                         name="name"
-                                        placeholder="John Doe"
+                                        placeholder="e.g. John Doe"
                                         value={state.name}
                                         onChange={handleChange}
                                         required
                                         autoComplete="name"
                                         style={{
                                             width: "100%",
-                                            height: "48px",
+                                            height: "46px",
                                             padding: "0 16px 0 46px",
                                             fontSize: "14px",
-                                            color: "#ffffff",
-                                            background: "rgba(255, 255, 255, 0.05)",
-                                            border: "1px solid rgba(255, 255, 255, 0.12)",
-                                            borderRadius: "14px",
+                                            color: "#0f172a",
+                                            background: "#f8fafc",
+                                            border: "1.5px solid #e2e8f0",
+                                            borderRadius: "12px",
                                             outline: "none",
-                                            transition: "all 0.25s ease",
+                                            transition: "all 0.2s ease",
                                             boxSizing: "border-box"
                                         }}
                                         onFocus={(e) => {
-                                            e.target.style.borderColor = "#34d399"
-                                            e.target.style.background = "rgba(255, 255, 255, 0.08)"
-                                            e.target.style.boxShadow = "0 0 0 4px rgba(52, 211, 153, 0.15)"
+                                            e.target.style.borderColor = "#0d9488"
+                                            e.target.style.background = "#ffffff"
+                                            e.target.style.boxShadow = "0 0 0 4px rgba(13, 148, 136, 0.12)"
                                         }}
                                         onBlur={(e) => {
-                                            e.target.style.borderColor = "rgba(255, 255, 255, 0.12)"
-                                            e.target.style.background = "rgba(255, 255, 255, 0.05)"
+                                            e.target.style.borderColor = "#e2e8f0"
+                                            e.target.style.background = "#f8fafc"
                                             e.target.style.boxShadow = "none"
                                         }}
                                     />
@@ -501,7 +500,7 @@ const Register = () => {
                                         display: "block",
                                         fontSize: "13px",
                                         fontWeight: 700,
-                                        color: "rgba(255, 255, 255, 0.9)",
+                                        color: "#334155",
                                         marginBottom: "6px"
                                     }}
                                 >
@@ -514,7 +513,7 @@ const Register = () => {
                                             left: "16px",
                                             top: "50%",
                                             transform: "translateY(-50%)",
-                                            color: "#5eead4",
+                                            color: "#94a3b8",
                                             fontSize: "16px",
                                             pointerEvents: "none"
                                         }}
@@ -525,32 +524,32 @@ const Register = () => {
                                         id="reg-email"
                                         type="email"
                                         name="email"
-                                        placeholder="you@domain.com"
+                                        placeholder="name@example.com"
                                         value={state.email}
                                         onChange={handleChange}
                                         required
                                         autoComplete="email"
                                         style={{
                                             width: "100%",
-                                            height: "48px",
+                                            height: "46px",
                                             padding: "0 16px 0 46px",
                                             fontSize: "14px",
-                                            color: "#ffffff",
-                                            background: "rgba(255, 255, 255, 0.05)",
-                                            border: "1px solid rgba(255, 255, 255, 0.12)",
-                                            borderRadius: "14px",
+                                            color: "#0f172a",
+                                            background: "#f8fafc",
+                                            border: "1.5px solid #e2e8f0",
+                                            borderRadius: "12px",
                                             outline: "none",
-                                            transition: "all 0.25s ease",
+                                            transition: "all 0.2s ease",
                                             boxSizing: "border-box"
                                         }}
                                         onFocus={(e) => {
-                                            e.target.style.borderColor = "#34d399"
-                                            e.target.style.background = "rgba(255, 255, 255, 0.08)"
-                                            e.target.style.boxShadow = "0 0 0 4px rgba(52, 211, 153, 0.15)"
+                                            e.target.style.borderColor = "#0d9488"
+                                            e.target.style.background = "#ffffff"
+                                            e.target.style.boxShadow = "0 0 0 4px rgba(13, 148, 136, 0.12)"
                                         }}
                                         onBlur={(e) => {
-                                            e.target.style.borderColor = "rgba(255, 255, 255, 0.12)"
-                                            e.target.style.background = "rgba(255, 255, 255, 0.05)"
+                                            e.target.style.borderColor = "#e2e8f0"
+                                            e.target.style.background = "#f8fafc"
                                             e.target.style.boxShadow = "none"
                                         }}
                                     />
@@ -566,7 +565,7 @@ const Register = () => {
                                             display: "block",
                                             fontSize: "13px",
                                             fontWeight: 700,
-                                            color: "rgba(255, 255, 255, 0.9)",
+                                            color: "#334155",
                                             marginBottom: "6px"
                                         }}
                                     >
@@ -579,7 +578,7 @@ const Register = () => {
                                                 left: "14px",
                                                 top: "50%",
                                                 transform: "translateY(-50%)",
-                                                color: "#5eead4",
+                                                color: "#94a3b8",
                                                 fontSize: "15px",
                                                 pointerEvents: "none"
                                             }}
@@ -597,25 +596,25 @@ const Register = () => {
                                             autoComplete="new-password"
                                             style={{
                                                 width: "100%",
-                                                height: "48px",
+                                                height: "46px",
                                                 padding: "0 40px 0 42px",
                                                 fontSize: "14px",
-                                                color: "#ffffff",
-                                                background: "rgba(255, 255, 255, 0.05)",
-                                                border: "1px solid rgba(255, 255, 255, 0.12)",
-                                                borderRadius: "14px",
+                                                color: "#0f172a",
+                                                background: "#f8fafc",
+                                                border: "1.5px solid #e2e8f0",
+                                                borderRadius: "12px",
                                                 outline: "none",
-                                                transition: "all 0.25s ease",
+                                                transition: "all 0.2s ease",
                                                 boxSizing: "border-box"
                                             }}
                                             onFocus={(e) => {
-                                                e.target.style.borderColor = "#34d399"
-                                                e.target.style.background = "rgba(255, 255, 255, 0.08)"
-                                                e.target.style.boxShadow = "0 0 0 4px rgba(52, 211, 153, 0.15)"
+                                                e.target.style.borderColor = "#0d9488"
+                                                e.target.style.background = "#ffffff"
+                                                e.target.style.boxShadow = "0 0 0 4px rgba(13, 148, 136, 0.12)"
                                             }}
                                             onBlur={(e) => {
-                                                e.target.style.borderColor = "rgba(255, 255, 255, 0.12)"
-                                                e.target.style.background = "rgba(255, 255, 255, 0.05)"
+                                                e.target.style.borderColor = "#e2e8f0"
+                                                e.target.style.background = "#f8fafc"
                                                 e.target.style.boxShadow = "none"
                                             }}
                                         />
@@ -630,7 +629,7 @@ const Register = () => {
                                                 transform: "translateY(-50%)",
                                                 background: "none",
                                                 border: "none",
-                                                color: "rgba(255, 255, 255, 0.6)",
+                                                color: "#64748b",
                                                 cursor: "pointer",
                                                 padding: "6px",
                                                 fontSize: "15px",
@@ -650,7 +649,7 @@ const Register = () => {
                                             display: "block",
                                             fontSize: "13px",
                                             fontWeight: 700,
-                                            color: "rgba(255, 255, 255, 0.9)",
+                                            color: "#334155",
                                             marginBottom: "6px"
                                         }}
                                     >
@@ -663,7 +662,7 @@ const Register = () => {
                                                 left: "14px",
                                                 top: "50%",
                                                 transform: "translateY(-50%)",
-                                                color: "#5eead4",
+                                                color: "#94a3b8",
                                                 fontSize: "15px",
                                                 pointerEvents: "none"
                                             }}
@@ -674,32 +673,32 @@ const Register = () => {
                                             id="reg-confirm-password"
                                             type={showConfirmPassword ? "text" : "password"}
                                             name="confirmPassword"
-                                            placeholder="Repeat pass"
+                                            placeholder="Repeat password"
                                             value={state.confirmPassword}
                                             onChange={handleChange}
                                             required
                                             autoComplete="new-password"
                                             style={{
                                                 width: "100%",
-                                                height: "48px",
+                                                height: "46px",
                                                 padding: "0 40px 0 42px",
                                                 fontSize: "14px",
-                                                color: "#ffffff",
-                                                background: "rgba(255, 255, 255, 0.05)",
-                                                border: "1px solid rgba(255, 255, 255, 0.12)",
-                                                borderRadius: "14px",
+                                                color: "#0f172a",
+                                                background: "#f8fafc",
+                                                border: "1.5px solid #e2e8f0",
+                                                borderRadius: "12px",
                                                 outline: "none",
-                                                transition: "all 0.25s ease",
+                                                transition: "all 0.2s ease",
                                                 boxSizing: "border-box"
                                             }}
                                             onFocus={(e) => {
-                                                e.target.style.borderColor = "#34d399"
-                                                e.target.style.background = "rgba(255, 255, 255, 0.08)"
-                                                e.target.style.boxShadow = "0 0 0 4px rgba(52, 211, 153, 0.15)"
+                                                e.target.style.borderColor = "#0d9488"
+                                                e.target.style.background = "#ffffff"
+                                                e.target.style.boxShadow = "0 0 0 4px rgba(13, 148, 136, 0.12)"
                                             }}
                                             onBlur={(e) => {
-                                                e.target.style.borderColor = "rgba(255, 255, 255, 0.12)"
-                                                e.target.style.background = "rgba(255, 255, 255, 0.05)"
+                                                e.target.style.borderColor = "#e2e8f0"
+                                                e.target.style.background = "#f8fafc"
                                                 e.target.style.boxShadow = "none"
                                             }}
                                         />
@@ -714,7 +713,7 @@ const Register = () => {
                                                 transform: "translateY(-50%)",
                                                 background: "none",
                                                 border: "none",
-                                                color: "rgba(255, 255, 255, 0.6)",
+                                                color: "#64748b",
                                                 cursor: "pointer",
                                                 padding: "6px",
                                                 fontSize: "15px",
@@ -732,7 +731,7 @@ const Register = () => {
                             {state.password && (
                                 <div style={{ marginBottom: "16px" }}>
                                     <div style={{ display: "flex", justifyContent: "space-between", fontSize: "11px", fontWeight: 700, marginBottom: "4px" }}>
-                                        <span style={{ color: "rgba(255, 255, 255, 0.6)" }}>Password Strength:</span>
+                                        <span style={{ color: "#64748b" }}>Password Strength:</span>
                                         <span style={{ color: strength.color }}>{strength.label}</span>
                                     </div>
                                     <div style={{ display: "flex", gap: "4px", height: "4px" }}>
@@ -742,7 +741,7 @@ const Register = () => {
                                                 style={{
                                                     flex: 1,
                                                     borderRadius: "2px",
-                                                    background: strength.level >= step ? strength.color : "rgba(255, 255, 255, 0.1)",
+                                                    background: strength.level >= step ? strength.color : "#e2e8f0",
                                                     transition: "background 0.3s ease"
                                                 }}
                                             />
@@ -751,9 +750,9 @@ const Register = () => {
                                 </div>
                             )}
 
-                            {/* Terms Checkbox */}
+                            {/* Terms & Conditions Checkbox */}
                             <div style={{ marginBottom: "22px" }}>
-                                <label style={{ display: "flex", alignItems: "flex-start", gap: "8px", cursor: "pointer", fontSize: "12px", color: "rgba(255, 255, 255, 0.75)", lineHeight: 1.4, userSelect: "none" }}>
+                                <label style={{ display: "flex", alignItems: "flex-start", gap: "8px", cursor: "pointer", fontSize: "12px", color: "#475569", lineHeight: 1.4, userSelect: "none" }}>
                                     <input
                                         type="checkbox"
                                         checked={agreeTerms}
@@ -762,15 +761,15 @@ const Register = () => {
                                             width: "16px",
                                             height: "16px",
                                             marginTop: "2px",
-                                            accentColor: "#10b981",
+                                            accentColor: "#0d9488",
                                             cursor: "pointer",
                                             borderRadius: "4px"
                                         }}
                                     />
                                     <span>
-                                        I agree to the{" "}
-                                        <span style={{ color: "#34d399", fontWeight: 700 }}>Terms of Service</span> and{" "}
-                                        <span style={{ color: "#34d399", fontWeight: 700 }}>Privacy Policy</span>.
+                                        I agree to MyStore's{" "}
+                                        <span style={{ color: "#0d9488", fontWeight: 700 }}>Terms of Service</span> and{" "}
+                                        <span style={{ color: "#0d9488", fontWeight: 700 }}>Privacy Policy</span>.
                                     </span>
                                 </label>
                             </div>
@@ -781,19 +780,18 @@ const Register = () => {
                                 disabled={isProcessing}
                                 style={{
                                     width: "100%",
-                                    height: "52px",
-                                    borderRadius: "16px",
+                                    height: "50px",
+                                    borderRadius: "14px",
                                     border: "none",
                                     background: isProcessing
-                                        ? "rgba(255, 255, 255, 0.2)"
-                                        : "linear-gradient(135deg, #10b981 0%, #0d9488 60%, #065f46 100%)",
+                                        ? "#94a3b8"
+                                        : "linear-gradient(135deg, #0d9488 0%, #042f2e 100%)",
                                     color: "#ffffff",
                                     fontSize: "15px",
-                                    fontWeight: 800,
-                                    letterSpacing: "0.2px",
+                                    fontWeight: 700,
                                     cursor: isProcessing ? "not-allowed" : "pointer",
-                                    boxShadow: isProcessing ? "none" : "0 12px 30px rgba(16, 185, 129, 0.45)",
-                                    transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+                                    boxShadow: isProcessing ? "none" : "0 10px 25px -5px rgba(13, 148, 136, 0.45)",
+                                    transition: "all 0.25s ease",
                                     display: "flex",
                                     alignItems: "center",
                                     justifyContent: "center",
@@ -802,13 +800,13 @@ const Register = () => {
                                 onMouseEnter={(e) => {
                                     if (!isProcessing) {
                                         e.currentTarget.style.transform = "translateY(-2px)"
-                                        e.currentTarget.style.boxShadow = "0 16px 36px rgba(16, 185, 129, 0.55)"
+                                        e.currentTarget.style.boxShadow = "0 14px 30px -5px rgba(13, 148, 136, 0.55)"
                                     }
                                 }}
                                 onMouseLeave={(e) => {
                                     if (!isProcessing) {
                                         e.currentTarget.style.transform = "translateY(0)"
-                                        e.currentTarget.style.boxShadow = "0 12px 30px rgba(16, 185, 129, 0.45)"
+                                        e.currentTarget.style.boxShadow = "0 10px 25px -5px rgba(13, 148, 136, 0.45)"
                                     }
                                 }}
                             >
@@ -819,23 +817,23 @@ const Register = () => {
                                             role="status"
                                             style={{ width: "18px", height: "18px", borderWidth: "2px" }}
                                         />
-                                        <span>Creating Your Account...</span>
+                                        <span>Creating Account...</span>
                                     </>
                                 ) : (
                                     <>
-                                        <span>Create VIP Account</span>
+                                        <span>Create Free Account</span>
                                         <span style={{ fontSize: "16px" }}>→</span>
                                     </>
                                 )}
                             </button>
 
-                            {/* Bottom Prompt */}
-                            <div style={{ marginTop: "22px", textAlign: "center", fontSize: "13px", color: "rgba(255, 255, 255, 0.6)" }}>
+                            {/* Bottom Login Prompt */}
+                            <div style={{ marginTop: "22px", textAlign: "center", fontSize: "13px", color: "#64748b" }}>
                                 Already have an account?{" "}
                                 <Link
                                     to="/auth/login"
                                     style={{
-                                        color: "#34d399",
+                                        color: "#0d9488",
                                         fontWeight: 800,
                                         textDecoration: "none",
                                         marginLeft: "4px"
@@ -850,9 +848,9 @@ const Register = () => {
                 </div>
             </div>
 
-            {/* Bottom Security Note */}
-            <div style={{ marginTop: "24px", textAlign: "center", fontSize: "12px", color: "rgba(255, 255, 255, 0.45)", zIndex: 1 }}>
-                Protected by Cloudflare & SSL 256-Bit Encryption • MyStore © {new Date().getFullYear()}
+            {/* Footer */}
+            <div style={{ marginTop: "20px", textAlign: "center", fontSize: "12px", color: "#64748b", zIndex: 1 }}>
+                Protected by MyStore Security • All Rights Reserved © {new Date().getFullYear()}
             </div>
         </main>
     )

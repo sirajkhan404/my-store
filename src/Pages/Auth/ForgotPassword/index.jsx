@@ -37,52 +37,54 @@ const ForgotPassword = () => {
         <main
             style={{
                 minHeight: "100vh",
-                background: "#021212",
-                backgroundImage: `
-                    radial-gradient(circle at 15% 20%, rgba(13, 148, 136, 0.28) 0%, transparent 40%),
-                    radial-gradient(circle at 85% 75%, rgba(16, 185, 129, 0.22) 0%, transparent 40%),
-                    radial-gradient(circle at 50% 50%, rgba(6, 78, 59, 0.3) 0%, transparent 60%),
-                    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px)
-                `,
-                backgroundSize: "100% 100%, 100% 100%, 100% 100%, 32px 32px, 32px 32px",
+                background: "linear-gradient(135deg, #f0fdf4 0%, #f8fafc 40%, #ecfdf5 100%)",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
-                padding: "32px 16px",
+                padding: "24px 16px",
                 position: "relative",
                 overflow: "hidden",
-                color: "#ffffff",
                 fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
             }}
         >
-            {/* Top Glow Highlights */}
+            {/* Background Ambient Glows */}
             <div
                 style={{
                     position: "absolute",
-                    top: "-120px",
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    width: "700px",
-                    height: "250px",
+                    top: "-80px",
+                    left: "-80px",
+                    width: "420px",
+                    height: "420px",
                     borderRadius: "50%",
-                    background: "radial-gradient(ellipse, rgba(45, 212, 191, 0.2) 0%, transparent 70%)",
+                    background: "radial-gradient(circle, rgba(13, 148, 136, 0.12) 0%, transparent 70%)",
                     pointerEvents: "none",
-                    filter: "blur(50px)",
+                    zIndex: 0
+                }}
+            />
+            <div
+                style={{
+                    position: "absolute",
+                    bottom: "-80px",
+                    right: "-80px",
+                    width: "400px",
+                    height: "400px",
+                    borderRadius: "50%",
+                    background: "radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, transparent 70%)",
+                    pointerEvents: "none",
                     zIndex: 0
                 }}
             />
 
-            {/* Top Navigation */}
+            {/* Top Navigation Bar */}
             <div
                 style={{
                     width: "100%",
-                    maxWidth: "520px",
+                    maxWidth: "500px",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
-                    marginBottom: "24px",
+                    marginBottom: "20px",
                     zIndex: 2
                 }}
             >
@@ -92,51 +94,45 @@ const ForgotPassword = () => {
                         display: "inline-flex",
                         alignItems: "center",
                         gap: "8px",
-                        color: "#a7f3d0",
+                        color: "#0f766e",
                         textDecoration: "none",
-                        fontSize: "13px",
+                        fontSize: "14px",
                         fontWeight: 700,
-                        padding: "9px 18px",
-                        borderRadius: "14px",
-                        background: "rgba(255, 255, 255, 0.05)",
-                        backdropFilter: "blur(16px)",
-                        border: "1px solid rgba(255, 255, 255, 0.12)",
-                        boxShadow: "0 4px 15px rgba(0, 0, 0, 0.25)",
+                        padding: "8px 16px",
+                        borderRadius: "12px",
+                        background: "#ffffff",
+                        border: "1px solid #ccfbf1",
+                        boxShadow: "0 2px 8px rgba(13, 148, 136, 0.06)",
                         transition: "all 0.2s ease"
                     }}
                     onMouseEnter={(e) => {
-                        e.currentTarget.style.background = "rgba(255, 255, 255, 0.1)"
-                        e.currentTarget.style.borderColor = "#5eead4"
                         e.currentTarget.style.transform = "translateX(-3px)"
+                        e.currentTarget.style.boxShadow = "0 4px 12px rgba(13, 148, 136, 0.12)"
                     }}
                     onMouseLeave={(e) => {
-                        e.currentTarget.style.background = "rgba(255, 255, 255, 0.05)"
-                        e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.12)"
                         e.currentTarget.style.transform = "translateX(0)"
+                        e.currentTarget.style.boxShadow = "0 2px 8px rgba(13, 148, 136, 0.06)"
                     }}
                 >
                     <ArrowLeftOutlined /> Back to Sign In
                 </Link>
 
-                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                    <div
-                        style={{
-                            display: "inline-flex",
-                            alignItems: "center",
-                            gap: "6px",
-                            fontSize: "12px",
-                            fontWeight: 700,
-                            color: "#5eead4",
-                            background: "rgba(13, 148, 136, 0.2)",
-                            border: "1px solid rgba(94, 234, 212, 0.3)",
-                            padding: "6px 14px",
-                            borderRadius: "30px",
-                            backdropFilter: "blur(10px)"
-                        }}
-                    >
-                        <SafetyCertificateFilled style={{ color: "#34d399", fontSize: "14px" }} />
-                        <span>Secure Recovery</span>
-                    </div>
+                <div
+                    style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "6px",
+                        fontSize: "12px",
+                        fontWeight: 700,
+                        color: "#0f766e",
+                        background: "#f0fdf4",
+                        border: "1px solid #bbf7d0",
+                        padding: "6px 14px",
+                        borderRadius: "20px"
+                    }}
+                >
+                    <SafetyCertificateFilled style={{ color: "#10b981" }} />
+                    <span>Secure Recovery</span>
                 </div>
             </div>
 
@@ -144,42 +140,40 @@ const ForgotPassword = () => {
             <div
                 style={{
                     width: "100%",
-                    maxWidth: "520px",
-                    background: "rgba(4, 28, 27, 0.72)",
-                    backdropFilter: "blur(24px)",
-                    WebkitBackdropFilter: "blur(24px)",
-                    borderRadius: "32px",
-                    border: "1px solid rgba(255, 255, 255, 0.12)",
-                    boxShadow: "0 30px 90px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(94, 234, 212, 0.15)",
+                    maxWidth: "500px",
+                    background: "#ffffff",
+                    borderRadius: "28px",
+                    boxShadow: "0 20px 60px -15px rgba(15, 23, 42, 0.1), 0 0 1px 1px rgba(13, 148, 136, 0.08)",
+                    border: "1px solid #e2e8f0",
                     overflow: "hidden",
-                    padding: "40px 32px",
+                    padding: "36px 30px",
                     position: "relative",
                     zIndex: 1
                 }}
             >
                 {/* Header Icon */}
-                <div style={{ textAlign: "center", marginBottom: "26px" }}>
+                <div style={{ textAlign: "center", marginBottom: "24px" }}>
                     <div
                         style={{
-                            width: "68px",
-                            height: "68px",
+                            width: "64px",
+                            height: "64px",
                             borderRadius: "20px",
-                            background: "linear-gradient(135deg, #10b981 0%, #0d9488 100%)",
+                            background: "linear-gradient(135deg, #14b8a6, #0d9488)",
                             color: "#ffffff",
-                            fontSize: "28px",
+                            fontSize: "26px",
                             display: "inline-flex",
                             alignItems: "center",
                             justifyContent: "center",
-                            boxShadow: "0 12px 28px rgba(13, 148, 136, 0.45)",
-                            marginBottom: "18px"
+                            boxShadow: "0 10px 25px rgba(13, 148, 136, 0.35)",
+                            marginBottom: "16px"
                         }}
                     >
                         <KeyOutlined />
                     </div>
-                    <h1 style={{ fontSize: "26px", fontWeight: 800, color: "#ffffff", marginBottom: "8px", letterSpacing: "-0.5px" }}>
+                    <h1 style={{ fontSize: "24px", fontWeight: 800, color: "#0f172a", marginBottom: "8px", letterSpacing: "-0.5px" }}>
                         Reset Your Password
                     </h1>
-                    <p style={{ fontSize: "14px", color: "rgba(255, 255, 255, 0.65)", maxWidth: "380px", margin: "0 auto", lineHeight: 1.5 }}>
+                    <p style={{ fontSize: "14px", color: "#64748b", maxWidth: "380px", margin: "0 auto", lineHeight: 1.5 }}>
                         Enter the email associated with your MyStore account and we'll send a secure reset link.
                     </p>
                 </div>
@@ -187,36 +181,35 @@ const ForgotPassword = () => {
                 {isSent ? (
                     <div
                         style={{
-                            background: "rgba(16, 185, 129, 0.12)",
-                            border: "1px solid rgba(52, 211, 153, 0.3)",
-                            borderRadius: "20px",
-                            padding: "26px 20px",
+                            background: "#f0fdf4",
+                            border: "1px solid #bbf7d0",
+                            borderRadius: "16px",
+                            padding: "24px 20px",
                             textAlign: "center"
                         }}
                     >
-                        <div style={{ fontSize: "40px", color: "#34d399", marginBottom: "12px" }}>
+                        <div style={{ fontSize: "36px", color: "#10b981", marginBottom: "12px" }}>
                             <CheckCircleFilled />
                         </div>
-                        <h4 style={{ fontSize: "18px", fontWeight: 800, color: "#ffffff", marginBottom: "8px" }}>
+                        <h4 style={{ fontSize: "17px", fontWeight: 800, color: "#166534", marginBottom: "8px" }}>
                             Recovery Link Sent!
                         </h4>
-                        <p style={{ fontSize: "13px", color: "rgba(255, 255, 255, 0.8)", marginBottom: "22px" }}>
-                            We've sent an email to <strong style={{ color: "#34d399" }}>{state.email}</strong> with instructions to reset your password.
+                        <p style={{ fontSize: "13px", color: "#15803d", marginBottom: "20px" }}>
+                            We've sent an email to <strong>{state.email}</strong> with instructions to reset your password.
                         </p>
                         <button
                             type="button"
                             onClick={() => navigate("/auth/login")}
                             style={{
                                 width: "100%",
-                                height: "48px",
-                                borderRadius: "14px",
+                                height: "46px",
+                                borderRadius: "12px",
                                 border: "none",
-                                background: "linear-gradient(135deg, #10b981 0%, #0d9488 100%)",
+                                background: "#0d9488",
                                 color: "#ffffff",
                                 fontSize: "14px",
                                 fontWeight: 700,
-                                cursor: "pointer",
-                                boxShadow: "0 10px 25px rgba(13, 148, 136, 0.4)"
+                                cursor: "pointer"
                             }}
                         >
                             Return to Sign In
@@ -231,7 +224,7 @@ const ForgotPassword = () => {
                                     display: "block",
                                     fontSize: "13px",
                                     fontWeight: 700,
-                                    color: "rgba(255, 255, 255, 0.9)",
+                                    color: "#334155",
                                     marginBottom: "8px"
                                 }}
                             >
@@ -244,7 +237,7 @@ const ForgotPassword = () => {
                                         left: "16px",
                                         top: "50%",
                                         transform: "translateY(-50%)",
-                                        color: "#5eead4",
+                                        color: "#94a3b8",
                                         fontSize: "16px",
                                         pointerEvents: "none"
                                     }}
@@ -255,32 +248,32 @@ const ForgotPassword = () => {
                                     id="reset-email"
                                     type="email"
                                     name="email"
-                                    placeholder="you@domain.com"
+                                    placeholder="name@example.com"
                                     value={state.email}
                                     onChange={handleChange}
                                     required
                                     autoComplete="email"
                                     style={{
                                         width: "100%",
-                                        height: "50px",
+                                        height: "48px",
                                         padding: "0 16px 0 46px",
                                         fontSize: "14px",
-                                        color: "#ffffff",
-                                        background: "rgba(255, 255, 255, 0.05)",
-                                        border: "1px solid rgba(255, 255, 255, 0.12)",
-                                        borderRadius: "14px",
+                                        color: "#0f172a",
+                                        background: "#f8fafc",
+                                        border: "1.5px solid #e2e8f0",
+                                        borderRadius: "12px",
                                         outline: "none",
-                                        transition: "all 0.25s ease",
+                                        transition: "all 0.2s ease",
                                         boxSizing: "border-box"
                                     }}
                                     onFocus={(e) => {
-                                        e.target.style.borderColor = "#34d399"
-                                        e.target.style.background = "rgba(255, 255, 255, 0.08)"
-                                        e.target.style.boxShadow = "0 0 0 4px rgba(52, 211, 153, 0.15)"
+                                        e.target.style.borderColor = "#0d9488"
+                                        e.target.style.background = "#ffffff"
+                                        e.target.style.boxShadow = "0 0 0 4px rgba(13, 148, 136, 0.12)"
                                     }}
                                     onBlur={(e) => {
-                                        e.target.style.borderColor = "rgba(255, 255, 255, 0.12)"
-                                        e.target.style.background = "rgba(255, 255, 255, 0.05)"
+                                        e.target.style.borderColor = "#e2e8f0"
+                                        e.target.style.background = "#f8fafc"
                                         e.target.style.boxShadow = "none"
                                     }}
                                 />
@@ -292,19 +285,18 @@ const ForgotPassword = () => {
                             disabled={isProcessing}
                             style={{
                                 width: "100%",
-                                height: "52px",
-                                borderRadius: "16px",
+                                height: "50px",
+                                borderRadius: "14px",
                                 border: "none",
                                 background: isProcessing
-                                    ? "rgba(255, 255, 255, 0.2)"
-                                    : "linear-gradient(135deg, #10b981 0%, #0d9488 60%, #065f46 100%)",
+                                    ? "#94a3b8"
+                                    : "linear-gradient(135deg, #0d9488 0%, #042f2e 100%)",
                                 color: "#ffffff",
                                 fontSize: "15px",
-                                fontWeight: 800,
-                                letterSpacing: "0.2px",
+                                fontWeight: 700,
                                 cursor: isProcessing ? "not-allowed" : "pointer",
-                                boxShadow: isProcessing ? "none" : "0 12px 30px rgba(16, 185, 129, 0.45)",
-                                transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+                                boxShadow: isProcessing ? "none" : "0 10px 25px -5px rgba(13, 148, 136, 0.45)",
+                                transition: "all 0.25s ease",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
@@ -313,13 +305,13 @@ const ForgotPassword = () => {
                             onMouseEnter={(e) => {
                                 if (!isProcessing) {
                                     e.currentTarget.style.transform = "translateY(-2px)"
-                                    e.currentTarget.style.boxShadow = "0 16px 36px rgba(16, 185, 129, 0.55)"
+                                    e.currentTarget.style.boxShadow = "0 14px 30px -5px rgba(13, 148, 136, 0.55)"
                                 }
                             }}
                             onMouseLeave={(e) => {
                                 if (!isProcessing) {
                                     e.currentTarget.style.transform = "translateY(0)"
-                                    e.currentTarget.style.boxShadow = "0 12px 30px rgba(16, 185, 129, 0.45)"
+                                    e.currentTarget.style.boxShadow = "0 10px 25px -5px rgba(13, 148, 136, 0.45)"
                                 }
                             }}
                         >
@@ -330,22 +322,22 @@ const ForgotPassword = () => {
                                         role="status"
                                         style={{ width: "18px", height: "18px", borderWidth: "2px" }}
                                     />
-                                    <span>Sending Recovery Link...</span>
+                                    <span>Sending Link...</span>
                                 </>
                             ) : (
                                 <>
-                                    <span>Send Reset Link</span>
+                                    <span>Send Password Reset Link</span>
                                     <span style={{ fontSize: "16px" }}>→</span>
                                 </>
                             )}
                         </button>
 
-                        <div style={{ marginTop: "24px", textAlign: "center", fontSize: "13px", color: "rgba(255, 255, 255, 0.6)" }}>
+                        <div style={{ marginTop: "24px", textAlign: "center", fontSize: "13px", color: "#64748b" }}>
                             Remember your password?{" "}
                             <Link
                                 to="/auth/login"
                                 style={{
-                                    color: "#34d399",
+                                    color: "#0d9488",
                                     fontWeight: 800,
                                     textDecoration: "none",
                                     marginLeft: "4px"
@@ -358,9 +350,9 @@ const ForgotPassword = () => {
                 )}
             </div>
 
-            {/* Footer Note */}
-            <div style={{ marginTop: "24px", textAlign: "center", fontSize: "12px", color: "rgba(255, 255, 255, 0.45)", zIndex: 1 }}>
-                Protected by Cloudflare & SSL 256-Bit Encryption • MyStore © {new Date().getFullYear()}
+            {/* Footer */}
+            <div style={{ marginTop: "20px", textAlign: "center", fontSize: "12px", color: "#64748b", zIndex: 1 }}>
+                Protected by MyStore Security • All Rights Reserved © {new Date().getFullYear()}
             </div>
         </main>
     )
