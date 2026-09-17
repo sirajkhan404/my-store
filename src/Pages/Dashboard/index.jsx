@@ -15,7 +15,8 @@ import {
     CloseOutlined,
     MenuOutlined,
     CrownOutlined,
-    ThunderboltFilled
+    ThunderboltFilled,
+    ShopFilled
 } from "@ant-design/icons";
 
 const navSections = [
@@ -292,7 +293,7 @@ const SidebarContent = ({ user, navSections, isActive, handleLogout, onClose, is
                         fontSize: "22px",
                         flexShrink: 0
                     }}>
-                        🏪
+                        <ShopFilled style={{ color: "#5eead4", fontSize: "22px" }} />
                     </div>
 
                     <div>
@@ -317,17 +318,17 @@ const SidebarContent = ({ user, navSections, isActive, handleLogout, onClose, is
                                 width: "6px",
                                 height: "6px",
                                 borderRadius: "50%",
-                                background: "#10b981",
-                                boxShadow: "0 0 8px #10b981"
+                                background: user?.role === "superAdmin" ? "#fbbf24" : "#10b981",
+                                boxShadow: user?.role === "superAdmin" ? "0 0 8px #fbbf24" : "0 0 8px #10b981"
                             }} />
                             <span style={{
                                 fontSize: "10px",
                                 fontWeight: 800,
                                 letterSpacing: "1.2px",
-                                color: "#5eead4",
+                                color: user?.role === "superAdmin" ? "#fbbf24" : "#5eead4",
                                 textTransform: "uppercase"
                             }}>
-                                Admin Pro v2.0
+                                {user?.role === "superAdmin" ? "SUPERADMIN" : "CUSTOMER"}
                             </span>
                         </div>
                     </div>
