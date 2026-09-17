@@ -1,9 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useAuth } from '@/context/Auth';
 
 const Contact = () => {
+    const { user } = useAuth();
     const [state, setState] = useState({ name: '', email: '', subject: '', message: '' });
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    useEffect(() => {
+        if (user) {
+            setState(prev => ({
+                ...prev,
+                name: prev.name || user.fullName || '',
+                email: prev.email || user.email || ''
+            }));
+        }
+    }, [user]);
 
     const handleChange = e => setState(s => ({ ...s, [e.target.name]: e.target.value }));
 
@@ -11,9 +23,14 @@ const Contact = () => {
         e.preventDefault();
         setIsSubmitting(true);
         try {
-            const { data } = await axios.post(`${window.api || 'http://localhost:8000'}/api/contact/send`, state);
+            const payload = {
+                ...state,
+                uid: user?._id || user?.uid || ""
+            };
+            const apiUrl = window.api || 'http://localhost:5000';
+            const { data } = await axios.post(`${apiUrl}/api/contact/send`, payload);
             window.toastify(data.message || 'Message sent successfully!', 'success');
-            setState({ name: '', email: '', subject: '', message: '' });
+            setState({ name: user?.fullName || '', email: user?.email || '', subject: '', message: '' });
         } catch (error) {
             console.error(error);
             window.toastify(error?.response?.data?.message || 'Failed to send message. Please try again.', 'error');
